@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beezy FM - Radio Bathong</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -195,11 +195,42 @@
             vertical-align: middle;
         }
 
-        .time-display {
-            font-size: 1rem;
-            color: #a0aec0;
-            margin-top: 1.5rem;
+        /* Modern Time Widget Styles */
+        .modern-time-widget {
+            background-color: rgba(0, 0, 0, 0.7); /* Dark, slightly transparent background */
+            border-radius: 0.75rem; /* Rounded corners */
+            padding: 1.2rem 1.5rem; /* Ample padding */
+            margin-top: 2rem; /* Space from content above */
+            display: flex; /* Use flexbox for stacking */
+            flex-direction: column; /* Stack time and date */
+            align-items: center; /* Center horizontally */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Deeper shadow */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
+            max-width: fit-content; /* Shrink to fit content */
+            margin-left: auto; /* Center the block */
+            margin-right: auto; /* Center the block */
         }
+
+        .digital-time {
+            font-family: 'Space Mono', monospace; /* More digital-like font */
+            font-size: 2.8rem; /* Larger font size */
+            font-weight: 700;
+            color: #00ff00; /* Neon green for a digital look */
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; /* Glow effect */
+            letter-spacing: 0.1em; /* Space out digits */
+            margin-bottom: 0.5rem; /* Space between time and date */
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        .digital-date {
+            font-family: 'Inter', sans-serif; /* Keep Inter for date, but slightly stylized */
+            font-size: 1.1rem; /* Clear date font size */
+            color: #a0aec0; /* Lighter grey for date */
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
 
         .progress-bar-container {
             width: 100%;
@@ -691,9 +722,24 @@
             .presenter-info { font-size: 1rem; }
             .whatsapp-line { font-size: 0.9rem; }
             .show-image-container { width: 150px; height: 150px; } /* Smaller image */
-            .time-display { font-size: 0.9rem; }
+            .time-display { font-size: 0.9rem; } /* This can be removed or ignored */
             .next-show-info { font-size: 0.95rem; }
             .next-show-presenter { font-size: 0.85rem; }
+
+            /* Modern Time Widget Mobile */
+            .modern-time-widget {
+                padding: 1rem 1.2rem;
+                margin-top: 1.5rem;
+            }
+            .digital-time {
+                font-size: 2rem; /* Smaller on mobile */
+                letter-spacing: 0.05em;
+                text-shadow: 0 0 8px #00ff00, 0 0 15px #00ff00; /* Reduce glow for mobile */
+            }
+            .digital-date {
+                font-size: 0.9rem; /* Smaller on mobile */
+            }
+
 
             /* News section adjustments */
             #news-section h2 { font-size: 1.8rem; }
@@ -804,7 +850,11 @@
                 <p class="next-show-info" id="next-show-name"></p>
                 <p class="next-show-presenter" id="next-show-presenter"></p>
             </div>
-            <p class="time-display" id="current-time"></p>
+
+            <div class="modern-time-widget">
+                <span id="current-time-val" class="digital-time"></span>
+                <span id="current-date-val" class="digital-date"></span>
+            </div>
         </div>
 
         <div id="news-section" class="container">
@@ -905,7 +955,6 @@
             const presenterNameElement = document.getElementById('presenter-name');
             const whatsappLineElement = document.getElementById('whatsapp-line'); // Get the WhatsApp element
             const showProgressBar = document.getElementById('show-progress-bar');
-            const currentTimeElement = document.getElementById('current-time');
             const showImageElement = document.getElementById('show-image');
             const showElapsedTimeLabel = document.getElementById('show-elapsed-time-label');
             const showTotalDurationLabel = document.getElementById('show-total-duration-label');
@@ -913,23 +962,15 @@
             const nextShowPresenterElement = document.getElementById('next-show-presenter');
             const currentShowDurationDisplay = document.getElementById('current-show-duration-display');
 
+            // Modernized Time Display Updates
+            const currentTimeValElement = document.getElementById('current-time-val');
+            const currentDateValElement = document.getElementById('current-date-val');
+
             const formattedTime = now.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-            const formattedDate = now.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            currentTimeElement.textContent = `Current Time (SAST): ${formattedTime} on ${formattedDate}`;
+            const formattedDate = now.toLocaleDateString('en-ZA', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
 
-            const formatElapsedTime = (totalSeconds) => {
-                const hours = Math.floor(totalSeconds / 3600);
-                const minutes = Math.floor((totalSeconds % 3600) / 60);
-                const seconds = totalSeconds % 60;
-                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            };
-
-            const formatTimeAmPm = (hour, minute) => {
-                const date = new Date();
-                date.setHours(hour);
-                date.setMinutes(minute);
-                return date.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', hour12: true });
-            };
+            currentTimeValElement.textContent = formattedTime;
+            currentDateValElement.textContent = formattedDate;
 
             let currentDaySchedule = [];
             if (day >= 1 && day <= 5) {
