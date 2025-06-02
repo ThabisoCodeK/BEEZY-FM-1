@@ -55,11 +55,14 @@
             gap: 1rem;
         }
 
+        /* MODIFIED: Station logo to be square with no border/shadow */
         .station-logo {
             width: 60px; /* Smaller logo in header */
             height: 60px;
-            object-fit: contain;
-
+            object-fit: cover; /* Fill the square, potentially cropping */
+            border-radius: 0; /* Make it square */
+            border: none; /* Remove border */
+            box-shadow: none; /* Remove shadow */
         }
 
         .station-info h1 {
@@ -193,11 +196,14 @@
             vertical-align: middle;
         }
 
+        /* Reverted: Original time-display styles */
         .time-display {
             font-size: 1rem;
             color: #a0aec0;
             margin-top: 1.5rem;
         }
+        /* Reverted: Removed .modern-time-widget, .digital-time, .digital-date styles */
+
 
         .progress-bar-container {
             width: 100%;
@@ -693,6 +699,7 @@
             .next-show-info { font-size: 0.95rem; }
             .next-show-presenter { font-size: 0.85rem; }
 
+
             /* News section adjustments */
             #news-section h2 { font-size: 1.8rem; }
             .weather-card h3 { font-size: 1.1rem; }
@@ -722,7 +729,7 @@
                 padding: 1rem; /* Reduce card padding */
             }
             .schedule-time {
-                font-size: 1rem; /* Adjust font size */
+                font-size: 1.0rem; /* Adjust font size */
             }
             .schedule-entry-image {
                 width: 60px; /* Smaller image in schedule entry */
@@ -783,7 +790,7 @@
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 flashing-on-air">LIVE ON AIR</h1>
             <div id="show-info" class="p-6 bg-blue-50 border border-blue-200 rounded-lg shadow-md">
                 <div class="show-image-container">
-                    <img id="show-image" class="show-image" src="" alt="Show Image">
+                    <img id="show-image" class="show-image" src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Show Image">
                 </div>
                 <p class="show-time-at-top" id="current-show-duration-display"></p>
                 <p class="show-title" id="show-name">Loading Show...</p>
@@ -802,6 +809,7 @@
                 <p class="next-show-info" id="next-show-name"></p>
                 <p class="next-show-presenter" id="next-show-presenter"></p>
             </div>
+
             <p class="time-display" id="current-time"></p>
         </div>
 
@@ -852,7 +860,7 @@
 
     <script>
         let intervalId;
-        let listenerCountInterval; // Declare a variable for the listener count interval
+        let listenerCountInterval;
 
         // --- Schedule Data ---
         const schedule = {
@@ -860,23 +868,25 @@
             sunday: [
                 { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "LOVE AFFAIRS", presenter: "DIBUSENG PELEHA" },
                 { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "EMMANUEL", presenter: "MONYANE MOKOENA" },
-                { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "Nkunyana Nkunyana (Skuzabell)" },
-                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "MAKODILO", presenter: "Hananious Motaung" },
-                { start: {hour: 18, minute: 0}, end: {hour: 21, minute: 0}, name: "EBENHEZER", presenter:"Apostle Lerato Mokayane"},
-                { start: {hour: 21, minute: 0}, end: {hour: 23, minute: 59, second: 59, nextDay: false }, name:"DIVINE WORSHIP", presenter:"Malesedi Mofokeng" },
+                { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
+                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "MAKODILO", presenter: "HANANIOUS MOTAUNG" },
+                { start: {hour: 18, minute: 0}, end: {hour: 21, minute: 0}, name: "EBENHEZER", presenter:"LERATO MOKAEANE"},
+                { start: {hour: 21, minute: 0}, end: {hour: 23, minute: 59, second: 59, nextDay: false }, name:"DIVINE WORSHIP", presenter:"MALESEDI MOFOKENG" },
                 { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "AUTOMATED PLAYLIST", presenter: "Automated Playlist" }
             ],
             // Monday to Friday (1-5)
+            // Note: Friday will have specific overrides handled in updateRadioShow
             weekday: [
                 { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA" },
                 { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA" },
                 { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA MPONO" },
                 { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE" },
-                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SEMELA" },
+                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SIMELA" },
                 { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
                 { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
+                // Notice Board and Campus Corner for Mon-Thu
                 { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "NOTICE BOARD", presenter: "MOJALEFA ZIM" },
-                { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0 }, name: "CAMPUS CORNER", presenter: "JABULILE HLONGWANE" },
+                { start: { hour: 21, minute: 0 }, end: { hour: 23, minute: 59, seconds: 59, }, name: "CAMPUS CORNER", presenter: "JABULILE HLONGWANE" },
                 { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "Automated Playlist", presenter: "Automated Playlist" }
             ],
             // Saturday (6)
@@ -884,26 +894,100 @@
                 { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "KA LAPENG", presenter: "MONYANE MOKOENA" },
                 { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "BEZZY FM TOP 30", presenter: "DJ INCUS THE ORIGINIAL" },
                 { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
-                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEZZY FM TOP 30", presenter: "DJ INCUS THE ORIGINIAL" },
-                { start: { hour: 18, minute: 0 }, end: { hour: 6, minute: 0, nextDay: true }, name: "Saturday Night Chill", presenter: "Automated Playlist" }
+                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "OLD VIBES", presenter: "SAKI CHELE" },
+                { start: { hour: 18, minute: 0 }, end: { hour: 21, minute: 0 }, name: "TSA MORAOMORAO", presenter: "HANANIOUS MOTAUNG" }, // Adjusted end time
+                { start: { hour: 21, minute: 0 }, end: { hour: 23, minute: 59, seconds: 59 }, name: "HOT ZONE", presenter: "LERATO MOSETHE" }, // New Hot Zone
+                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "Automated Playlist", presenter: "Automated Playlist" } // Automated playlist after midnight
+            ],
+             // Friday specific schedule (overrides parts of weekday)
+             // This structure makes it easier to manage Friday's unique late-night shows
+            friday: [
+                { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA" },
+                { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA" },
+                { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA MPONO" },
+                { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE" },
+                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SEMELA" },
+                { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
+                { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
+                // Friday specific shows
+                { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "Reggae Hour", presenter: "Saki Chele" },
+                { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0, nextDay: true }, name: "Hot Zone", presenter: "Lerato Mosethe" },
+                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "Automated Playlist", presenter: "Automated Playlist" }
             ]
         };
         // --- End Schedule Data ---
 
         const UNIVERSAL_IMAGE_URL = "https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000";
 
+        const ZENO_NOW_PLAYING_API_URL = `https://api.zeno.fm/api/v2/stations/${'f0ccd091-d7e5-4939-98d8-52457d88ecd3'}/nowplaying`; // Verified URL structure
+        let currentPlayingSongTitle = "";
+        let currentPlayingSongArtist = "";
+        let currentPlayingSongId = null;
+
+        async function fetchCurrentSongMetadata() {
+            try {
+                const response = await fetch(ZENO_NOW_PLAYING_API_URL);
+                if (!response.ok) {
+                    console.warn(`Failed to fetch Zeno.fm metadata: ${response.status} ${response.statusText}`);
+                    // Optionally clear or set default song info if fetch fails
+                    document.getElementById('current-song-title').textContent = "No song info";
+                    document.getElementById('current-song-artist').textContent = "";
+                    return;
+                }
+                const data = await response.json();
+
+                // Inspect the 'data' object structure returned by Zeno.fm
+                // Based on common Zeno.fm API responses, the structure might be like:
+                // data.metadata.now_playing.title
+                // data.metadata.now_playing.artist
+                // data.metadata.now_playing.album
+
+                if (data && data.metadata && data.metadata.now_playing) {
+                    const nowPlaying = data.metadata.now_playing;
+                    const newTitle = nowPlaying.title || "Unknown Title";
+                    const newArtist = nowPlaying.artist || "Unknown Artist";
+                    const newSongId = nowPlaying.song_id || null; // If they provide one
+
+                    // Only update if song information has actually changed
+                    if (newTitle !== currentPlayingSongTitle || newArtist !== currentPlayingSongArtist) {
+                        currentPlayingSongTitle = newTitle;
+                        currentPlayingSongArtist = newArtist;
+                        currentPlayingSongId = newSongId;
+
+                        console.log("New Song Playing:", currentPlayingSongTitle, "by", currentPlayingSongArtist);
+                        console.log("Song ID (from Zeno.fm):", currentPlayingSongId);
+
+                        // Update UI elements with the new song information
+                        document.getElementById('current-song-title').textContent = currentPlayingSongTitle;
+                        document.getElementById('current-song-artist').textContent = `Artist: ${currentPlayingSongArtist}`;
+                    }
+                } else {
+                    console.log("Zeno.fm API response does not contain expected 'now_playing' metadata.");
+                    document.getElementById('current-song-title').textContent = "No song info available";
+                    document.getElementById('current-song-artist').textContent = "";
+                    currentPlayingSongTitle = "";
+                    currentPlayingSongArtist = "";
+                    currentPlayingSongId = null;
+                }
+
+            } catch (error) {
+                console.error("Error fetching current song metadata from Zeno.fm:", error);
+                document.getElementById('current-song-title').textContent = "Failed to load song info";
+                document.getElementById('current-song-artist').textContent = "";
+            }
+        }
+
 
         function updateRadioShow() {
             const now = new Date();
-            const day = now.getDay();
+            const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 5 = Friday, 6 = Saturday
             const currentHour = now.getHours(); // 0-23
             const currentMinute = now.getMinutes();
 
             const showNameElement = document.getElementById('show-name');
             const presenterNameElement = document.getElementById('presenter-name');
-            const whatsappLineElement = document.getElementById('whatsapp-line'); // Get the WhatsApp element
+            const whatsappLineElement = document.getElementById('whatsapp-line');
             const showProgressBar = document.getElementById('show-progress-bar');
-            const currentTimeElement = document.getElementById('current-time');
             const showImageElement = document.getElementById('show-image');
             const showElapsedTimeLabel = document.getElementById('show-elapsed-time-label');
             const showTotalDurationLabel = document.getElementById('show-total-duration-label');
@@ -911,32 +995,35 @@
             const nextShowPresenterElement = document.getElementById('next-show-presenter');
             const currentShowDurationDisplay = document.getElementById('current-show-duration-display');
 
-            const formattedTime = now.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-            const formattedDate = now.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            currentTimeElement.textContent = `Current Time (SAST): ${formattedTime} on ${formattedDate}`;
+            const currentTimeElement = document.getElementById('current-time');
+            currentTimeElement.textContent = `Current Time (SAST): ${now.toLocaleTimeString('en-ZA')} on ${now.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
 
-            const formatElapsedTime = (totalSeconds) => {
-                const hours = Math.floor(totalSeconds / 3600);
-                const minutes = Math.floor((totalSeconds % 3600) / 60);
-                const seconds = totalSeconds % 60;
-                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            };
+            function formatElapsedTime(seconds) {
+                const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+                const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+                const s = String(seconds % 60).padStart(2, '0');
+                return `${h}:${m}:${s}`;
+            }
 
-            const formatTimeAmPm = (hour, minute) => {
-                const date = new Date();
-                date.setHours(hour);
-                date.setMinutes(minute);
-                return date.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', hour12: true });
-            };
+            function formatTimeAmPm(hour, minute) {
+                const ampm = hour >= 12 ? 'PM' : 'AM';
+                const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+                const formattedMinute = String(minute).padStart(2, '0');
+                return `${formattedHour}:${formattedMinute} ${ampm}`;
+            }
 
             let currentDaySchedule = [];
-            if (day >= 1 && day <= 5) {
+            // Use Friday schedule for Friday (day === 5)
+            if (day === 5) { // Friday
+                currentDaySchedule = schedule.friday;
+            } else if (day >= 1 && day <= 4) { // Monday to Thursday
                 currentDaySchedule = schedule.weekday;
-            } else if (day === 0) {
+            } else if (day === 0) { // Sunday
                 currentDaySchedule = schedule.sunday;
-            } else if (day === 6) {
+            } else if (day === 6) { // Saturday
                 currentDaySchedule = schedule.saturday;
             }
+
 
             let currentShow = null;
             let nextShow = null;
@@ -944,17 +1031,16 @@
 
             for (let i = 0; i < currentDaySchedule.length; i++) {
                 const show = currentDaySchedule[i];
-                // Create Date objects for comparison
                 const showStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.start.hour, show.start.minute, 0);
                 let showEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.end.hour, show.end.minute, 0);
 
-                // Handle shows that end on the next day (e.g., overnight playlists)
+                // Handle shows that end on the next day
                 if (show.end.nextDay || show.start.hour > show.end.hour || (show.start.hour === show.end.hour && show.start.minute > show.end.minute)) {
-                    // If the show starts on the previous day and crosses midnight into today
-                    if (now < showStart && !(show.end.nextDay && now.getHours() < show.end.hour)) { // Adjusted logic for overnight
-                        showStart.setDate(showStart.getDate() - 1);
+                    // If current time is after midnight, and the show started yesterday
+                    if (now < showStart && !(show.end.nextDay && now.getHours() < show.end.hour)) {
+                         showStart.setDate(showStart.getDate() - 1);
                     }
-                    showEnd.setDate(showEnd.getDate() + (show.end.nextDay ? 1 : 0));
+                    showEnd.setDate(showEnd.getDate() + 1); // Extend to next day
                 }
 
                 if (now >= showStart && now < showEnd) {
@@ -966,71 +1052,63 @@
 
             // --- Determine Next Show Logic ---
             if (currentShow) {
-                // Determine the week of the month for presenter rotation
                 const date = now.getDate();
-                const weekOfMonth = Math.ceil(date / 7); // 1st, 2nd, 3rd, 4th, or 5th week
+                const weekOfMonth = Math.ceil(date / 7);
 
-                // Apply presenter rotation for "DINALEDI SPORTS SHOW"
                 if (currentShow.name === "DINALEDI SPORTS SHOW") {
                     if (weekOfMonth === 1 || weekOfMonth === 3) {
                         currentShow.presenter = "MALEFETSANE MOREKI";
-                    } else { // weekOfMonth === 2, 4, or 5 (last week)
+                    } else {
                         currentShow.presenter = "MOJALEFA TSOTETSI";
                     }
                 }
 
-                // If it's the last show of the current day's array OR it's an overnight show,
-                // we *must* look at the next calendar day's schedule for the 'nextShow'.
-                const isLastShowInArray = (currentShowIndex === currentDaySchedule.length - 1);
-
-                if (isLastShowInArray || (currentShow.end.nextDay && currentShow.end.hour <= now.getHours())) { // Check if overnight show is ending soon
+                // Check for next show in the *current day's* schedule
+                if (currentShowIndex < currentDaySchedule.length - 1) {
+                    nextShow = currentDaySchedule[currentShowIndex + 1];
+                } else {
+                    // If current show is the last in today's schedule, get the first show of the *next calendar day*
                     const nextDayDate = new Date(now);
-                    nextDayDate.setDate(now.getDate() + 1); // Move to the next calendar day
-                    const nextCalendarDayIndex = nextDayDate.getDay(); // Get the day index for the next calendar day
+                    nextDayDate.setDate(now.getDate() + 1);
+                    const nextCalendarDayIndex = nextDayDate.getDay();
 
                     let nextDaySchedule = [];
-                    if (nextCalendarDayIndex >= 1 && nextCalendarDayIndex <= 5) {
+                    if (nextCalendarDayIndex === 5) { // If next day is Friday
+                        nextDaySchedule = schedule.friday;
+                    } else if (nextCalendarDayIndex >= 1 && nextCalendarDayIndex <= 4) { // Mon-Thu
                         nextDaySchedule = schedule.weekday;
-                    } else if (nextCalendarDayIndex === 0) {
+                    } else if (nextCalendarDayIndex === 0) { // Sunday
                         nextDaySchedule = schedule.sunday;
-                    } else if (nextCalendarDayIndex === 6) {
+                    } else if (nextCalendarDayIndex === 6) { // Saturday
                         nextDaySchedule = schedule.saturday;
                     }
 
                     if (nextDaySchedule.length > 0) {
-                        nextShow = nextDaySchedule[0]; // The first show of the next day's schedule
+                        nextShow = nextDaySchedule[0];
                     } else {
-                        nextShow = null; // No schedule for the next day
+                        nextShow = null;
                     }
-                } else {
-                    // It's not the last show, so the next show is simply the next one in the array
-                    nextShow = currentDaySchedule[currentShowIndex + 1];
                 }
 
                 showNameElement.textContent = currentShow.name;
                 presenterNameElement.textContent = currentShow.presenter ? `Presenter: ${currentShow.presenter}` : '';
 
-                // Show WhatsApp line only if it's not an automated playlist
                 if (currentShow.name !== "AUTOMATED PLAYLIST" && currentShow.name !== "Automated Playlist" && currentShow.name !== "Saturday Night Chill") {
-                    whatsappLineElement.style.display = 'flex'; // Show the WhatsApp line
+                    whatsappLineElement.style.display = 'flex';
                 } else {
-                    whatsappLineElement.style.display = 'none'; // Hide if automated
+                    whatsappLineElement.style.display = 'none';
                 }
-
 
                 const showStartDateForCalc = new Date(now.getFullYear(), now.getMonth(), now.getDate(), currentShow.start.hour, currentShow.start.minute, 0);
                 let showEndDateForCalc = new Date(now.getFullYear(), now.getMonth(), now.getDate(), currentShow.end.hour, currentShow.end.minute, 0);
 
-                // Re-evaluate overnight start date for calculation if current time implies it started yesterday
-                if (currentShow.start.hour > currentShow.end.hour || (currentShow.start.hour === currentShow.end.hour && currentShow.start.minute > currentShow.minute)) {
-                    if (now < showStartDateForCalc) {
-                        showStartDateForCalc.setDate(showStartDateForCalc.getDate() - 1);
+                if (currentShow.end.nextDay || (currentShow.start.hour > currentShow.end.hour || (currentShow.start.hour === currentShow.end.hour && currentShow.start.minute > currentShow.end.minute))) {
+                     if (now.getHours() < currentShow.end.hour || (now.getHours() === currentShow.end.hour && now.getMinutes() < currentShow.end.minute)) {
+                         showStartDateForCalc.setDate(showStartDateForCalc.getDate() - 1);
                     }
-                }
-
-                if (currentShow.end.nextDay) {
                     showEndDateForCalc.setDate(showEndDateForCalc.getDate() + 1);
                 }
+
 
                 const totalDurationMs = showEndDateForCalc.getTime() - showStartDateForCalc.getTime();
                 const elapsedTimeMs = now.getTime() - showStartDateForCalc.getTime();
@@ -1047,11 +1125,11 @@
                 showElapsedTimeLabel.textContent = formatElapsedTime(elapsedSeconds);
                 showTotalDurationLabel.textContent = formatElapsedTime(totalDurationSeconds);
 
-                currentShowDurationDisplay.textContent = `${formatTimeAmPm(showStartDateForCalc.getHours(), showStartDateForCalc.getMinutes())} to ${formatTimeAmPm(showEndDateForCalc.getHours(), showEndDateForCalc.getMinutes())}`;
+                currentShowDurationDisplay.textContent = `${formatTimeAmPm(showStartDateForCalc.getHours(), showStartDateForCalc.getMinutes())} to ${formatTimeAmPm(showEndDateForCalc.Sporeshours(), showEndDateForCalc.getMinutes())}`;
             } else {
                 showNameElement.textContent = "Station Off Air";
                 presenterNameElement.textContent = "";
-                whatsappLineElement.style.display = 'none'; // Hide WhatsApp if off air
+                whatsappLineElement.style.display = 'none';
                 showProgressBar.style.width = `0%`;
                 showElapsedTimeLabel.textContent = "00:00:00";
                 showTotalDurationLabel.textContent = "00:00:00";
@@ -1059,11 +1137,18 @@
                 nextShow = null;
             }
 
-            // Universal image URL for all shows
             showImageElement.src = UNIVERSAL_IMAGE_URL;
             showImageElement.onerror = () => {
                 showImageElement.src = "https://placehold.co/200x200/CCCCCC/666666?text=ERROR";
             };
+
+            if (nextShow) {
+                nextShowNameElement.textContent = `Up Next: ${nextShow.name}`;
+                nextShowPresenterElement.textContent = nextShow.presenter ? `Presenter: ${nextShow.presenter}` : '';
+            } else {
+                nextShowNameElement.textContent = "Check schedule for next show.";
+                nextShowPresenterElement.textContent = "";
+            }
         }
 
         // --- Volume Control ---
@@ -1076,7 +1161,6 @@
             updateVolumeIcon(radioStream.volume);
         });
 
-        // Initialize volume
         radioStream.volume = volumeSlider.value;
         updateVolumeIcon(radioStream.volume);
 
@@ -1095,18 +1179,15 @@
             document.getElementById('home-section').style.display = 'none';
             document.getElementById('news-section').style.display = 'none';
             document.getElementById('about-section').style.display = 'none';
-            document.getElementById('schedule-section').style.display = 'none'; // Hide schedule section by default
+            document.getElementById('schedule-section').style.display = 'none';
 
-            // Clear any existing listener count animation
             if (listenerCountInterval) {
                 clearInterval(listenerCountInterval);
                 listenerCountInterval = null;
             }
 
-            // Show the requested section
             document.getElementById(sectionId).style.display = 'block';
 
-            // Close mobile nav if open
             const mainNav = document.getElementById('main-nav');
             const hamburgerButton = document.getElementById('hamburger-button');
             if (mainNav.classList.contains('active')) {
@@ -1114,29 +1195,27 @@
                 hamburgerButton.classList.remove('active');
             }
 
-
             if (sectionId === 'news-section') {
-                fetchWeatherUpdates(); // Fetch weather when news section is shown
+                fetchWeatherUpdates();
             } else if (sectionId === 'about-section') {
-                startListenerCountAnimation(); // Start animation when about section is shown
+                startListenerCountAnimation();
             } else if (sectionId === 'schedule-section') {
-                generateSchedule(); // Regenerate schedule to ensure live status is updated
+                generateSchedule();
             }
         }
 
         // --- Dynamic Listener Count Animation ---
         let currentListenerCount = 0;
         const targetListenerCount = 69000;
-        const animationDuration = 3000; // milliseconds
-        const updateInterval = 50; // milliseconds
+        const animationDuration = 3000;
+        const updateInterval = 50;
         const increment = Math.ceil((targetListenerCount / animationDuration) * updateInterval);
 
         function startListenerCountAnimation() {
             const listenerCountElement = document.getElementById('listener-count');
-            currentListenerCount = 0; // Reset count every time the page is shown
-            listenerCountElement.textContent = '0'; // Display 0 initially
+            currentListenerCount = 0;
+            listenerCountElement.textContent = '0';
 
-            // Clear any existing interval before starting a new one
             if (listenerCountInterval) {
                 clearInterval(listenerCountInterval);
             }
@@ -1147,16 +1226,17 @@
                     currentListenerCount = targetListenerCount;
                     clearInterval(listenerCountInterval);
                     listenerCountInterval = null;
-                    listenerCountElement.textContent = currentListenerCount.toLocaleString() + '+'; // Add '+' here only when target is reached
+                    listenerCountElement.textContent = currentListenerCount.toLocaleString() + '+';
                 } else {
-                    listenerCountElement.textContent = currentListenerCount.toLocaleString(); // No '+' during animation
+                    listenerCountElement.textContent = currentListenerCount.toLocaleString();
                 }
             }, updateInterval);
         }
 
         // --- Schedule Data for Horizontal Display ---
         const daysConfig = [
-            { id: "mon-fri", label: "Mon-Fri", scheduleKey: "weekday", dayIndices: [1, 2, 3, 4, 5] },
+            { id: "mon-thu", label: "Mon-Thu", scheduleKey: "weekday", dayIndices: [1, 2, 3, 4] }, // Changed to Mon-Thu
+            { id: "friday", label: "Friday", scheduleKey: "friday", dayIndices: [5] }, // New Friday tab
             { id: "saturday", label: "Saturday", scheduleKey: "saturday", dayIndices: [6] },
             { id: "sunday", label: "Sunday", scheduleKey: "sunday", dayIndices: [0] }
         ];
@@ -1164,11 +1244,11 @@
         function generateSchedule() {
             const dayTabsContainer = document.getElementById('day-tabs');
             const dailySchedulesContainer = document.getElementById('daily-schedules-container');
-            dayTabsContainer.innerHTML = ''; // Clear existing tabs
-            dailySchedulesContainer.innerHTML = ''; // Clear existing schedule content
+            dayTabsContainer.innerHTML = '';
+            dailySchedulesContainer.innerHTML = '';
 
             const now = new Date();
-            const currentDayIndex = now.getDay(); // 0 for Sunday, 1 for Monday, etc.
+            const currentDayIndex = now.getDay();
             let activeDayId = '';
 
             const formatTime24hr = (hour, minute) => {
@@ -1176,22 +1256,19 @@
             };
 
             daysConfig.forEach(dayInfo => {
-                // Create Day Tab Button
                 const button = document.createElement('button');
                 button.textContent = dayInfo.label;
                 button.onclick = () => showDaySchedule(dayInfo.id);
                 dayTabsContainer.appendChild(button);
 
-                // Create Container for Day's Shows
                 const dayShowsDiv = document.createElement('div');
                 dayShowsDiv.id = `schedule-${dayInfo.id}`;
                 dayShowsDiv.classList.add('schedule-day-shows');
-                dayShowsDiv.style.display = 'none'; // Hidden by default
+                dayShowsDiv.style.display = 'none';
 
                 const daySchedule = schedule[dayInfo.scheduleKey];
                 if (daySchedule && daySchedule.length > 0) {
                     daySchedule.forEach(show => {
-                        // Check if this show is currently live on the actual current day
                         const showStartToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.start.hour, show.start.minute, 0);
                         let showEndToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.end.hour, show.end.minute, 0);
 
@@ -1199,6 +1276,7 @@
                             showEndToday.setDate(showEndToday.getDate() + 1);
                         }
 
+                        // Determine if 'isLive' for the actual current day
                         const isLive = dayInfo.dayIndices.includes(currentDayIndex) && (now >= showStartToday && now < showEndToday);
                         const liveClass = isLive ? 'live-show-highlight' : '';
 
@@ -1218,7 +1296,7 @@
                         `;
 
                         if (isLive) {
-                            activeDayId = dayInfo.id; // Set active day to the one with the live show
+                            activeDayId = dayInfo.id;
                         }
                     });
                 } else {
@@ -1227,41 +1305,35 @@
                 dailySchedulesContainer.appendChild(dayShowsDiv);
             });
 
-            // If no live show is found (e.g., station off air), default to current day's schedule
             if (!activeDayId) {
                 const todayConfig = daysConfig.find(d => d.dayIndices.includes(currentDayIndex));
                 if (todayConfig) {
                     activeDayId = todayConfig.id;
                 } else {
-                    activeDayId = daysConfig[0].id; // Fallback to first day if no match (e.g., invalid day index)
+                    activeDayId = daysConfig[0].id;
                 }
             }
             showDaySchedule(activeDayId);
         }
 
         function showDaySchedule(dayIdToShow) {
-            // Hide all schedule day divs
             document.querySelectorAll('.schedule-day-shows').forEach(div => {
                 div.style.display = 'none';
             });
 
-            // Remove active class from all buttons
             document.querySelectorAll('.day-tabs button').forEach(button => {
                 button.classList.remove('active');
             });
 
-            // Show the selected day's schedule div
             const selectedDayDiv = document.getElementById(`schedule-${dayIdToShow}`);
             if (selectedDayDiv) {
-                selectedDayDiv.style.display = 'flex'; // Use flex to maintain horizontal layout
-                // Also scroll to the start of the currently live show if available
+                selectedDayDiv.style.display = 'flex';
                 const liveShow = selectedDayDiv.querySelector('.live-show-highlight');
                 if (liveShow) {
                     liveShow.scrollIntoView({ behavior: 'smooth', inline: 'center' });
                 }
             }
 
-            // Add active class to the clicked button
             const activeTabButton = document.querySelector(`.day-tabs button[onclick="showDaySchedule('${dayIdToShow}')"]`);
             if (activeTabButton) {
                 activeTabButton.classList.add('active');
@@ -1361,7 +1433,7 @@
 
         hamburgerButton.addEventListener('click', () => {
             mainNav.classList.toggle('active');
-            hamburgerButton.classList.toggle('active'); // For the X animation
+            hamburgerButton.classList.toggle('active');
         });
 
         navLinks.forEach(link => {
@@ -1376,14 +1448,16 @@
             updateRadioShow();
             intervalId = setInterval(updateRadioShow, 1000);
 
-            showSection('home-section'); // Display home section by default
+            showSection('home-section');
 
-            // Fetch weather updates initially and then every 10 minutes
             fetchWeatherUpdates();
             setInterval(fetchWeatherUpdates, 600000);
 
-            // Generate schedule when the DOM is loaded
             generateSchedule();
+
+            // Initial fetch of current song metadata and then update every 10 seconds
+            fetchCurrentSongMetadata();
+            setInterval(fetchCurrentSongMetadata, 10000); // Poll every 10 seconds
         });
     </script>
 </body>
