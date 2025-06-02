@@ -55,14 +55,11 @@
             gap: 1rem;
         }
 
-        /* MODIFIED: Station logo to be square with no border/shadow */
         .station-logo {
             width: 60px; /* Smaller logo in header */
             height: 60px;
-            object-fit: cover; /* Fill the square, potentially cropping */
-            border-radius: 0; /* Make it square */
-            border: none; /* Remove border */
-            box-shadow: none; /* Remove shadow */
+            object-fit: contain;
+
         }
 
         .station-info h1 {
@@ -196,14 +193,11 @@
             vertical-align: middle;
         }
 
-        /* Reverted: Original time-display styles */
         .time-display {
             font-size: 1rem;
             color: #a0aec0;
             margin-top: 1.5rem;
         }
-        /* Reverted: Removed .modern-time-widget, .digital-time, .digital-date styles */
-
 
         .progress-bar-container {
             width: 100%;
@@ -699,7 +693,6 @@
             .next-show-info { font-size: 0.95rem; }
             .next-show-presenter { font-size: 0.85rem; }
 
-
             /* News section adjustments */
             #news-section h2 { font-size: 1.8rem; }
             .weather-card h3 { font-size: 1.1rem; }
@@ -729,7 +722,7 @@
                 padding: 1rem; /* Reduce card padding */
             }
             .schedule-time {
-                font-size: 1.0rem; /* Adjust font size */
+                font-size: 1rem; /* Adjust font size */
             }
             .schedule-entry-image {
                 width: 60px; /* Smaller image in schedule entry */
@@ -809,7 +802,6 @@
                 <p class="next-show-info" id="next-show-name"></p>
                 <p class="next-show-presenter" id="next-show-presenter"></p>
             </div>
-
             <p class="time-display" id="current-time"></p>
         </div>
 
@@ -911,6 +903,7 @@
             const presenterNameElement = document.getElementById('presenter-name');
             const whatsappLineElement = document.getElementById('whatsapp-line'); // Get the WhatsApp element
             const showProgressBar = document.getElementById('show-progress-bar');
+            const currentTimeElement = document.getElementById('current-time');
             const showImageElement = document.getElementById('show-image');
             const showElapsedTimeLabel = document.getElementById('show-elapsed-time-label');
             const showTotalDurationLabel = document.getElementById('show-total-duration-label');
@@ -918,25 +911,23 @@
             const nextShowPresenterElement = document.getElementById('next-show-presenter');
             const currentShowDurationDisplay = document.getElementById('current-show-duration-display');
 
-            // Reverted: Original time display update
-            const currentTimeElement = document.getElementById('current-time');
-            currentTimeElement.textContent = `Current Time (SAST): ${now.toLocaleTimeString('en-ZA')} on ${now.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
+            const formattedTime = now.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            const formattedDate = now.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            currentTimeElement.textContent = `Current Time (SAST): ${formattedTime} on ${formattedDate}`;
 
-            // Helper for formatting time (HH:MM:SS)
-            function formatElapsedTime(seconds) {
-                const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
-                const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-                const s = String(seconds % 60).padStart(2, '0');
-                return `${h}:${m}:${s}`;
-            }
+            const formatElapsedTime = (totalSeconds) => {
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            };
 
-            // Helper for formatting time (AM/PM)
-            function formatTimeAmPm(hour, minute) {
-                const ampm = hour >= 12 ? 'PM' : 'AM';
-                const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
-                const formattedMinute = String(minute).padStart(2, '0');
-                return `${formattedHour}:${formattedMinute} ${ampm}`;
-            }
+            const formatTimeAmPm = (hour, minute) => {
+                const date = new Date();
+                date.setHours(hour);
+                date.setMinutes(minute);
+                return date.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', hour12: true });
+            };
 
             let currentDaySchedule = [];
             if (day >= 1 && day <= 5) {
@@ -1000,11 +991,9 @@
                     let nextDaySchedule = [];
                     if (nextCalendarDayIndex >= 1 && nextCalendarDayIndex <= 5) {
                         nextDaySchedule = schedule.weekday;
-                    }
-                    else if (nextCalendarDayIndex === 0) {
+                    } else if (nextCalendarDayIndex === 0) {
                         nextDaySchedule = schedule.sunday;
-                    }
-                    else if (nextCalendarDayIndex === 6) {
+                    } else if (nextCalendarDayIndex === 6) {
                         nextDaySchedule = schedule.saturday;
                     }
 
@@ -1075,15 +1064,6 @@
             showImageElement.onerror = () => {
                 showImageElement.src = "https://placehold.co/200x200/CCCCCC/666666?text=ERROR";
             };
-
-            // Update next show info
-            if (nextShow) {
-                nextShowNameElement.textContent = `Up Next: ${nextShow.name}`;
-                nextShowPresenterElement.textContent = nextShow.presenter ? `Presenter: ${nextShow.presenter}` : '';
-            } else {
-                nextShowNameElement.textContent = "Check schedule for next show.";
-                nextShowPresenterElement.textContent = "";
-            }
         }
 
         // --- Volume Control ---
