@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beezy FM - Radio Bathong</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -55,13 +55,14 @@
             gap: 1rem;
         }
 
+        /* MODIFIED: Station logo to be square with no border/shadow */
         .station-logo {
             width: 60px; /* Smaller logo in header */
             height: 60px;
-            object-fit: contain;
-            border-radius: 50%; /* Make it circular */
-            border: 2px solid yellow; /* Yellow border for the logo */
-            box-shadow: 0 0 8px rgba(255, 255, 0, 0.5); /* Subtle yellow glow */
+            object-fit: cover; /* Fill the square, potentially cropping */
+            border-radius: 0; /* Make it square */
+            border: none; /* Remove border */
+            box-shadow: none; /* Remove shadow */
         }
 
         .station-info h1 {
@@ -195,41 +196,13 @@
             vertical-align: middle;
         }
 
-        /* Modern Time Widget Styles */
-        .modern-time-widget {
-            background-color: rgba(0, 0, 0, 0.7); /* Dark, slightly transparent background */
-            border-radius: 0.75rem; /* Rounded corners */
-            padding: 1.2rem 1.5rem; /* Ample padding */
-            margin-top: 2rem; /* Space from content above */
-            display: flex; /* Use flexbox for stacking */
-            flex-direction: column; /* Stack time and date */
-            align-items: center; /* Center horizontally */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Deeper shadow */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
-            max-width: fit-content; /* Shrink to fit content */
-            margin-left: auto; /* Center the block */
-            margin-right: auto; /* Center the block */
+        /* Reverted: Original time-display styles */
+        .time-display {
+            font-size: 1rem;
+            color: #a0aec0;
+            margin-top: 1.5rem;
         }
-
-        .digital-time {
-            font-family: 'Space Mono', monospace; /* More digital-like font */
-            font-size: 2.8rem; /* Larger font size */
-            font-weight: 700;
-            color: #00ff00; /* Neon green for a digital look */
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; /* Glow effect */
-            letter-spacing: 0.1em; /* Space out digits */
-            margin-bottom: 0.5rem; /* Space between time and date */
-            white-space: nowrap; /* Prevent wrapping */
-        }
-
-        .digital-date {
-            font-family: 'Inter', sans-serif; /* Keep Inter for date, but slightly stylized */
-            font-size: 1.1rem; /* Clear date font size */
-            color: #a0aec0; /* Lighter grey for date */
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            white-space: nowrap; /* Prevent wrapping */
-        }
+        /* Reverted: Removed .modern-time-widget, .digital-time, .digital-date styles */
 
 
         .progress-bar-container {
@@ -722,23 +695,9 @@
             .presenter-info { font-size: 1rem; }
             .whatsapp-line { font-size: 0.9rem; }
             .show-image-container { width: 150px; height: 150px; } /* Smaller image */
-            .time-display { font-size: 0.9rem; } /* This can be removed or ignored */
+            .time-display { font-size: 0.9rem; }
             .next-show-info { font-size: 0.95rem; }
             .next-show-presenter { font-size: 0.85rem; }
-
-            /* Modern Time Widget Mobile */
-            .modern-time-widget {
-                padding: 1rem 1.2rem;
-                margin-top: 1.5rem;
-            }
-            .digital-time {
-                font-size: 2rem; /* Smaller on mobile */
-                letter-spacing: 0.05em;
-                text-shadow: 0 0 8px #00ff00, 0 0 15px #00ff00; /* Reduce glow for mobile */
-            }
-            .digital-date {
-                font-size: 0.9rem; /* Smaller on mobile */
-            }
 
 
             /* News section adjustments */
@@ -770,7 +729,7 @@
                 padding: 1rem; /* Reduce card padding */
             }
             .schedule-time {
-                font-size: 1rem; /* Adjust font size */
+                font-size: 1.0rem; /* Adjust font size */
             }
             .schedule-entry-image {
                 width: 60px; /* Smaller image in schedule entry */
@@ -851,10 +810,7 @@
                 <p class="next-show-presenter" id="next-show-presenter"></p>
             </div>
 
-            <div class="modern-time-widget">
-                <span id="current-time-val" class="digital-time"></span>
-                <span id="current-date-val" class="digital-date"></span>
-            </div>
+            <p class="time-display" id="current-time"></p>
         </div>
 
         <div id="news-section" class="container">
@@ -962,15 +918,25 @@
             const nextShowPresenterElement = document.getElementById('next-show-presenter');
             const currentShowDurationDisplay = document.getElementById('current-show-duration-display');
 
-            // Modernized Time Display Updates
-            const currentTimeValElement = document.getElementById('current-time-val');
-            const currentDateValElement = document.getElementById('current-date-val');
+            // Reverted: Original time display update
+            const currentTimeElement = document.getElementById('current-time');
+            currentTimeElement.textContent = `Current Time (SAST): ${now.toLocaleTimeString('en-ZA')} on ${now.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
 
-            const formattedTime = now.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-            const formattedDate = now.toLocaleDateString('en-ZA', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+            // Helper for formatting time (HH:MM:SS)
+            function formatElapsedTime(seconds) {
+                const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+                const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+                const s = String(seconds % 60).padStart(2, '0');
+                return `${h}:${m}:${s}`;
+            }
 
-            currentTimeValElement.textContent = formattedTime;
-            currentDateValElement.textContent = formattedDate;
+            // Helper for formatting time (AM/PM)
+            function formatTimeAmPm(hour, minute) {
+                const ampm = hour >= 12 ? 'PM' : 'AM';
+                const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+                const formattedMinute = String(minute).padStart(2, '0');
+                return `${formattedHour}:${formattedMinute} ${ampm}`;
+            }
 
             let currentDaySchedule = [];
             if (day >= 1 && day <= 5) {
@@ -1034,9 +1000,11 @@
                     let nextDaySchedule = [];
                     if (nextCalendarDayIndex >= 1 && nextCalendarDayIndex <= 5) {
                         nextDaySchedule = schedule.weekday;
-                    } else if (nextCalendarDayIndex === 0) {
+                    }
+                    else if (nextCalendarDayIndex === 0) {
                         nextDaySchedule = schedule.sunday;
-                    } else if (nextCalendarDayIndex === 6) {
+                    }
+                    else if (nextCalendarDayIndex === 6) {
                         nextDaySchedule = schedule.saturday;
                     }
 
@@ -1107,6 +1075,15 @@
             showImageElement.onerror = () => {
                 showImageElement.src = "https://placehold.co/200x200/CCCCCC/666666?text=ERROR";
             };
+
+            // Update next show info
+            if (nextShow) {
+                nextShowNameElement.textContent = `Up Next: ${nextShow.name}`;
+                nextShowPresenterElement.textContent = nextShow.presenter ? `Presenter: ${nextShow.presenter}` : '';
+            } else {
+                nextShowNameElement.textContent = "Check schedule for next show.";
+                nextShowPresenterElement.textContent = "";
+            }
         }
 
         // --- Volume Control ---
