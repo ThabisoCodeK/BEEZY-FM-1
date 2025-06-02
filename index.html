@@ -57,8 +57,8 @@
 
         /* MODIFIED: Station logo to be square with no border/shadow */
         .station-logo {
-            width: 60px; /* Smaller logo in header */
-            height: 60px;
+            width: 100px; /* Smaller logo in header */
+            height: 100px;
             object-fit: cover; /* Fill the square, potentially cropping */
             border-radius: 0; /* Make it square */
             border: none; /* Remove border */
@@ -757,7 +757,7 @@
         <div class="header-left">
             <img src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Beezy FM Logo" class="station-logo">
             <div class="station-info">
-                <h1>Beezy FM</h1>
+                <h1>BEEZY FM</h1>
                 <p>Radio Bathong</p>
             </div>
         </div>
@@ -892,12 +892,12 @@
             // Saturday (6)
             saturday: [
                 { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "KA LAPENG", presenter: "MONYANE MOKOENA" },
-                { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "BEZZY FM TOP 30", presenter: "DJ INCUS THE ORIGINIAL" },
+                { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "BEZZY FM TOP 30", presenter: "LEUTSOA NKUNYANA (DJ INCUS)" },
                 { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
-                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "OLD VIBES", presenter: "SAKI CHELE" },
+                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "OLD VIBES", presenter: "SAKI CHELE (DJ SEXY D)" },
                 { start: { hour: 18, minute: 0 }, end: { hour: 21, minute: 0 }, name: "TSA MORAOMORAO", presenter: "HANANIOUS MOTAUNG" }, // Adjusted end time
                 { start: { hour: 21, minute: 0 }, end: { hour: 23, minute: 59, seconds: 59 }, name: "HOT ZONE", presenter: "LERATO MOSETHE" }, // New Hot Zone
-                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "Automated Playlist", presenter: "Automated Playlist" } // Automated playlist after midnight
+                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "AUTOMATED PLAYLIST", presenter: "AUTOMATED PLAYLIST" } // Automated playlist after midnight
             ],
              // Friday specific schedule (overrides parts of weekday)
              // This structure makes it easier to manage Friday's unique late-night shows
@@ -910,9 +910,9 @@
                 { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
                 { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
                 // Friday specific shows
-                { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "Reggae Hour", presenter: "Saki Chele" },
-                { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0, nextDay: true }, name: "Hot Zone", presenter: "Lerato Mosethe" },
-                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "Automated Playlist", presenter: "Automated Playlist" }
+                { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "REGGAE HOUR", presenter: "SAKI CHELE (DJ SEXY D)" },
+                { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0, nextDay: true }, name: "HOT ZONE", presenter: "LERATO MOSETHE" },
+                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "AUTOMATED PLAYLIST", presenter: "AUTOMATED PLAYLIST" }
             ]
         };
         // --- End Schedule Data ---
