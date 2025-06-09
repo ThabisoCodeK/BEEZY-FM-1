@@ -409,7 +409,8 @@
   /* Individual weather card styles. */
   .weather-card {
     flex-shrink: 0;
-    width: 280px;
+    width: 280px; /* Fixed width for desktop */
+    box-sizing: border-box; /* Ensures padding is included in the width */
     background-color: rgba(248, 250, 252, 0.95);
     border: 1px solid #e2e8f0;
     border-radius: 0.75rem;
@@ -890,6 +891,31 @@
     .container {
       padding: 1.5rem; /* Reduce padding for smaller screens */
     }
+
+    /* Mobile specific styles for weather and schedule grids */
+    .weather-grid,
+    .schedule-day-shows {
+      flex-direction: column; /* Stack items vertically */
+      white-space: normal; /* Allow content to wrap */
+      overflow-x: hidden; /* Disable horizontal scrolling */
+      align-items: center; /* Center stacked items */
+      padding-left: 0.5rem; /* Add some padding to the sides */
+      padding-right: 0.5rem; /* Add some padding to the sides */
+      gap: 1rem; /* Adjust gap for vertical stacking */
+    }
+
+    .weather-card,
+    .schedule-entry {
+      width: calc(100% - 1rem); /* Take full width minus 0.5rem padding on each side */
+      max-width: none; /* Override any max-width */
+      margin-bottom: 1rem; /* Add vertical spacing between stacked cards */
+    }
+
+    /* Remove bottom margin for the last card to prevent extra space */
+    .weather-grid .weather-card:last-child,
+    .schedule-day-shows .schedule-entry:last-child {
+      margin-bottom: 0;
+    }
   }
 </style>
 </head>
@@ -1314,7 +1340,7 @@
     if (volume == 0) {
       volumeIcon.textContent = '🔇';
     } else if (volume < 0.5) {
-      volumeIcon.textContent = '�';
+      volumeIcon.textContent = '🔈';
     } else {
       volumeIcon.textContent = '🔊';
     }
@@ -1757,4 +1783,3 @@
 </script>
 </body>
 </html>
-�
