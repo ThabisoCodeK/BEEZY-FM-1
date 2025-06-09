@@ -1,1464 +1,1753 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beezy FM - Radio Bathong</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-image: url('image_643d5e.jpg'); /* Using the uploaded image */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* Keeps background fixed when scrolling */
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            position: relative; /* Needed for pseudo-element positioning */
-            overflow-y: auto; /* Allow scrolling if content is long */
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Beezy FM - Radio Bathong</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  /*
+   * Base body styles: sets font, background, and ensures full viewport height.
+   * Also includes a fixed background image for consistent visual appeal.
+   */
+  body {
+    font-family: 'Inter', sans-serif;
+    background-image: url('image_643d5e.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative; /* Needed for the pseudo-element positioning */
+    overflow-y: auto; /* Allows scrolling when content exceeds viewport height */
+  }
 
-        /* Overlay for blur effect */
-        body::before {
-            content: "";
-            position: fixed; /* Fixed to viewport */
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.2); /* A slight white overlay for better text readability */
-            backdrop-filter: blur(8px); /* Adjust blur strength as needed */
-            -webkit-backdrop-filter: blur(8px); /* For Safari */
-            z-index: -1; /* Place it behind content but above the background image */
-        }
+  /*
+   * Overlay for blur effect: Creates a semi-transparent layer over the background image
+   * to enhance readability of text and apply a subtle blur.
+   */
+  body::before {
+    content: "";
+    position: fixed; /* Fixed to the viewport */
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white overlay */
+    backdrop-filter: blur(8px); /* Applies a blur effect */
+    -webkit-backdrop-filter: blur(8px); /* Vendor prefix for Safari compatibility */
+    z-index: -1; /* Positions the overlay behind the main content */
+  }
 
-        header {
-            background-color: rgba(0, 0, 0, 0.8); /* Black header with transparency */
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            position: sticky; /* Make header sticky */
-            top: 0;
-            z-index: 1000; /* Ensure it's above other content */
-        }
+  /* Header styles: Defines the top navigation bar's appearance and layout. */
+  header {
+    background-color: rgba(0, 0, 0, 0.8); /* Dark background with transparency */
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allows header items to wrap on smaller screens */
+    position: sticky; /* Makes the header sticky at the top */
+    top: 0;
+    z-index: 1000; /* Ensures the header stays on top of other content */
+  }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+  /* Left section of the header: groups logo and station information. */
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 
-        /* MODIFIED: Station logo to be square with no border/shadow */
-        .station-logo {
-            width: 100px; /* Smaller logo in header */
-            height: 100px;
-            object-fit: cover; /* Fill the square, potentially cropping */
-            border-radius: 0; /* Make it square */
-            border: none; /* Remove border */
-            box-shadow: none; /* Remove shadow */
-        }
+  /* Station logo styles: Controls the appearance of the radio station's logo. */
+  .station-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* Ensures the image covers the area, potentially cropping */
+    border-radius: 0; /* Keeps the logo square */
+    border: none; /* Removes any border */
+    box-shadow: none; /* Removes any shadow */
+  }
 
-        .station-info h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: yellow; /* Yellow for station name */
-            margin-bottom: 0.25rem;
-        }
+  /* Station information styles: Controls the main title and slogan within the header. */
+  .station-info h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: yellow; /* Bright yellow for visibility */
+    margin-bottom: 0.25rem;
+  }
 
-        .station-info p {
-            font-size: 0.9rem;
-            color: #ccc; /* Lighter grey for slogan */
-        }
+  .station-info p {
+    font-size: 0.9rem;
+    color: #ccc; /* Lighter grey for secondary text */
+  }
 
-        /* Desktop Navigation */
-        nav ul {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+  /* Navigation bar (navbar) styles: Defines the layout and appearance of navigation links. */
+  nav ul {
+    list-style: none; /* Removes default list bullets */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.5rem; /* Space between navigation items */
+    flex-wrap: wrap; /* Allows navigation items to wrap */
+    justify-content: center; /* Centers navigation items */
+  }
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
+  nav a {
+    color: white;
+    text-decoration: none; /* Removes underline from links */
+    font-weight: 600;
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+  }
 
-        nav a:hover {
-            color: yellow;
-        }
+  nav a:hover {
+    color: yellow; /* Changes link color to yellow on hover */
+  }
 
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-left: 1.5rem;
-        }
+  /* Volume control section: Styles for the volume slider and icon. */
+  .volume-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1.5rem;
+  }
 
-        /* Corrected CSS for range input */
-        .volume-control input[type="range"] {
-            width: 80px; /* Adjust as needed */
-            -webkit-appearance: none;
-            appearance: none;
-            background: #4a5568; /* Darker grey for the track */
-            outline: none;
-            border-radius: 5px;
-            height: 5px;
-            cursor: pointer;
-        }
+  /* Volume slider input styles: Customizes the appearance of the range input. */
+  .volume-control input[type="range"] {
+    width: 80px;
+    -webkit-appearance: none; /* Removes default WebKit appearance */
+    appearance: none;
+    background: #4a5568; /* Dark grey track */
+    outline: none;
+    border-radius: 5px;
+    height: 5px;
+    cursor: pointer;
+  }
 
-        .volume-control input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: yellow;
-            cursor: pointer;
-            border: 1px solid #fff;
-        }
+  /* WebKit specific thumb styles for the volume slider. */
+  .volume-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%; /* Makes the thumb circular */
+    background: yellow;
+    cursor: pointer;
+    border: 1px solid #fff;
+  }
 
-        .volume-control input[type="range"]::-moz-range-thumb {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: yellow;
-            cursor: pointer;
-            border: 1px solid #fff;
-        }
+  /* Mozilla specific thumb styles for the volume slider. */
+  .volume-control input[type="range"]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: yellow;
+    cursor: pointer;
+    border: 1px solid #fff;
+  }
 
-        main {
+  /* Main content area styles: Defines layout and spacing for all content sections. */
+  main {
+    flex-grow: 1; /* Allows main to grow and take available vertical space */
+    display: flex;
+    flex-direction: column; /* Stacks content vertically */
+    justify-content: flex-start; /* Aligns content to the top */
+    align-items: center; /* Centers content horizontally */
+    padding: 2rem;
+    gap: 4rem; /* Space between content sections - ADJUSTED FROM 2rem to 4rem */
+    position: relative;
+    z-index: 1;
+  }
+
+  /* General container styles for content sections. */
+  .container {
+    background-color: rgba(240, 242, 245, 0.9); /* Slightly transparent light background */
+    border-radius: 1rem; /* Rounded corners */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), /* Subtle shadow for depth */
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 2.5rem;
+    width: 90%; /* Adjusted to take up 90% of the parent width */
+    max-width: 90%; /* Ensures it doesn't exceed 90% */
+    position: relative;
+    border: 1px solid #e2e8f0; /* Light border */
+    text-align: center; /* Centered content within container */
+  }
+
+  /* Styles for the current show time at the top of the home section. */
+  .show-time-at-top {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Styles for the current show title. */
+  .show-title {
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #eab308; /* Tailwind yellow-500 */
+    margin-bottom: 0.75rem;
+  }
+
+  /* Styles for presenter information. */
+  .presenter-info {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4a5568; /* Tailwind gray-700 */
+    margin-bottom: 0.5rem;
+  }
+
+  /* Styles for the contact lines container */
+  .contact-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem; /* Space below the contact lines */
+  }
+
+  /* Styles for individual contact lines (WhatsApp, Studio Line) */
+  .contact-line-item {
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center content within the line item */
+    gap: 0.5rem;
+  }
+
+  /* Specific color for WhatsApp line */
+  .whatsapp-line-item {
+    color: #25D366; /* WhatsApp green */
+  }
+
+  /* Specific color for Studio line */
+  .studio-line-item {
+    color: #1A73E8; /* Google Blue, or similar */
+  }
+
+  /* Styles for the WhatsApp icon. */
+  .whatsapp-icon {
+    width: 20px; height: 20px;
+  }
+
+  /* Styles for general time display (e.g., current system time). */
+  .time-display {
+    font-size: 1rem;
+    color: #a0aec0;
+    margin-top: 1.5rem;
+  }
+
+  /* Styles for the progress bar container. */
+  .progress-bar-container {
+    width: 100%;
+    background-color: #e2e8f0; /* Light grey background for the track */
+    border-radius: 9999px; /* Fully rounded corners */
+    height: 0.75rem;
+    margin-top: 2.5rem;
+    overflow: visible;
+    position: relative;
+  }
+
+  /* Styles for the progress bar itself (the filled part). */
+  .progress-bar {
+    height: 100%;
+    background-color: yellow;
+    border-radius: 9999px;
+    width: 0%;
+    transition: width 0.5s ease; /* Smooth transition for progress updates */
+  }
+
+  /* Keyframe animation for the "LIVE ON AIR" text to make it flash. */
+  @keyframes flashRed {
+    0%, 100% { color: #ef4444; } /* Red color at start and end */
+    50% { color: #b91c1c; } /* Darker red in the middle */
+  }
+
+  /* Class to apply the flashing animation. */
+  .flashing-on-air {
+    text-align: center;
+    animation: flashRed 1.15s infinite alternate; /* Applies animation, alternates direction */
+  }
+
+  /* Container for the show image. */
+  .show-image-container {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1.5rem auto; /* Centers horizontally, provides bottom margin */
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); /* Initial shadow for pulse effect */
+    animation: pulseMagnetic 2s infinite ease-in-out; /* Applies pulse animation */
+  }
+
+  /* Styles for the actual show image within its container. */
+  .show-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers the area without distortion */
+    display: block;
+  }
+
+  /* Play/Pause Button styles */
+  .play-pause-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+    border: 2px solid yellow;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    z-index: 5; /* Ensure it's above the image */
+  }
+
+  .play-pause-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .play-pause-button svg {
+    fill: yellow; /* Icon color */
+    width: 30px;
+    height: 30px;
+  }
+
+
+  /* Keyframe animation for a magnetic pulsing effect on the show image container. */
+  @keyframes pulseMagnetic {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); } /* Start with no visible shadow */
+    70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); } /* Expands and fades out */
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); } /* Returns to invisible */
+  }
+
+  /* Labels for start and end times on the progress bar. */
+  .time-label {
+    text-align: center;
+    position: absolute;
+    top: -1.5rem; /* Positions above the progress bar */
+    font-size: 0.75rem;
+    color: #000;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Specific positioning for start and end time labels. */
+  .time-label.start { left: 0; }
+  .time-label.end { right: 0; }
+
+  /* Styles for "Up Next" show information. */
+  .next-show-info {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    color: #eab308; /* Yellow color */
+    font-weight: 600;
+  }
+
+  /* Styles for the presenter of the "Up Next" show. */
+  .next-show-presenter {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #4a5568; /* Grey color */
+  }
+
+  /* News Section Styles */
+  #news-section {
+    background-color: rgba(255,255,255,0.9);
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),
+                0 4px 6px -2px rgba(0,0,0,0.05);
+    padding: 2.5rem;
+    width: 90%; /* Adjusted to take up 90% of the parent width */
+    max-width: 90%; /* Ensures it doesn't exceed 90% */
+    min-height: 400px; /* Added for consistent length */
+    margin-top: 2rem; /* Space below the preceding section */
+    text-align: center;
+    border: 1px solid #e2e8f0;
+  }
+
+  /* Heading for the News Section. */
+  #news-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  /* Horizontal Scrolling container for weather cards within the News Section. */
+  .weather-grid {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-bottom: 1rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+  .weather-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Individual weather card styles. */
+  .weather-card {
+    flex-shrink: 0;
+    width: 280px;
+    background-color: rgba(248, 250, 252, 0.95);
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Hover effect for weather cards. */
+  .weather-card:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Highlight for the closest city weather card */
+  .weather-card.highlight {
+    border: 2px solid #eab308; /* Yellow border */
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.5); /* Yellow glow */
+    transform: scale(1.03); /* Slightly larger */
+  }
+
+  /* Heading for individual weather cards (city name). */
+  .weather-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Paragraph text within weather cards. */
+  .weather-card p {
+    font-size: 1rem;
+    color: #4a5568;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Temperature display within weather cards. */
+  .weather-card .temp {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #eab308;
+  }
+
+  /* About Section Styles */
+  #about-section {
+    background-color: rgba(255,255,255,0.9);
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),
+                0 4px 6px -2px rgba(0,0,0,0.05);
+    padding: 2.5rem;
+    width: 90%; /* Adjusted to take up 90% of the parent width */
+    max-width: 90%; /* Ensures it doesn't exceed 90% */
+    min-height: 400px; /* Added for consistent length */
+    margin-top: 2rem;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+  }
+
+  /* Heading for the About Section. */
+  #about-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Paragraph and list item text within the About Section. */
+  #about-section p, #about-section ul {
+    font-size: 1.15rem;
+    color: #333;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  /* List styles within the About Section. */
+  #about-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem auto;
+    max-width: 400px;
+    text-align: left;
+  }
+
+  /* Individual list item styles within the About Section. */
+  #about-section ul li {
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  /* Custom bullet point for list items in the About Section. */
+  #about-section ul li:before {
+    content: '⭐';
+    position: absolute;
+    left: 0;
+    color: yellow;
+    font-size: 1.2em;
+    line-height: 1;
+  }
+
+  /* Styles for the dynamic listener count display. */
+  .listener-count-display {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #eab308;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  /* Label for the listener count. */
+  .listener-count-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  /* Schedule Section Styles */
+  #schedule-section {
+    background-color: rgba(255,255,255,0.9);
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),
+                0 4px 6px -2px rgba(0,0,0,0.05);
+    padding: 2.5rem;
+    width: 90%; /* Adjusted to take up 90% of the parent width */
+    max-width: 90%; /* Ensures it doesn't exceed 90% */
+    min-height: 400px; /* Added for consistent length */
+    margin-top: 2rem;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+  }
+
+  /* Heading for the Schedule Section. */
+  #schedule-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Day Tabs for Schedule: Styles for the buttons to switch between daily schedules. */
+  .day-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Individual day tab button styles. */
+  .day-tabs button {
+    background-color: #cbd5e0;
+    color: #4a5568;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: none;
+    flex-shrink: 0;
+  }
+
+  /* Hover effect for day tab buttons. */
+  .day-tabs button:hover {
+    background-color: #a0aec0;
+    color: #1a202c;
+  }
+
+  /* Active state for day tab buttons. */
+  .day-tabs button.active {
+    background-color: #eab308;
+    color: white;
+    box-shadow: 0 2px 5px rgba(234, 179, 8, 0.4);
+  }
+
+  /* Horizontal Scrolling container for Daily Schedules. */
+  .daily-schedules-container {
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Styles for the container of individual show entries within a day's schedule. */
+  .schedule-day-shows {
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 1rem;
+    white-space: nowrap;
+    gap: 1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* Hide scrollbar for a cleaner look across different browsers. */
+  .schedule-day-shows::-webkit-scrollbar {
+    display: none;
+  }
+  .schedule-day-shows {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Styles for individual schedule entries (show cards). */
+  .schedule-entry {
+    flex-shrink: 0;
+    width: 280px;
+    scroll-snap-align: start;
+    background-color: #f8fafc;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Hover effect for schedule entries. */
+  .schedule-entry:hover {
+    transform: translateY(-3px);
+    background-color: #f0f4f8;
+  }
+
+  /* Keyframe animation for a flashing effect on the currently live show in the schedule. */
+  @keyframes flashScheduleEntry {
+    0%, 100% {
+      background-color: #fffbeb;
+      border-color: #fbbf24;
+      box-shadow: 0 4px 8px rgba(251, 191, 36, 0.2);
+    }
+    50% {
+      background-color: #fcd34d;
+      border-color: #eab308;
+      box-shadow: 0 6px 12px rgba(251, 191, 36, 0.4);
+    }
+  }
+
+  /* Class to apply the flashing animation to the live schedule entry. */
+  .live-show-highlight {
+    text-align: center;
+    animation: flashScheduleEntry 1.5s infinite alternate;
+  }
+
+  /* Styles for the time display within a schedule entry. */
+  .schedule-time {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed #cbd5e0;
+    width: 100%;
+  }
+
+  /* Styles for the details section within a schedule entry. */
+  .schedule-details {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    margin-top: 0.5rem;
+  }
+
+  /* Styles for the image within a schedule entry. */
+  .schedule-entry-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    border: 2px solid #ccc;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Styles for the title of a show within a schedule entry. */
+  .schedule-entry-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.25rem;
+    white-space: normal;
+  }
+
+  /* Styles for the presenter name within a schedule entry. */
+  .schedule-entry-presenter {
+    font-size: 1rem;
+    color: #666;
+    white-space: normal;
+  }
+
+  /* Contact Section Styles - New section for contact information */
+  #contact-section {
+    background-color: rgba(255,255,255,0.9);
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),
+                0 4px 6px -2px rgba(0,0,0,0.05);
+    padding: 2.5rem;
+    width: 90%; /* Adjusted to take up 90% of the parent width */
+    max-width: 90%; /* Ensures it doesn't exceed 90% */
+    min-height: 400px; /* Added for consistent length */
+    margin-top: 2rem;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+  }
+
+  /* Heading for the Contact Section. */
+  #contact-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 1.5rem;
+  }
+
+  /* List styles for contact methods. */
+  #contact-section ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  /* Individual list item styles for contact methods. */
+  #contact-section ul li {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+  }
+
+  /* Footer styles: Defines the bottom section of the page. */
+  footer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ccc;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    margin-top: auto;
+  }
+
+  /* Social links within the footer. */
+  footer .social-links a {
+    color: yellow;
+    margin: 0 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* Hamburger menu for responsive design (hidden on larger screens). */
+  .hamburger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+  }
+
+  /* Bars within the hamburger menu icon. */
+  .hamburger-menu span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    border-radius: 3px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* Hamburger menu animation: Transforms bars into an 'X' when active. */
+  .hamburger-menu.active span:nth-child(1) {
+    transform: translateY(11px) rotate(45deg);
+  }
+
+  .hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-menu.active span:nth-child(3) {
+    transform: translateY(-11px) rotate(-45deg);
+  }
+
+  /* Mobile navigation styles: Controls how the nav menu appears on small screens. */
+  #main-nav {
+    display: flex;
+  }
+
+  @media (max-width: 768px) {
+    /* Show hamburger menu on smaller screens. */
+    .hamburger-menu {
+      display: flex;
+    }
+
+    /* Styles for the main navigation when in mobile view. */
+    #main-nav {
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      padding: 1rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 999;
+    }
+
+    /* Active state for mobile navigation (slides into view). */
+    #main-nav.active {
+      transform: translateX(0);
+    }
+
+    /* List items within mobile navigation. */
+    #main-nav ul {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Links within mobile navigation. */
+    #main-nav a {
+      padding: 0.5rem 1rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Volume control adjustments for mobile. */
+    .volume-control {
+      margin-left: 0;
+      margin-top: 1rem;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  /* Further responsive adjustments for very small screens (e.g., phones in portrait). */
+  @media (max-width: 600px) {
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem;
+    }
+    .header-left {
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .station-info {
+      flex-grow: 1;
+      text-align: right;
+    }
+    .volume-control {
+      order: 3;
+      margin-top: 1rem;
+    }
+    main {
             flex-grow: 1;
             display: flex;
-            flex-direction: column; /* Allow content to stack */
-            justify-content: flex-start; /* Align to top */
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
             padding: 2rem;
-            gap: 2rem; /* Space between sections */
+            gap: 2rem;
         }
-
-        .container {
-            background-color: rgba(240, 242, 245, 0.9); /* Slightly transparent white container */
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 2.5rem;
-            text-align: center;
-            max-width: 90%;
-            width: 500px; /* Default width for home section */
-            position: relative;
-            border: 1px solid #e2e8f0;
-        }
-
-        .show-time-at-top {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 0.5rem;
-        }
-
-        .show-title {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: #eab308; /* Tailwind yellow-500 for show title */
-            margin-bottom: 0.75rem;
-        }
-
-        .presenter-info { /* New class for presenter and WhatsApp */
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #4a5568; /* Tailwind gray-700 */
-            margin-bottom: 0.5rem; /* Space between presenter and progress bar */
-        }
-
-        .whatsapp-line {
-            font-size: 1rem; /* Smaller font for WhatsApp line */
-            color: #25D366; /* WhatsApp green */
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .whatsapp-icon {
-            width: 20px; /* Size of WhatsApp icon */
-            height: 20px;
-            vertical-align: middle;
-        }
-
-        /* Reverted: Original time-display styles */
-        .time-display {
-            font-size: 1rem;
-            color: #a0aec0;
-            margin-top: 1.5rem;
-        }
-        /* Reverted: Removed .modern-time-widget, .digital-time, .digital-date styles */
-
-
-        .progress-bar-container {
-            width: 100%;
-            background-color: #e2e8f0; /* Light grey background for empty bar */
-            border-radius: 9999px;
-            height: 0.75rem;
-            margin-top: 2.5rem;
-            overflow: visible;
-            position: relative;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background-color: yellow;
-            border-radius: 9999px;
-            width: 0%;
-            transition: width 0.5s ease-in-out;
-        }
-
-        @keyframes flashRed {
-            0%, 100% { color: #ef4444; }
-            50% { color: #b91c1c; }
-        }
-        .flashing-on-air {
-            animation: flashRed 1.15s infinite alternate;
-        }
-
-        .show-image-container {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 1.5rem auto;
-            position: relative;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7);
-            animation: pulseMagnetic 2s infinite ease-in-out;
-        }
-
-        .show-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        @keyframes pulseMagnetic {
-            0% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); }
-        }
-
-        .time-label {
-            position: absolute;
-            top: -1.5rem;
-            font-size: 0.75rem;
-            color: #000000;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .time-label.start { left: 0; }
-        .time-label.end { right: 0; }
-
-        .next-show-info {
-            margin-top: 1.5rem;
-            font-size: 1rem;
-            color: #eab308; /* Yellow for next show */
-            font-weight: 600;
-        }
-        .next-show-presenter {
-            font-size: 0.9rem;
-            color: #4a5568;
-        }
-
-        /* News Section Styles */
-        #news-section {
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 2.5rem;
-            max-width: 90%;
-            width: 800px; /* Wider for news content */
-            margin-top: 2rem;
-            text-align: left; /* Align text left for readability */
-            display: none; /* Hidden by default */
-            border: 1px solid #e2e8f0;
-        }
-
-        #news-section h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .weather-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .weather-card {
-            background-color: rgba(248, 250, 252, 0.95); /* Slightly transparent light grey */
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            padding: 1.25rem;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: transform 0.2s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .weather-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .weather-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 0.5rem;
-        }
-
-        .weather-card p {
-            font-size: 1rem;
-            color: #4a5568;
-            margin-bottom: 0.25rem;
-        }
-
-        .weather-card .temp {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #eab308;
-        }
-
-        /* About Section Styles */
-        #about-section {
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 2.5rem;
-            max-width: 90%;
-            width: 700px;
-            margin-top: 2rem;
-            text-align: center; /* Center content within the about card */
-            display: none; /* Hidden by default */
-            border: 1px solid #e2e8f0;
-        }
-
-        #about-section h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 1.5rem;
-        }
-
-        #about-section p, #about-section ul {
-            font-size: 1.15rem;
-            color: #333;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        #about-section ul {
-            list-style: none; /* Remove default bullet points */
-            padding: 0;
-            margin: 1.5rem auto; /* Center the list */
-            max-width: 400px; /* Limit width for better readability */
-            text-align: left; /* Align list items to the left */
-        }
-
-        #about-section ul li {
-            margin-bottom: 0.75rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        #about-section ul li:before {
-            content: '⭐'; /* Custom bullet point */
-            position: absolute;
-            left: 0;
-            color: yellow;
-            font-size: 1.2em;
-            line-height: 1;
-        }
-
-        .listener-count-display {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #eab308;
-            margin-bottom: 1.5rem;
-            display: block; /* Ensure it takes its own line */
-        }
-        .listener-count-label {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        /* Schedule Section Styles */
-        #schedule-section {
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 2.5rem;
-            max-width: 90%;
-            width: 700px; /* Adjust width for schedule list */
-            margin-top: 2rem;
-            text-align: center;
-            display: none; /* Hidden by default */
-            border: 1px solid #e2e8f0;
-        }
-
-        #schedule-section h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Day Tabs for Schedule */
-        .day-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
-        }
-
-        .day-tabs button {
-            background-color: #cbd5e0; /* light grey */
-            color: #4a5568; /* dark grey text */
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            border: none;
-            flex-shrink: 0; /* Prevent buttons from shrinking too much */
-        }
-
-        .day-tabs button:hover {
-            background-color: #a0aec0; /* slightly darker grey */
-            color: #1a202c;
-        }
-
-        .day-tabs button.active {
-            background-color: #eab308; /* yellow */
-            color: white;
-            box-shadow: 0 2px 5px rgba(234, 179, 8, 0.4);
-        }
-
-        /* Horizontal Scrolling for Daily Schedules */
-        .daily-schedules-container {
-            overflow-x: hidden; /* Hide main container's scrollbar */
-            position: relative; /* For potential future navigation arrows */
-        }
-
-        .schedule-day-shows {
-            display: flex;
-            overflow-x: scroll; /* Enable horizontal scrolling */
-            scroll-snap-type: x mandatory; /* Snap to items */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-            padding-bottom: 1rem; /* Space for scrollbar on some systems */
-            white-space: nowrap; /* Prevent items from wrapping */
-            gap: 1.5rem; /* Space between show entries */
-            padding-left: 1.5rem; /* Padding for first item to not be at edge */
-            padding-right: 1.5rem; /* Padding for last item */
-        }
-
-        /* Hide scrollbar for a cleaner look */
-        .schedule-day-shows::-webkit-scrollbar {
-            display: none; /* For Webkit browsers */
-        }
-        .schedule-day-shows {
-            -ms-overflow-style: none;  /* For Internet Explorer and Edge */
-            scrollbar-width: none;  /* For Firefox */
-        }
-
-
-        .schedule-entry {
-            flex-shrink: 0; /* Prevent items from shrinking */
-            width: 280px; /* Fixed width for each show card */
-            scroll-snap-align: start; /* Snap to the start of each item */
-            background-color: #f8fafc; /* Lightest grey background */
-            border-radius: 0.75rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-            border: 1px solid #e2e8f0;
-            padding: 1.5rem; /* Increased padding for better appearance */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .schedule-entry:hover {
-            transform: translateY(-3px);
-            background-color: #f0f4f8;
-        }
-
-        /* Keyframe animation for schedule entry flash */
-        @keyframes flashScheduleEntry {
-            0%, 100% {
-                background-color: #fffbeb; /* light yellow */
-                border-color: #fbbf24; /* amber */
-                box-shadow: 0 4px 8px rgba(251, 191, 36, 0.2);
-            }
-            50% {
-                background-color: #fcd34d; /* deeper yellow/amber */
-                border-color: #eab308; /* even deeper yellow */
-                box-shadow: 0 6px 12px rgba(251, 191, 36, 0.4);
-            }
-        }
-
-        .live-show-highlight {
-            animation: flashScheduleEntry 1.5s infinite alternate; /* Apply the new flashing animation */
-        }
-
-        .schedule-time {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px dashed #cbd5e0;
-            width: 100%;
-        }
-
-        .schedule-details {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-grow: 1;
-            margin-top: 0.5rem;
-        }
-
-        .schedule-entry-image {
-            width: 80px; /* Larger image in horizontal view */
-            height: 80px;
-            object-fit: cover;
-            border-radius: 0.75rem;
-            border: 2px solid #ccc;
-            margin-bottom: 0.75rem;
-        }
-
-        .schedule-entry-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 0.25rem;
-            white-space: normal; /* Allow title to wrap */
-        }
-
-        .schedule-entry-presenter {
-            font-size: 1rem;
-            color: #666;
-            white-space: normal; /* Allow presenter name to wrap */
-        }
-
-
-        footer {
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #ccc;
-            padding: 1.5rem 2rem;
-            text-align: center;
-            font-size: 0.85rem;
-            margin-top: auto;
-        }
-
-        footer .social-links a {
-            color: yellow;
-            margin: 0 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-
-        /* --- Mobile Responsiveness Adjustments (max-width: 768px) --- */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column; /* Stack header items vertically */
-                align-items: flex-start; /* Align to start */
-                padding: 1rem;
-                gap: 1rem; /* Space between stacked header items */
-                position: relative; /* For positioning hamburger button */
-            }
-
-            .header-left {
-                width: 100%; /* Take full width */
-                justify-content: center; /* Center logo and info */
-                margin-bottom: 0.5rem; /* Space between logo/info and volume/nav toggle area */
-            }
-
-            .station-info {
-                text-align: center;
-            }
-
-            .volume-control {
-                margin-left: 0; /* Remove left margin */
-                width: 100%; /* Take full width */
-                justify-content: center; /* Center volume control */
-                order: 3; /* Move volume control to bottom of header on mobile */
-            }
-
-            /* Hamburger menu button */
-            .hamburger-menu {
-                display: block; /* Show hamburger button on mobile */
-                position: absolute; /* Position it absolutely in the header */
-                right: 1rem;
-                top: 1.5rem; /* Adjust positioning relative to header */
-                background: none;
-                border: none;
-                cursor: pointer;
-                z-index: 1001; /* Ensure it's above other content */
-                padding: 0.5rem; /* Make it easier to tap */
-            }
-            .hamburger-menu span {
-                display: block;
-                background-color: white;
-                height: 2px;
-                width: 24px;
-                margin-bottom: 4px;
-                transition: transform 0.3s ease, opacity 0.3s ease;
-            }
-            .hamburger-menu span:last-child {
-                margin-bottom: 0;
-            }
-
-            /* Hamburger animation to 'X' */
-            .hamburger-menu.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-            .hamburger-menu.active span:nth-child(2) { opacity: 0; }
-            .hamburger-menu.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
-
-            /* Mobile Navigation */
-            #main-nav {
-                position: fixed; /* Overlay the content */
-                top: 0;
-                right: -100%; /* Start off-screen */
-                width: 75%; /* Width of the menu */
-                max-width: 300px; /* Limit max width for larger tablets in portrait */
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.95); /* Dark background for the menu */
-                transition: right 0.3s ease-in-out;
-                z-index: 999; /* Below hamburger, above content */
-                padding-top: 6rem; /* Space for header items that are above the menu */
-                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-            }
-
-            #main-nav.active {
-                right: 0; /* Slide in */
-            }
-
-            #main-nav ul {
-                flex-direction: column; /* Stack nav items vertically */
-                gap: 1.5rem; /* Space between nav items */
-                align-items: flex-start; /* Align text to the left */
-                padding: 1rem 2rem; /* Padding inside the nav menu */
-                width: 100%;
-            }
-
-            #main-nav a {
-                font-size: 1.2rem; /* Larger font for tap targets */
-                display: block; /* Make the whole link tap-able */
-                padding: 0.5rem 0;
-                width: 100%;
-                color: white; /* Ensure text color is visible on dark background */
-            }
-
-            /* Main content padding & container adjustments */
-            main {
-                padding: 1rem; /* Reduce main padding */
-            }
-            .container {
-                padding: 1.5rem; /* Reduce padding on containers */
-                width: 100%; /* Allow containers to take full width */
-                max-width: 100%; /* Override max-width */
-            }
-
-            /* Home section specific adjustments */
-            .show-time-at-top { font-size: 1.2rem; }
-            .show-title { font-size: 1.8rem; }
-            .presenter-info { font-size: 1rem; }
-            .whatsapp-line { font-size: 0.9rem; }
-            .show-image-container { width: 150px; height: 150px; } /* Smaller image */
-            .time-display { font-size: 0.9rem; }
-            .next-show-info { font-size: 0.95rem; }
-            .next-show-presenter { font-size: 0.85rem; }
-
-
-            /* News section adjustments */
-            #news-section h2 { font-size: 1.8rem; }
-            .weather-card h3 { font-size: 1.1rem; }
-            .weather-card p { font-size: 0.9rem; }
-            .weather-card .temp { font-size: 1.3rem; }
-            .weather-grid { gap: 1rem; } /* Slightly reduce gap in grid */
-            .weather-card { padding: 1rem; }
-
-            /* About section adjustments */
-            #about-section h2 { font-size: 2rem; }
-            #about-section p, #about-section ul { font-size: 1rem; }
-            .listener-count-display { font-size: 2rem; }
-            .listener-count-label { font-size: 1rem; }
-            #about-section ul { margin: 1rem auto; max-width: none; } /* Adjust list for full width */
-
-
-            /* Schedule specific mobile adjustments */
-            .schedule-section h2 { font-size: 1.8rem; }
-            .schedule-day-shows {
-                padding-left: 0.75rem; /* Adjust horizontal padding to start closer to edge */
-                padding-right: 0.75rem;
-                gap: 1rem; /* Reduce gap between cards slightly */
-            }
-
-            .schedule-entry {
-                width: 260px; /* Slightly smaller card width for very small screens */
-                padding: 1rem; /* Reduce card padding */
-            }
-            .schedule-time {
-                font-size: 1.0rem; /* Adjust font size */
-            }
-            .schedule-entry-image {
-                width: 60px; /* Smaller image in schedule entry */
-                height: 60px;
-            }
-            .schedule-entry-title {
-                font-size: 1.1rem; /* Adjust font size */
-            }
-            .schedule-entry-presenter {
-                font-size: 0.9rem; /* Adjust font size */
-            }
-
-            .day-tabs {
-                gap: 0.3rem; /* Smaller gap for day buttons */
-            }
-            .day-tabs button {
-                padding: 0.4rem 0.8rem; /* Smaller padding for buttons */
-                font-size: 0.9rem; /* Slightly smaller font */
-            }
-        }
-    </style>
+    .container {
+      padding: 1.5rem;
+    }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <div class="header-left">
-            <img src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Beezy FM Logo" class="station-logo">
-            <div class="station-info">
-                <h1>BEEZY FM</h1>
-                <p>Radio Bathong</p>
-            </div>
-        </div>
+<header>
+  <div class="header-left">
+    <img src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Beezy FM Logo" class="station-logo" />
+    <div class="station-info">
+      <h1>BEEZY FM</h1>
+      <p>RADIO BATHONG</p>
+    </div>
+  </div>
+  <button class="hamburger-menu" id="hamburger-button" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="main-nav">
+    <ul>
+      <li><a href="#" onclick="showSection('home-section')">HOME</a></li>
+      <li><a href="#" onclick="showSection('news-section')">BEEZY NEWS</a></li>
+      <li><a href="#" onclick="showSection('schedule-section')">BEEZY SCHEDULE</a></li>
+      <li><a href="#" onclick="showSection('about-section')">ABOUT US</a></li>
+      <li><a href="#" onclick="showSection('contact-section')">CONTACT</a></li>
+    </ul>
+  </nav>
+  <div class="volume-control">
+    <label for="volume-slider" class="sr-only">Volume</label>
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" />
+    <span id="volume-icon">🔊</span>
+  </div>
+</header>
+<main>
+  <div class="container" id="home-section">
 
-        <button class="hamburger-menu" id="hamburger-button">
-            <span></span>
-            <span></span>
-            <span></span>
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 flashing-on-air" id="show-time-top">LIVE ON AIR</h1>
+    <div id="show-info" class="p-6 bg-blue-50 border border-blue-200 rounded-lg shadow-md">
+      <!-- New div for contact numbers - positioned above the image -->
+      <div id="contact-numbers" class="contact-lines">
+          <!-- Contact numbers will be dynamically inserted here by JavaScript -->
+      </div>
+      <div class="show-image-container">
+        <img id="show-image" class="show-image" src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Show Image" />
+        <!-- Play/Pause button overlay -->
+        <button id="play-pause-button" class="play-pause-button" aria-label="Play/Pause Radio Stream">
+          <svg id="play-icon" style="display: block;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg id="pause-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
         </button>
+      </div>
+      <!-- This paragraph will now display the show's start and end time -->
+      <p class="show-time-at-top" id="current-show-duration-display"></p>
+      <!-- This paragraph will now display the show's name -->
+      <p class="show-title" id="show-name">Loading Show...</p>
+      <p id="current-song-title" class="text-lg font-semibold text-gray-700 mt-2">No song info</p>
+      <p id="current-song-artist" class="text-md text-gray-600">Artist: </p>
+      <div class="presenter-info">
+        <p id="presenter-name"></p>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="show-progress-bar"></div>
+        <span class="time-label start" id="show-elapsed-time-label"></span>
+        <span class="time-label end" id="show-total-duration-label"></span>
+      </div>
+      <p class="next-show-info" id="next-show-name"></p>
+      <p class="next-show-presenter" id="next-show-presenter"></p>
+    </div>
+    <p class="time-display" id="current-time"></p>
+  </div>
 
-        <nav id="main-nav">
-            <ul>
-                <li><a href="#" onclick="showSection('home-section')">Home</a></li>
-                <li><a href="#" onclick="showSection('news-section')">Beezy News</a></li>
-                <li><a href="#" onclick="showSection('schedule-section')">Beezy Schedule</a></li>
-                <li><a href="#" onclick="showSection('about-section')">About Us</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+    <div id="news-section" class="container hidden">
+      <h2>Beezy News: Weather Updates</h2>
+      <div class="weather-grid" id="weather-updates">
+        <p>Loading weather data...</p>
+      </div>
+      <p class="time-display" id="news-last_updated"></p>
+    </div>
 
-        <div class="volume-control">
-            <label for="volume-slider" class="sr-only">Volume</label>
-            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
-            <span id="volume-icon">🔊</span>
-        </div>
-    </header>
+    <div id="schedule-section" class="container hidden">
+      <h2>Beezy FM Broadcast Schedule</h2>
+      <div id="day-tabs" class="day-tabs"></div>
+      <div id="daily-schedules-container" class="daily-schedules-container"></div>
+    </div>
 
-    <main>
-        <div class="container" id="home-section">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 flashing-on-air">LIVE ON AIR</h1>
-            <div id="show-info" class="p-6 bg-blue-50 border border-blue-200 rounded-lg shadow-md">
-                <div class="show-image-container">
-                    <img id="show-image" class="show-image" src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Show Image">
-                </div>
-                <p class="show-time-at-top" id="current-show-duration-display"></p>
-                <p class="show-title" id="show-name">Loading Show...</p>
-                <div class="presenter-info">
-                    <p id="presenter-name"></p>
-                    <p id="whatsapp-line" class="whatsapp-line" style="display: none;">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon" class="whatsapp-icon">
-                        083 644 2822
-                    </p>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="show-progress-bar"></div>
-                    <span class="time-label start" id="show-elapsed-time-label"></span>
-                    <span class="time-label end" id="show-total-duration-label"></span>
-                </div>
-                <p class="next-show-info" id="next-show-name"></p>
-                <p class="next-show-presenter" id="next-show-presenter"></p>
-            </div>
+    <div id="about-section" class="container hidden">
+      <h2>Welcome to the New Beezy FM!</h2>
+      <p class="listener-count-label">Our Growing Family:</p>
+      <span id="listener-count" class="listener-count-display">0</span>
+      <p>
+        Beezy FM is more than just a radio station; we are a vibrant community hub, dedicated to bringing you the freshest beats,
+        most insightful discussions, and up-to-the-minute news. Our mission is to connect, entertain, and inform our listeners across South Africa.
+      </p>
+      <p>
+        We are constantly innovating to enhance your listening experience. From our dynamic presenters to our diverse music selection,
+        every aspect of Beezy FM is crafted with you in mind. Join us as we continue to grow and shape the sound of tomorrow!
+      </p>
+      <ul>
+        <li>🎧 Cutting-Edge Content: Always relevant, always engaging.</li>
+        <li>🌍 Community Focused: Your voice, your stories, our platform.</li>
+        <li>🎶 Diverse Music Library: Discover new favorites and timeless classics.</li>
+        <li>🎙️ Top Presenters: The best talent bringing you daily joy.</li>
+        <li>🏆 Award-Winning Quality: Recognized for our commitment to excellence.</li>
+      </ul>
+      <p>Thank you for being part of the Beezy FM family. Radio Bathong!</p>
+    </div>
 
-            <p class="time-display" id="current-time"></p>
-        </div>
+    <div id="contact-section" class="container hidden">
+      <h2>Contact Beezy FM</h2>
+      <p>We'd love to hear from you! Reach out to us through the following channels:</p>
+      <ul class="text-left max-w-sm mx-auto">
+        <li>
+          <span class="text-yellow-500 text-xl">📞</span> Phone: <a href="tel:+27836442822" class="text-blue-600 hover:underline">083 644 2822</a>
+        </li>
+        <li>
+          <span class="text-green-500 text-xl">📱</span> WhatsApp: <a href="https://wa.me/27836442822" target="_blank" class="text-blue-600 hover:underline">083 644 2822</a>
+        </li>
+        <li>
+          <span class="text-red-500 text-xl">📧</span> Email: <a href="mailto:info@beezyfm.co.za" class="text-blue-600 hover:underline">info@beezyfm.co.za</a>
+        </li>
+        <li>
+          <span class="text-blue-500 text-xl">👍</span> Facebook: <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank" class="text-blue-600 hover:underline">Beezy FM Page</a>
+        </li>
+      </ul>
+      <p class="mt-4">Our offices are open from 8:00 AM to 5:00 PM, Monday to Friday.</p>
+    </div>
 
-        <div id="news-section" class="container">
-            <h2>Beezy News: Weather Updates</h2>
-            <div class="weather-grid" id="weather-updates">
-                <p>Loading weather data...</p>
-            </div>
-            <p class="time-display" id="news-last_updated"></p>
-        </div>
+</main>
+<footer>
+  <p>© 2025 Beezy FM. All rights reserved. Radio Bathong.</p>
+  <div class="social-links">
+    <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank">Facebook</a> |
+    <a href="https://wa.me/0836442822" target="_blank">Whatsapp</a>
+  </div>
+</footer>
+<audio id="radio-stream" src="https://stream.zeno.fm/f0ccd091-d7e5-4939-98d8-52457d88ecd3/audio" preload="none"></audio>
+<script>
+  // Global variable for interval ID to manage periodic updates.
+  let currentShowIntervalId; // Renamed for clarity for the main player updates
+  let weatherIntervalId; // For weather updates
+  let listenerCountIntervalId; // For listener count animation
 
-        <div id="schedule-section" class="container">
-            <h2>Beezy FM Broadcast Schedule</h2>
-            <div id="day-tabs" class="day-tabs">
-                </div>
-            <div id="daily-schedules-container" class="daily-schedules-container">
-                </div>
-        </div>
+  // --- Schedule Data (used for current show logic) ---
+  const schedule = {
+    sunday: [
+      { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "SELEKANE", presenter: "TROST WAHA NDUMO" },
+      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "EMMANUEL", presenter: "MONYANE MOKOENA" },
+      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
+      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY CRUISE", presenter: "DIBUSENG PELEHA (QUEEN D)" },
+      { start: {hour: 18, minute: 0}, end: {hour: 21, minute: 0}, name: "EBENHEZER", presenter:"LERATO MOKAEANE"},
+      { start: {hour: 21, minute: 0}, end: {hour: 0, minute: 0}, name:"DIVINE WORSHIP", presenter:"MALESEDI MOFOKENG" },
+      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0}, name: "AUTOMATED PLAYLIST", presenter: "Automated Playlist" }
+    ],
+    weekday: [
+      { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA" },
+      { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA" },
+      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA (PEKSH) MPONO" },
+      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE" },
+      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SIMELA" },
+      { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
+      { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
+      { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "NOTICE BOARD", presenter: "MOJALEFA ZIM" },
+      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "CAMPUS CORNER", presenter: "JABULILE HLONGWANE" },
+      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0 }, name: "Automated Playlist", presenter: "Automated Playlist" }
+    ],
+    saturday: [
+      { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "KA LAPENG", presenter: "MONYANE MOKOENA" },
+      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "BEEZY FM TOP 30", presenter: "LEUTSOA NKUNYANA (DJ INCUS)" },
+      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
+      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "OLD VIBES", presenter: "SAKI CHELE (DJ SEXY D)" },
+      { start: { hour: 18, minute: 0 }, end: { hour: 21, minute: 0 }, name: "TSA MORAOMORAO", presenter: "HANANIOUS MOTAUNG" },
+      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "HOT ZONE", presenter: "LERATO MOSETHE" },
+      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0}, name: "AUTOMATED PLAYLIST", presenter: "AUTOMATED PLAYLIST" }
+    ],
+    friday: [
+      { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA" },
+      { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA" },
+      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA (PEKSH) MPONO" },
+      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE" },
+      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SIMELA" },
+      { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
+      { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
+      { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "REGGAE HOUR", presenter: "SAKI CHELE (DJ SEXY D)" },
+      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "HOT ZONE", presenter: "LERATO MOSETHE" },
+      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0}, name: "AUTOMATED PLAYLIST", presenter: "Automated Playlist" }
+    ]
+  };
 
-        <div id="about-section" class="container">
-            <h2>About Beezy FM</h2>
-            <p class="listener-count-label">Our Growing Family:</p>
-            <span id="listener-count" class="listener-count-display">0</span>
-            <p>
-                At Beezy FM, we are dedicated to bringing you the best in radio entertainment and information.
-                We pride ourselves on our commitment to our listeners and our vibrant community.
+  const UNIVERSAL_IMAGE_URL = "https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000";
+  const ZENO_NOW_PLAYING_API_URL = `https://api.zeno.fm/api/v2/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/nowplaying`;
+
+  let currentPlayingSongTitle = "";
+  let currentPlayingSongArtist = "";
+  let currentPlayingSongId = null;
+
+  async function fetchCurrentSongMetadata() {
+    try {
+      const response = await fetch(ZENO_NOW_PLAYING_API_URL);
+      if (!response.ok) {
+        console.warn(`Failed to fetch Zeno.fm metadata: ${response.status} ${response.statusText}`);
+        document.getElementById('current-song-title').textContent = "No song info";
+        document.getElementById('current-song-artist').textContent = "";
+        return;
+      }
+      const data = await response.json();
+
+      if (data && data.metadata && data.metadata.now_playing) {
+        const nowPlaying = data.metadata.now_playing;
+        const newTitle = nowPlaying.title || "Unknown Title";
+        const newArtist = nowPlaying.artist || "Unknown Artist";
+        const newSongId = nowPlaying.song_id || null;
+        
+        if (newTitle !== currentPlayingSongTitle || newArtist !== currentPlayingSongArtist) {
+          currentPlayingSongTitle = newTitle;
+          currentPlayingSongArtist = newArtist;
+          currentPlayingSongId = newSongId;
+          console.log("New Song Playing:", currentPlayingSongTitle, "by", currentPlayingSongArtist);
+          
+          document.getElementById('current-song-title').textContent = newTitle;
+          document.getElementById('current-song-artist').textContent = `Artist: ${newArtist}`;
+        }
+      } else {
+        console.log("Zeno.fm API response does not contain expected 'now_playing' metadata.");
+        document.getElementById('current-song-title').textContent = "No song info available";
+        document.getElementById('current-song-artist').textContent = "";
+        currentPlayingSongTitle = "";
+        currentPlayingSongArtist = "";
+        currentPlayingSongId = null;
+      }
+    } catch (error) {
+      console.error("Error fetching current song metadata from Zeno.fm:", error);
+      document.getElementById('current-song-title').textContent = "Failed to load song info";
+      document.getElementById('current-song-artist').textContent = "";
+    }
+  }
+
+  function formatElapsedTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return "00:00:00";
+    const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+  }
+
+  function formatTimeAmPm(hour, minute) {
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+    const formattedMinute = String(minute).padStart(2, '0');
+    return `${formattedHour}:${formattedMinute} ${ampm}`;
+  }
+
+  function updateRadioShow() {
+    try {
+      const now = new Date();
+      const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+
+      document.getElementById('current-time').textContent = `Current Time (SAST): ${now.toLocaleTimeString('en-ZA')} on ${now.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
+
+      let todaySchedule = [];
+      if (day === 5) { // Friday
+        todaySchedule = schedule.friday;
+      } else if (day >= 1 && day <= 4) { // Monday to Thursday (weekday)
+        todaySchedule = schedule.weekday;
+      } else if (day === 0) { // Sunday
+        todaySchedule = schedule.sunday;
+      } else if (day === 6) { // Saturday
+        todaySchedule = schedule.saturday;
+      }
+
+      let currentShow = null;
+      let nextShow = null;
+      let currentShowIndex = -1;
+
+      for (let i = 0; i < todaySchedule.length; i++) {
+        const show = todaySchedule[i];
+
+        let showStartCandidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.start.hour, show.start.minute);
+        let showEndCandidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.end.hour, show.end.minute);
+
+        if (show.end.nextDay || (show.start.hour > show.end.hour || (show.start.hour === show.end.hour && show.start.minute > show.end.minute))) {
+            showEndCandidate.setDate(showEndCandidate.getDate() + 1);
+        }
+        
+        if (show.start.hour === 0 && show.start.minute === 0 && show.end.hour === 6) {
+          if (now.getHours() >= 0 && now.getHours() < 6 && showStartCandidate.getHours() === 0) {
+            showStartCandidate.setDate(showStartCandidate.getDate() - 1);
+          }
+        }
+
+        if (now >= showStartCandidate && now < showEndCandidate) {
+          currentShow = show;
+          currentShowIndex = i;
+          currentShow.actualStart = showStartCandidate;
+          currentShow.actualEnd = showEndCandidate;
+          break;
+        }
+      }
+
+      const showNameEl = document.getElementById('show-name'); // This will be the show TITLE
+      const presenterEl = document.getElementById('presenter-name');
+      const progressBar = document.getElementById('show-progress-bar');
+      const showImage = document.getElementById('show-image');
+      const elapsedTimeLabel = document.getElementById('show-elapsed-time-label');
+      const totalDurationLabel = document.getElementById('show-total-duration-label');
+      const liveOnAirText = document.getElementById('show-time-top'); // This is the H1 that should display "LIVE ON AIR"
+      const showDurationDisplay = document.getElementById('current-show-duration-display'); // This will display the show's START-END TIME
+      const contactNumbersDiv = document.getElementById('contact-numbers'); // Get the contact numbers div
+
+      // Start with default contact numbers HTML
+      let contactHtml = `
+          <p class="contact-line-item whatsapp-line-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon" class="whatsapp-icon" />
+            WHATSAPP: 083 644 2822
+          </p>
+          <p class="contact-line-item studio-line-item">
+              <span class="text-xl">📞</span> STUDIO LINE: 068 717 5275
+          </p>`;
+
+      if (currentShow) {
+        const date = now.getDate();
+        const weekOfMonth = Math.ceil(date / 7);
+        if (currentShow.name === "DINALEDI SPORTS SHOW") {
+          if (weekOfMonth === 1 || weekOfMonth === 2) { // Modified condition for week 1 or 2
+            currentShow.presenter = "MALEFETSANE MOREKI";
+          } else {
+            currentShow.presenter = "MOJALEFA TSOTETSI";
+          }
+        }
+
+        const totalDurationMs = currentShow.actualEnd.getTime() - currentShow.actualStart.getTime();
+        const elapsedMs = now.getTime() - currentShow.actualStart.getTime();
+
+        let progressPercent = (elapsedMs / totalDurationMs) * 100;
+        if (progressPercent < 0 || isNaN(progressPercent)) progressPercent = 0;
+        if (progressPercent > 100) progressPercent = 100;
+        progressBar.style.width = progressPercent + '%';
+
+        elapsedTimeLabel.textContent = formatElapsedTime(Math.floor(elapsedMs / 1000));
+        totalDurationLabel.textContent = formatElapsedTime(Math.floor(totalDurationMs / 1000));
+
+        const showStartStr = formatTimeAmPm(currentShow.actualStart.getHours(), currentShow.actualStart.getMinutes());
+        const showEndStr = formatTimeAmPm(currentShow.actualEnd.getHours(), currentShow.actualEnd.getMinutes());
+
+        // Set "LIVE ON AIR" text and ensure flashing class is present
+        liveOnAirText.textContent = "LIVE ON AIR";
+        liveOnAirText.classList.add('flashing-on-air');
+
+        // Set show time on the designated element
+        showDurationDisplay.textContent = `${showStartStr} - ${showEndStr}`;
+
+        // Set show name
+        showNameEl.textContent = currentShow.name;
+        presenterEl.textContent = currentShow.presenter ? `Presenter: ${currentShow.presenter}` : '';
+
+        // Conditional contact number for IKETLE on Sunday 12pm-3pm
+        if (currentShow.name === "IKETLE" && day === 0 && now.getHours() >= 12 && now.getHours() < 15) {
+          contactHtml += `
+            <p class="contact-line-item" style="color: #25D366;">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon" class="whatsapp-icon" />
+              SKUZABELL BEST 10 SUNDAY SONG REQUEST: 075 174 9408
             </p>
-            <ul>
-                <li>24/7 Broadcasting: Always on air, always for you.</li>
-                <li>Engaging Content: Thought-provoking discussions and lively interactions.</li>
-                <li>Great Music: A diverse selection to suit every mood.</li>
-                <li>Experienced DJs: The best voices in the business to keep you entertained.</li>
-                <li>Nominations: Recognized for our excellence in broadcasting.</li>
-            </ul>
-            <p>Thank you for making us your preferred station. Beezy FM Radio Bathong.</p>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Beezy FM. All rights reserved. Radio Bathong.</p>
-        <div class="social-links">
-            <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank">Facebook</a> |
-            <a href="https://wa.me/0836442822" target="_blank">Whatsapp</a>
-        </div>
-    </footer>
-
-    <audio id="radio-stream" src="https://stream.zeno.fm/f0ccd091-d7e5-4939-98d8-52457d88ecd3/audio" preload="none"></audio>
-
-    <script>
-        let intervalId;
-        let listenerCountInterval;
-
-        // --- Schedule Data ---
-        const schedule = {
-            // Sunday (0)
-            sunday: [
-                { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "LOVE AFFAIRS", presenter: "DIBUSENG PELEHA" },
-                { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "EMMANUEL", presenter: "MONYANE MOKOENA" },
-                { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
-                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "MAKODILO", presenter: "HANANIOUS MOTAUNG" },
-                { start: {hour: 18, minute: 0}, end: {hour: 21, minute: 0}, name: "EBENHEZER", presenter:"LERATO MOKAEANE"},
-                { start: {hour: 21, minute: 0}, end: {hour: 23, minute: 59, second: 59, nextDay: false }, name:"DIVINE WORSHIP", presenter:"MALESEDI MOFOKENG" },
-                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "AUTOMATED PLAYLIST", presenter: "Automated Playlist" }
-            ],
-            // Monday to Friday (1-5)
-            // Note: Friday will have specific overrides handled in updateRadioShow
-            weekday: [
-                { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA" },
-                { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA" },
-                { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA MPONO" },
-                { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE" },
-                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SIMELA" },
-                { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
-                { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
-                // Notice Board and Campus Corner for Mon-Thu
-                { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "NOTICE BOARD", presenter: "MOJALEFA ZIM" },
-                { start: { hour: 21, minute: 0 }, end: { hour: 23, minute: 59, seconds: 59, }, name: "CAMPUS CORNER", presenter: "JABULILE HLONGWANE" },
-                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "Automated Playlist", presenter: "Automated Playlist" }
-            ],
-            // Saturday (6)
-            saturday: [
-                { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "KA LAPENG", presenter: "MONYANE MOKOENA" },
-                { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "BEZZY FM TOP 30", presenter: "LEUTSOA NKUNYANA (DJ INCUS)" },
-                { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
-                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "OLD VIBES", presenter: "SAKI CHELE (DJ SEXY D)" },
-                { start: { hour: 18, minute: 0 }, end: { hour: 21, minute: 0 }, name: "TSA MORAOMORAO", presenter: "HANANIOUS MOTAUNG" }, // Adjusted end time
-                { start: { hour: 21, minute: 0 }, end: { hour: 23, minute: 59, seconds: 59 }, name: "HOT ZONE", presenter: "LERATO MOSETHE" }, // New Hot Zone
-                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "AUTOMATED PLAYLIST", presenter: "AUTOMATED PLAYLIST" } // Automated playlist after midnight
-            ],
-             // Friday specific schedule (overrides parts of weekday)
-             // This structure makes it easier to manage Friday's unique late-night shows
-            friday: [
-                { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA" },
-                { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA" },
-                { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA MPONO" },
-                { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE" },
-                { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SEMELA" },
-                { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
-                { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
-                // Friday specific shows
-                { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "REGGAE HOUR", presenter: "SAKI CHELE (DJ SEXY D)" },
-                { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0, nextDay: true }, name: "HOT ZONE", presenter: "LERATO MOSETHE" },
-                { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "AUTOMATED PLAYLIST", presenter: "AUTOMATED PLAYLIST" }
-            ]
-        };
-        // --- End Schedule Data ---
-
-        const UNIVERSAL_IMAGE_URL = "https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000";
-
-        const ZENO_NOW_PLAYING_API_URL = `https://api.zeno.fm/api/v2/stations/${'f0ccd091-d7e5-4939-98d8-52457d88ecd3'}/nowplaying`; // Verified URL structure
-        let currentPlayingSongTitle = "";
-        let currentPlayingSongArtist = "";
-        let currentPlayingSongId = null;
-
-        async function fetchCurrentSongMetadata() {
-            try {
-                const response = await fetch(ZENO_NOW_PLAYING_API_URL);
-                if (!response.ok) {
-                    console.warn(`Failed to fetch Zeno.fm metadata: ${response.status} ${response.statusText}`);
-                    // Optionally clear or set default song info if fetch fails
-                    document.getElementById('current-song-title').textContent = "No song info";
-                    document.getElementById('current-song-artist').textContent = "";
-                    return;
-                }
-                const data = await response.json();
-
-                // Inspect the 'data' object structure returned by Zeno.fm
-                // Based on common Zeno.fm API responses, the structure might be like:
-                // data.metadata.now_playing.title
-                // data.metadata.now_playing.artist
-                // data.metadata.now_playing.album
-
-                if (data && data.metadata && data.metadata.now_playing) {
-                    const nowPlaying = data.metadata.now_playing;
-                    const newTitle = nowPlaying.title || "Unknown Title";
-                    const newArtist = nowPlaying.artist || "Unknown Artist";
-                    const newSongId = nowPlaying.song_id || null; // If they provide one
-
-                    // Only update if song information has actually changed
-                    if (newTitle !== currentPlayingSongTitle || newArtist !== currentPlayingSongArtist) {
-                        currentPlayingSongTitle = newTitle;
-                        currentPlayingSongArtist = newArtist;
-                        currentPlayingSongId = newSongId;
-
-                        console.log("New Song Playing:", currentPlayingSongTitle, "by", currentPlayingSongArtist);
-                        console.log("Song ID (from Zeno.fm):", currentPlayingSongId);
-
-                        // Update UI elements with the new song information
-                        document.getElementById('current-song-title').textContent = currentPlayingSongTitle;
-                        document.getElementById('current-song-artist').textContent = `Artist: ${currentPlayingSongArtist}`;
-                    }
-                } else {
-                    console.log("Zeno.fm API response does not contain expected 'now_playing' metadata.");
-                    document.getElementById('current-song-title').textContent = "No song info available";
-                    document.getElementById('current-song-artist').textContent = "";
-                    currentPlayingSongTitle = "";
-                    currentPlayingSongArtist = "";
-                    currentPlayingSongId = null;
-                }
-
-            } catch (error) {
-                console.error("Error fetching current song metadata from Zeno.fm:", error);
-                document.getElementById('current-song-title').textContent = "Failed to load song info";
-                document.getElementById('current-song-artist').textContent = "";
-            }
+          `;
         }
 
+      } else {
+        // When station is off air
+        liveOnAirText.textContent = "STATION OFF AIR"; // When no show is live
+        liveOnAirText.classList.remove('flashing-on-air'); // Remove flashing when off air
 
-        function updateRadioShow() {
-            const now = new Date();
-            const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 5 = Friday, 6 = Saturday
-            const currentHour = now.getHours(); // 0-23
-            const currentMinute = now.getMinutes();
-
-            const showNameElement = document.getElementById('show-name');
-            const presenterNameElement = document.getElementById('presenter-name');
-            const whatsappLineElement = document.getElementById('whatsapp-line');
-            const showProgressBar = document.getElementById('show-progress-bar');
-            const showImageElement = document.getElementById('show-image');
-            const showElapsedTimeLabel = document.getElementById('show-elapsed-time-label');
-            const showTotalDurationLabel = document.getElementById('show-total-duration-label');
-            const nextShowNameElement = document.getElementById('next-show-name');
-            const nextShowPresenterElement = document.getElementById('next-show-presenter');
-            const currentShowDurationDisplay = document.getElementById('current-show-duration-display');
-
-            const currentTimeElement = document.getElementById('current-time');
-            currentTimeElement.textContent = `Current Time (SAST): ${now.toLocaleTimeString('en-ZA')} on ${now.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
-
-            function formatElapsedTime(seconds) {
-                const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
-                const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-                const s = String(seconds % 60).padStart(2, '0');
-                return `${h}:${m}:${s}`;
-            }
-
-            function formatTimeAmPm(hour, minute) {
-                const ampm = hour >= 12 ? 'PM' : 'AM';
-                const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
-                const formattedMinute = String(minute).padStart(2, '0');
-                return `${formattedHour}:${formattedMinute} ${ampm}`;
-            }
-
-            let currentDaySchedule = [];
-            // Use Friday schedule for Friday (day === 5)
-            if (day === 5) { // Friday
-                currentDaySchedule = schedule.friday;
-            } else if (day >= 1 && day <= 4) { // Monday to Thursday
-                currentDaySchedule = schedule.weekday;
-            } else if (day === 0) { // Sunday
-                currentDaySchedule = schedule.sunday;
-            } else if (day === 6) { // Saturday
-                currentDaySchedule = schedule.saturday;
-            }
+        showDurationDisplay.textContent = "00:00 AM - 00:00 PM"; // Default time when off air
+        showNameEl.textContent = "No current show"; // Default show name when off air
+        presenterEl.textContent = "";
+        progressBar.style.width = '0%';
+        elapsedTimeLabel.textContent = "00:00:00";
+        totalDurationLabel.textContent = "00:00:00";
+        document.getElementById('next-show-name').textContent = "Check schedule for next show.";
+        document.getElementById('next-show-presenter').textContent = "";
+      }
+      
+      // Apply the generated contact HTML
+      contactNumbersDiv.innerHTML = contactHtml;
 
 
-            let currentShow = null;
-            let nextShow = null;
-            let currentShowIndex = -1;
+      showImage.src = UNIVERSAL_IMAGE_URL;
+      showImage.onerror = () => {
+        showImage.src = "https://placehold.co/200x200/CCCCCC/666666?text=ERROR";
+      };
 
-            for (let i = 0; i < currentDaySchedule.length; i++) {
-                const show = currentDaySchedule[i];
-                const showStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.start.hour, show.start.minute, 0);
-                let showEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.end.hour, show.end.minute, 0);
+      if (nextShow) {
+        document.getElementById('next-show-name').textContent = `Up Next: ${nextShow.name}`;
+        document.getElementById('next-show-presenter').textContent = nextShow.presenter ? `Presenter: ${nextShow.presenter}` : '';
+      } else if (currentShow && currentShowIndex === todaySchedule.length - 1) {
+        document.getElementById('next-show-name').textContent = "No more shows today. Check schedule for tomorrow.";
+        document.getElementById('next-show-presenter').textContent = "";
+      }
+    } catch (error) {
+      console.error("Error in updateRadioShow:", error);
+    }
+  }
 
-                // Handle shows that end on the next day
-                if (show.end.nextDay || show.start.hour > show.end.hour || (show.start.hour === show.end.hour && show.start.minute > show.end.minute)) {
-                    // If current time is after midnight, and the show started yesterday
-                    if (now < showStart && !(show.end.nextDay && now.getHours() < show.end.hour)) {
-                         showStart.setDate(showStart.getDate() - 1);
-                    }
-                    showEnd.setDate(showEnd.getDate() + 1); // Extend to next day
-                }
+  // --- Volume Control Functionality ---
+  const radioStream = document.getElementById('radio-stream');
+  const volumeSlider = document.getElementById('volume-slider');
+  const volumeIcon = document.getElementById('volume-icon');
+  const playPauseButton = document.getElementById('play-pause-button');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
 
-                if (now >= showStart && now < showEnd) {
-                    currentShow = show;
-                    currentShowIndex = i;
-                    break;
-                }
-            }
+  volumeSlider.addEventListener('input', () => {
+    radioStream.volume = volumeSlider.value;
+    updateVolumeIcon(radioStream.volume);
+  });
 
-            // --- Determine Next Show Logic ---
-            if (currentShow) {
-                const date = now.getDate();
-                const weekOfMonth = Math.ceil(date / 7);
+  radioStream.volume = volumeSlider.value;
+  updateVolumeIcon(radioStream.volume);
 
-                if (currentShow.name === "DINALEDI SPORTS SHOW") {
-                    if (weekOfMonth === 1 || weekOfMonth === 3) {
-                        currentShow.presenter = "MALEFETSANE MOREKI";
-                    } else {
-                        currentShow.presenter = "MOJALEFA TSOTETSI";
-                    }
-                }
+  function updateVolumeIcon(volume) {
+    if (volume == 0) {
+      volumeIcon.textContent = '🔇';
+    } else if (volume < 0.5) {
+      volumeIcon.textContent = '🔈';
+    } else {
+      volumeIcon.textContent = '🔊';
+    }
+  }
 
-                // Check for next show in the *current day's* schedule
-                if (currentShowIndex < currentDaySchedule.length - 1) {
-                    nextShow = currentDaySchedule[currentShowIndex + 1];
-                } else {
-                    // If current show is the last in today's schedule, get the first show of the *next calendar day*
-                    const nextDayDate = new Date(now);
-                    nextDayDate.setDate(now.getDate() + 1);
-                    const nextCalendarDayIndex = nextDayDate.getDay();
+  // --- Play/Pause Button Functionality ---
+  playPauseButton.addEventListener('click', () => {
+    if (radioStream.paused) {
+      radioStream.play().catch(e => console.error("Error playing stream:", e));
+    } else {
+      radioStream.pause();
+    }
+    updatePlayPauseButtonIcon();
+  });
 
-                    let nextDaySchedule = [];
-                    if (nextCalendarDayIndex === 5) { // If next day is Friday
-                        nextDaySchedule = schedule.friday;
-                    } else if (nextCalendarDayIndex >= 1 && nextCalendarDayIndex <= 4) { // Mon-Thu
-                        nextDaySchedule = schedule.weekday;
-                    } else if (nextCalendarDayIndex === 0) { // Sunday
-                        nextDaySchedule = schedule.sunday;
-                    } else if (nextCalendarDayIndex === 6) { // Saturday
-                        nextDaySchedule = schedule.saturday;
-                    }
+  radioStream.addEventListener('play', updatePlayPauseButtonIcon);
+  radioStream.addEventListener('pause', updatePlayPauseButtonIcon);
+  radioStream.addEventListener('ended', updatePlayPauseButtonIcon); // Reset when stream ends
 
-                    if (nextDaySchedule.length > 0) {
-                        nextShow = nextDaySchedule[0];
-                    } else {
-                        nextShow = null;
-                    }
-                }
+  function updatePlayPauseButtonIcon() {
+    if (radioStream.paused) {
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+    } else {
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    }
+  }
 
-                showNameElement.textContent = currentShow.name;
-                presenterNameElement.textContent = currentShow.presenter ? `Presenter: ${currentShow.presenter}` : '';
-
-                if (currentShow.name !== "AUTOMATED PLAYLIST" && currentShow.name !== "Automated Playlist" && currentShow.name !== "Saturday Night Chill") {
-                    whatsappLineElement.style.display = 'flex';
-                } else {
-                    whatsappLineElement.style.display = 'none';
-                }
-
-                const showStartDateForCalc = new Date(now.getFullYear(), now.getMonth(), now.getDate(), currentShow.start.hour, currentShow.start.minute, 0);
-                let showEndDateForCalc = new Date(now.getFullYear(), now.getMonth(), now.getDate(), currentShow.end.hour, currentShow.end.minute, 0);
-
-                if (currentShow.end.nextDay || (currentShow.start.hour > currentShow.end.hour || (currentShow.start.hour === currentShow.end.hour && currentShow.start.minute > currentShow.end.minute))) {
-                     if (now.getHours() < currentShow.end.hour || (now.getHours() === currentShow.end.hour && now.getMinutes() < currentShow.end.minute)) {
-                         showStartDateForCalc.setDate(showStartDateForCalc.getDate() - 1);
-                    }
-                    showEndDateForCalc.setDate(showEndDateForCalc.getDate() + 1);
-                }
+  // Initial state of the play/pause button
+  updatePlayPauseButtonIcon();
 
 
-                const totalDurationMs = showEndDateForCalc.getTime() - showStartDateForCalc.getTime();
-                const elapsedTimeMs = now.getTime() - showStartDateForCalc.getTime();
+  // --- Geolocation and Weather Data Functionality (for Beezy News Section) ---
+  const saCities = [
+    { name: "Johannesburg", lat: -26.2041, lon: 28.0473 },
+    { name: "Cape Town", lat: -33.9249, lon: 18.4241 },
+    { name: "Durban", lat: -29.8587, lon: 31.0218 },
+    { name: "Pretoria", lat: -25.7479, lon: 28.2293 },
+    { name: "Gqeberha", lat: -33.9610, lon: 25.6150 },
+    { name: "Bloemfontein", lat: -29.1167, lon: 26.2167 },
+    { name: "East London", lat: -33.0178, lon: 27.9116 },
+    { name: "Nelspruit", lat: -25.4776, lon: 30.9893 }, // Mbombela
+    { name: "Polokwane", lat: -23.9045, lon: 29.4674 },
+    { name: "Kimberley", lat: -28.7383, lon: 24.7639 },
+    { name: "Pietermaritzburg", lat: -29.6167, lon: 30.3833 },
+    { name: "Rustenburg", lat: -25.6589, lon: 27.2407 },
+    { name: "George", lat: -33.9610, lon: 22.4604 },
+    { name: "Mthatha", lat: -31.5786, lon: 28.7905 },
+    { name: "Upington", lat: -28.4500, lon: 21.2500 },
+    { name: "Welkom", lat: -27.9715, lon: 26.7329 },
+    { name: "Richards Bay", lat: -28.7833, lon: 32.0333 },
+    { name: "Mafikeng", lat: -25.8667, lon: 25.6667 }, // Mahikeng
+    { name: "Thohoyandou", lat: -22.9467, lon: 30.4700 },
+    { name: "Port Shepstone", lat: -30.7333, lon: 30.4500 },
+    { name: "Mossel Bay", lat: -34.1833, lon: 22.1333 },
+    { name: "Worcester", lat: -33.6500, lon: 19.4500 },
+    { name: "Queenstown", lat: -31.9000, lon: 26.8833 },
+    { name: "Springbok", lat: -29.6667, lon: 17.8833 },
+    { name: "Saldanha", lat: -32.9933, lon: 17.9450 },
+    { name: "Langebaan", lat: -33.0800, lon: 18.0400 }
+  ];
 
-                const totalDurationSeconds = Math.floor(totalDurationMs / 1000);
-                const elapsedSeconds = Math.floor(elapsedTimeMs / 1000);
+  const weatherCodeMap = {
+    0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+    45: "Fog", 48: "Depositing rime fog",
+    51: "Drizzle: Light", 53: "Drizzle: Moderate", 55: "Drizzle: Dense intensity",
+    56: "Freezing Drizzle: Light", 57: "Freezing Drizzle: Dense intensity",
+    61: "Rain: Slight", 63: "Rain: Moderate", 65: "Rain: Heavy intensity",
+    66: "Freezing Rain: Light", 67: "Freezing Rain: Heavy intensity",
+    71: "Snow fall: Slight", 73: "Snow fall: Moderate", 75: "Snow fall: Heavy intensity",
+    77: "Snow grains",
+    80: "Rain showers: Slight", 81: "Rain showers: Moderate", 82: "Rain showers: Violent",
+    85: "Snow showers: Slight", 86: "Snow showers: Heavy",
+    95: "Thunderstorm: Slight or moderate", 96: "Thunderstorm with slight hail", 99: "Thunderstorm with heavy hail"
+  };
 
-                let progressPercentage = (elapsedTimeMs / totalDurationMs) * 100;
-                if (progressPercentage < 0) progressPercentage = 0;
-                if (progressPercentage > 100) progressPercentage = 100;
+  /**
+   * Calculates the Haversine distance between two points on Earth (specified by latitudes and longitudes).
+   * @param {number} lat1 - Latitude of point 1.
+   * @param {number} lon1 - Longitude of point 1.
+   * @param {number} lat2 - Latitude of point 2.
+   * @param {number} lon2 - Longitude of point 2.
+   * @returns {number} Distance in kilometers.
+   */
+  function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of Earth in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
 
-                showProgressBar.style.width = `${progressPercentage}%`;
-
-                showElapsedTimeLabel.textContent = formatElapsedTime(elapsedSeconds);
-                showTotalDurationLabel.textContent = formatElapsedTime(totalDurationSeconds);
-
-                currentShowDurationDisplay.textContent = `${formatTimeAmPm(showStartDateForCalc.getHours(), showStartDateForCalc.getMinutes())} to ${formatTimeAmPm(showEndDateForCalc.Sporeshours(), showEndDateForCalc.getMinutes())}`;
-            } else {
-                showNameElement.textContent = "Station Off Air";
-                presenterNameElement.textContent = "";
-                whatsappLineElement.style.display = 'none';
-                showProgressBar.style.width = `0%`;
-                showElapsedTimeLabel.textContent = "00:00:00";
-                showTotalDurationLabel.textContent = "00:00:00";
-                currentShowDurationDisplay.textContent = "Station Off Air";
-                nextShow = null;
-            }
-
-            showImageElement.src = UNIVERSAL_IMAGE_URL;
-            showImageElement.onerror = () => {
-                showImageElement.src = "https://placehold.co/200x200/CCCCCC/666666?text=ERROR";
-            };
-
-            if (nextShow) {
-                nextShowNameElement.textContent = `Up Next: ${nextShow.name}`;
-                nextShowPresenterElement.textContent = nextShow.presenter ? `Presenter: ${nextShow.presenter}` : '';
-            } else {
-                nextShowNameElement.textContent = "Check schedule for next show.";
-                nextShowPresenterElement.textContent = "";
-            }
-        }
-
-        // --- Volume Control ---
-        const radioStream = document.getElementById('radio-stream');
-        const volumeSlider = document.getElementById('volume-slider');
-        const volumeIcon = document.getElementById('volume-icon');
-
-        volumeSlider.addEventListener('input', () => {
-            radioStream.volume = volumeSlider.value;
-            updateVolumeIcon(radioStream.volume);
-        });
-
-        radioStream.volume = volumeSlider.value;
-        updateVolumeIcon(radioStream.volume);
-
-        function updateVolumeIcon(volume) {
-            if (volume === 0) {
-                volumeIcon.textContent = '🔇';
-            } else if (volume < 0.5) {
-                volumeIcon.textContent = '🔉';
-            } else {
-                volumeIcon.textContent = '🔊';
-            }
-        }
-
-        // --- Section Visibility ---
-        function showSection(sectionId) {
-            document.getElementById('home-section').style.display = 'none';
-            document.getElementById('news-section').style.display = 'none';
-            document.getElementById('about-section').style.display = 'none';
-            document.getElementById('schedule-section').style.display = 'none';
-
-            if (listenerCountInterval) {
-                clearInterval(listenerCountInterval);
-                listenerCountInterval = null;
-            }
-
-            document.getElementById(sectionId).style.display = 'block';
-
-            const mainNav = document.getElementById('main-nav');
-            const hamburgerButton = document.getElementById('hamburger-button');
-            if (mainNav.classList.contains('active')) {
-                mainNav.classList.remove('active');
-                hamburgerButton.classList.remove('active');
-            }
-
-            if (sectionId === 'news-section') {
-                fetchWeatherUpdates();
-            } else if (sectionId === 'about-section') {
-                startListenerCountAnimation();
-            } else if (sectionId === 'schedule-section') {
-                generateSchedule();
-            }
-        }
-
-        // --- Dynamic Listener Count Animation ---
-        let currentListenerCount = 0;
-        const targetListenerCount = 69000;
-        const animationDuration = 3000;
-        const updateInterval = 50;
-        const increment = Math.ceil((targetListenerCount / animationDuration) * updateInterval);
-
-        function startListenerCountAnimation() {
-            const listenerCountElement = document.getElementById('listener-count');
-            currentListenerCount = 0;
-            listenerCountElement.textContent = '0';
-
-            if (listenerCountInterval) {
-                clearInterval(listenerCountInterval);
-            }
-
-            listenerCountInterval = setInterval(() => {
-                currentListenerCount += increment;
-                if (currentListenerCount >= targetListenerCount) {
-                    currentListenerCount = targetListenerCount;
-                    clearInterval(listenerCountInterval);
-                    listenerCountInterval = null;
-                    listenerCountElement.textContent = currentListenerCount.toLocaleString() + '+';
-                } else {
-                    listenerCountElement.textContent = currentListenerCount.toLocaleString();
-                }
-            }, updateInterval);
-        }
-
-        // --- Schedule Data for Horizontal Display ---
-        const daysConfig = [
-            { id: "mon-thu", label: "Mon-Thu", scheduleKey: "weekday", dayIndices: [1, 2, 3, 4] }, // Changed to Mon-Thu
-            { id: "friday", label: "Friday", scheduleKey: "friday", dayIndices: [5] }, // New Friday tab
-            { id: "saturday", label: "Saturday", scheduleKey: "saturday", dayIndices: [6] },
-            { id: "sunday", label: "Sunday", scheduleKey: "sunday", dayIndices: [0] }
-        ];
-
-        function generateSchedule() {
-            const dayTabsContainer = document.getElementById('day-tabs');
-            const dailySchedulesContainer = document.getElementById('daily-schedules-container');
-            dayTabsContainer.innerHTML = '';
-            dailySchedulesContainer.innerHTML = '';
-
-            const now = new Date();
-            const currentDayIndex = now.getDay();
-            let activeDayId = '';
-
-            const formatTime24hr = (hour, minute) => {
-                return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-            };
-
-            daysConfig.forEach(dayInfo => {
-                const button = document.createElement('button');
-                button.textContent = dayInfo.label;
-                button.onclick = () => showDaySchedule(dayInfo.id);
-                dayTabsContainer.appendChild(button);
-
-                const dayShowsDiv = document.createElement('div');
-                dayShowsDiv.id = `schedule-${dayInfo.id}`;
-                dayShowsDiv.classList.add('schedule-day-shows');
-                dayShowsDiv.style.display = 'none';
-
-                const daySchedule = schedule[dayInfo.scheduleKey];
-                if (daySchedule && daySchedule.length > 0) {
-                    daySchedule.forEach(show => {
-                        const showStartToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.start.hour, show.start.minute, 0);
-                        let showEndToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.end.hour, show.end.minute, 0);
-
-                        if (show.end.nextDay || show.start.hour > show.end.hour || (show.start.hour === show.end.hour && show.start.minute > show.end.minute)) {
-                            showEndToday.setDate(showEndToday.getDate() + 1);
-                        }
-
-                        // Determine if 'isLive' for the actual current day
-                        const isLive = dayInfo.dayIndices.includes(currentDayIndex) && (now >= showStartToday && now < showEndToday);
-                        const liveClass = isLive ? 'live-show-highlight' : '';
-
-                        let presenterDisplay = show.presenter ? `<p class="schedule-entry-presenter">Presenter: ${show.presenter}</p>` : '';
-
-                        dayShowsDiv.innerHTML += `
-                            <div class="schedule-entry ${liveClass}">
-                                <div class="schedule-time">
-                                    ${formatTime24hr(show.start.hour, show.start.minute)} - ${formatTime24hr(show.end.hour, show.end.minute)}
-                                </div>
-                                <div class="schedule-details">
-                                    <img src="${UNIVERSAL_IMAGE_URL}" alt="${show.name}" class="schedule-entry-image">
-                                    <h4 class="schedule-entry-title">${show.name}</h4>
-                                    ${presenterDisplay}
-                                </div>
-                            </div>
-                        `;
-
-                        if (isLive) {
-                            activeDayId = dayInfo.id;
-                        }
-                    });
-                } else {
-                    dayShowsDiv.innerHTML = '<p class="text-center w-full py-4 text-gray-600">No shows scheduled for this day.</p>';
-                }
-                dailySchedulesContainer.appendChild(dayShowsDiv);
+  /**
+   * Gets the user's current geographical coordinates.
+   * @returns {Promise<{latitude: number, longitude: number}>} A promise that resolves with the user's coordinates.
+   */
+  function getUserLocation() {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
             });
+          },
+          (error) => {
+            console.warn(`Geolocation error (${error.code}): ${error.message}`);
+            reject(new Error("Unable to retrieve your location. Please enable location services and grant permission."));
+          },
+          {
+            enableHighAccuracy: false, // Set to false to avoid draining battery unnecessarily
+            timeout: 5000,           // 5 seconds timeout
+            maximumAge: 60000        // Use cached position if less than 1 minute old
+          }
+        );
+      } else {
+        reject(new Error("Geolocation is not supported by your browser."));
+      }
+    });
+  }
 
-            if (!activeDayId) {
-                const todayConfig = daysConfig.find(d => d.dayIndices.includes(currentDayIndex));
-                if (todayConfig) {
-                    activeDayId = todayConfig.id;
-                } else {
-                    activeDayId = daysConfig[0].id;
-                }
-            }
-            showDaySchedule(activeDayId);
+  /**
+   * Fetches weather updates, prioritizing the user's current location.
+   * @param {Object} userCoords - Optional. User's coordinates {latitude, longitude}.
+   */
+  async function fetchWeatherUpdates(userCoords = null) {
+    const container = document.getElementById('weather-updates');
+    if (!container) return;
+    container.innerHTML = '<p>Loading weather data...</p>';
+    const lastUpdatedEl = document.getElementById('news-last_updated');
+
+    let citiesToFetch = [...saCities]; // Create a mutable copy of the cities array
+    let closestCityName = null;
+
+    if (userCoords) {
+      let minDist = Infinity;
+      let closestCityIndex = -1;
+
+      // Find the closest predefined city to the user's location
+      saCities.forEach((city, index) => {
+        const dist = haversineDistance(userCoords.latitude, userCoords.longitude, city.lat, city.lon);
+        if (dist < minDist) {
+          minDist = dist;
+          closestCityIndex = index;
         }
+      });
 
-        function showDaySchedule(dayIdToShow) {
-            document.querySelectorAll('.schedule-day-shows').forEach(div => {
-                div.style.display = 'none';
-            });
+      if (closestCityIndex !== -1) {
+        const closestCity = saCities[closestCityIndex];
+        closestCityName = closestCity.name;
+        // Move the closest city to the beginning of the array for prioritized display
+        citiesToFetch.splice(closestCityIndex, 1);
+        citiesToFetch.unshift(closestCity);
+        console.log(`User is closest to: ${closestCityName}`);
+      }
+    }
 
-            document.querySelectorAll('.day-tabs button').forEach(button => {
-                button.classList.remove('active');
-            });
-
-            const selectedDayDiv = document.getElementById(`schedule-${dayIdToShow}`);
-            if (selectedDayDiv) {
-                selectedDayDiv.style.display = 'flex';
-                const liveShow = selectedDayDiv.querySelector('.live-show-highlight');
-                if (liveShow) {
-                    liveShow.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-                }
-            }
-
-            const activeTabButton = document.querySelector(`.day-tabs button[onclick="showDaySchedule('${dayIdToShow}')"]`);
-            if (activeTabButton) {
-                activeTabButton.classList.add('active');
-            }
+    try {
+      let html = '';
+      const fetchPromises = citiesToFetch.map(async city => {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true&timezone=auto`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`Error fetching weather for ${city.name}: ${res.statusText}`);
         }
+        const data = await res.json();
+        const current = data.current_weather;
+        const temperature = current.temperature;
+        const windSpeed = current.windspeed;
+        const weatherCode = current.weathercode;
+        const weatherDesc = weatherCodeMap[weatherCode] || 'N/A';
 
+        // Add highlight class if this is the closest city
+        const highlightClass = (city.name === closestCityName && userCoords) ? 'highlight' : '';
 
-        // --- Weather Data ---
-        const saCities = [
-            { name: "Johannesburg", lat: -26.2041, lon: 28.0473 },
-            { name: "Cape Town", lat: -33.9249, lon: 18.4241 },
-            { name: "Durban", lat: -29.8587, lon: 31.0218 },
-            { name: "Pretoria", lat: -25.7479, lon: 28.2293 },
-            { name: "Gqeberha", lat: -33.9610, lon: 25.6150 }, // Formerly Port Elizabeth
-            { name: "Bloemfontein", lat: -29.1167, lon: 26.2167 },
-            { name: "East London", lat: -33.0178, lon: 27.9116 },
-            { name: "Nelspruit", lat: -25.4776, lon: 30.9893 }, // Mbombela
-            { name: "Polokwane", lat: -23.9045, lon: 29.4674 },
-            { name: "Kimberley", lat: -28.7383, lon: 24.7639 },
-            { name: "Pietermaritzburg", lat: -29.6167, lon: 30.3833 },
-            { name: "Rustenburg", lat: -25.6589, lon: 27.2407 },
-            { name: "George", lat: -33.9610, lon: 22.4604 },
-            { name: "Mthatha", lat: -31.5786, lon: 28.7905 },
-            { name: "Upington", lat: -28.4500, lon: 21.2500 },
-            { name: "Welkom", lat: -27.9715, lon: 26.7329 },
-            { name: "Richards Bay", lat: -28.7833, lon: 32.0333 },
-            { name: "Mafikeng", lat: -25.8667, lon: 25.6667 }, // Mahikeng
-            { name: "Thohoyandou", lat: -22.9467, lon: 30.4700 },
-            { name: "Port Shepstone", lat: -30.7333, lon: 30.4500 },
-            { name: "Mossel Bay", lat: -34.1833, lon: 22.1333 },
-            { name: "Worcester", lat: -33.6500, lon: 19.4500 },
-            { name: "Queenstown", lat: -31.9000, lon: 26.8833 }, // Komani
-            { name: "Springbok", lat: -29.6667, lon: 17.8833 },
-            { name: "Saldanha", lat: -32.9933, lon: 17.9450 },
-            { name: "Langebaan", lat: -33.0800, lon: 18.0400 }
-        ];
+        return `
+          <div class="weather-card ${highlightClass}" data-city-name="${city.name}">
+            <h3>${city.name}</h3>
+            <p>${weatherDesc}</p>
+            <p class="temp">${Math.round(temperature)}°C</p>
+            <p>Wind: ${Math.round(windSpeed)} m/s</p>
+          </div>`;
+      });
 
-        const weatherCodeMap = {
-            0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
-            45: "Fog", 48: "Depositing rime fog",
-            51: "Drizzle: Light", 53: "Drizzle: Moderate", 55: "Drizzle: Dense intensity",
-            56: "Freezing Drizzle: Light", 57: "Freezing Drizzle: Dense intensity",
-            61: "Rain: Slight", 63: "Rain: Moderate", 65: "Rain: Heavy intensity",
-            66: "Freezing Rain: Light", 67: "Freezing Rain: Heavy intensity",
-            71: "Snow fall: Slight", 73: "Snow fall: Moderate", 75: "Snow fall: Heavy intensity",
-            77: "Snow grains",
-            80: "Rain showers: Slight", 81: "Rain showers: Moderate", 82: "Rain showers: Violent",
-            85: "Snow showers: Slight", 86: "Snow showers: Heavy",
-            95: "Thunderstorm: Slight or moderate", 96: "Thunderstorm with slight hail", 99: "Thunderstorm with heavy hail"
-        };
-
-        async function fetchWeatherUpdates() {
-            const weatherContainer = document.getElementById('weather-updates');
-            weatherContainer.innerHTML = '<p>Fetching weather data...</p>';
-            const newsLastUpdated = document.getElementById('news-last_updated');
-
-            try {
-                let weatherHtml = '';
-                for (const city of saCities) {
-                    const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`;
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status} for ${city.name}`);
-                    }
-                    const data = await response.json();
-
-                    const current = data.current;
-                    const temperature = current.temperature_2m;
-                    const humidity = current.relative_humidity_2m;
-                    const windSpeed = current.wind_speed_10m;
-                    const weatherCode = current.weather_code;
-                    const weatherDescription = weatherCodeMap[weatherCode] || "N/A";
-
-                    weatherHtml += `
-                        <div class="weather-card">
-                            <h3>${city.name}</h3>
-                            <p>${weatherDescription}</p>
-                            <p class="temp">${Math.round(temperature)}°C</p>
-                            <p>Humidity: ${humidity}%</p>
-                            <p>Wind: ${Math.round(windSpeed)} m/s</p>
-                        </div>
-                    `;
-                }
-                weatherContainer.innerHTML = weatherHtml;
-                newsLastUpdated.textContent = `Weather data last updated: ${new Date().toLocaleTimeString('en-ZA')}`;
-            } catch (error) {
-                console.error("Error fetching weather data:", error);
-                weatherContainer.innerHTML = `<p class="text-red-500">Failed to load weather data. Please try again later. Error: ${error.message}</p>`;
-                newsLastUpdated.textContent = '';
-            }
+      const results = await Promise.allSettled(fetchPromises);
+      results.forEach(result => {
+        if (result.status === 'fulfilled') {
+          html += result.value;
+        } else {
+          console.error("Failed to fetch weather for a city:", result.reason);
         }
+      });
 
-        // --- Mobile Nav Toggle Logic ---
-        const hamburgerButton = document.getElementById('hamburger-button');
-        const mainNav = document.getElementById('main-nav');
-        const navLinks = mainNav.querySelectorAll('a');
+      if (html === '') {
+        container.innerHTML = `<p class="text-red-500">No weather data could be loaded for any city. Please check your internet connection or try again later.</p>`;
+      } else {
+        container.innerHTML = html;
+        // If a closest city was found, scroll to it
+        if (closestCityName) {
+          const closestCard = container.querySelector(`.weather-card[data-city-name="${closestCityName}"]`);
+          if (closestCard) {
+            closestCard.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+          }
+        }
+      }
+      lastUpdatedEl.textContent = `Weather data last updated: ${new Date().toLocaleTimeString('en-ZA')}`;
+    } catch (err) {
+      console.error("Overall error fetching weather data:", err);
+      container.innerHTML = `<p class="text-red-500">Failed to load weather data. An unexpected error occurred.</p>`;
+      lastUpdatedEl.textContent = '';
+    }
+  }
 
-        hamburgerButton.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
-            hamburgerButton.classList.toggle('active');
+  // --- Listener Count Animation Functionality (for About Us Section) ---
+  let listenerCountInterval = null;
+  let currentListenerCount = 0;
+  const targetListenerCount = 69000;
+  const animationDuration = 3000;
+  const updateInterval = 50;
+  const increment = (targetListenerCount / animationDuration) * updateInterval;
+
+  function startListenerCountAnimation() {
+    const listenerCountEl = document.getElementById('listener-count');
+    if (!listenerCountEl) return;
+    currentListenerCount = 0;
+    listenerCountEl.textContent = '0';
+
+    if (listenerCountInterval) {
+      clearInterval(listenerCountInterval);
+    }
+
+    listenerCountInterval = setInterval(() => {
+      currentListenerCount += increment;
+      if (currentListenerCount >= targetListenerCount) {
+        currentListenerCount = targetListenerCount;
+        clearInterval(listenerCountInterval);
+        listenerCountInterval = null;
+        listenerCountEl.textContent = currentListenerCount.toLocaleString() + '+';
+      } else {
+        listenerCountEl.textContent = Math.floor(currentListenerCount).toLocaleString();
+      }
+    }, updateInterval);
+  }
+
+  // --- Schedule Generation Functionality (for Beezy Schedule Section) ---
+  const daysConfig = [
+    { id: "mon-thu", label: "Mon-Thu", scheduleKey: "weekday", dayIndices: [1,2,3,4] },
+    { id: "friday", label: "Friday", scheduleKey: "friday", dayIndices: [5] },
+    { id: "saturday", label: "Saturday", scheduleKey: "saturday", dayIndices: [6] },
+    { id: "sunday", label: "Sunday", scheduleKey: "sunday", dayIndices: [0] }
+  ];
+
+  function generateSchedule() {
+    const dayTabsContainer = document.getElementById('day-tabs');
+    const dailySchedulesContainer = document.getElementById('daily-schedules-container');
+    if (!dayTabsContainer || !dailySchedulesContainer) return;
+
+    dayTabsContainer.innerHTML = '';
+    dailySchedulesContainer.innerHTML = '';
+
+    const now = new Date();
+    const currentDayIndex = now.getDay();
+    let activeDayId = '';
+
+    daysConfig.forEach(dayInfo => {
+      const btn = document.createElement('button');
+      btn.textContent = dayInfo.label;
+      btn.onclick = () => showDaySchedule(dayInfo.id);
+      dayTabsContainer.appendChild(btn);
+
+      const dayDiv = document.createElement('div');
+      dayDiv.id = `schedule-${dayInfo.id}`;
+      dayDiv.className = 'schedule-day-shows';
+      dayDiv.style.display = 'none';
+
+      const daySchedule = schedule[dayInfo.scheduleKey];
+      if (daySchedule && daySchedule.length > 0) {
+        daySchedule.forEach(show => {
+          const showStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.start.hour, show.start.minute);
+          let showEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.end.hour, show.end.minute);
+
+          if (show.end.nextDay || (show.start.hour > show.end.hour || (show.start.hour === show.end.hour && show.start.minute > show.end.minute))) {
+            showEnd.setDate(showEnd.getDate() + 1);
+          }
+          if (show.start.hour === 0 && show.start.minute === 0 && show.end.hour === 6) {
+            showStart.setDate(showStart.getDate() - 1);
+          }
+
+          const isLive = dayInfo.dayIndices.includes(currentDayIndex) && (now >= showStart && now < showEnd);
+          const liveClass = isLive ? 'live-show-highlight' : '';
+          const presenterHtml = show.presenter ? `<p class="schedule-entry-presenter">Presenter: ${show.presenter}</p>` : '';
+
+          dayDiv.innerHTML += `
+            <div class="schedule-entry ${liveClass}">
+              <div class="schedule-time">
+                ${show.start.hour.toString().padStart(2,'0')}:${show.start.minute.toString().padStart(2,'0')} - ${show.end.hour.toString().padStart(2,'0')}:${show.end.minute.toString().padStart(2,'0')}
+              </div>
+              <div class="schedule-details">
+                <img src="${UNIVERSAL_IMAGE_URL}" alt="${show.name}" class="schedule-entry-image"/>
+                <h4 class="schedule-entry-title">${show.name}</h4>
+                ${presenterHtml}
+              </div>
+            </div>
+          `;
+          if (isLive) {
+            activeDayId = dayInfo.id;
+          }
         });
+      } else {
+        dayDiv.innerHTML = '<p class="text-center w-full py-4 text-gray-600">No shows scheduled for this day.</p>';
+      }
+      dailySchedulesContainer.appendChild(dayDiv);
+    });
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mainNav.classList.remove('active');
-                hamburgerButton.classList.remove('active');
+    if (!activeDayId) {
+      const todayConfig = daysConfig.find(d => d.dayIndices.includes(currentDayIndex));
+      activeDayId = todayConfig ? todayConfig.id : daysConfig[0].id;
+    }
+    showDaySchedule(activeDayId);
+  }
+
+  function showDaySchedule(dayId) {
+    document.querySelectorAll('.schedule-day-shows').forEach(d => d.style.display = 'none');
+    document.querySelectorAll('.day-tabs button').forEach(b => b.classList.remove('active'));
+
+    const selectedDiv = document.getElementById(`schedule-${dayId}`);
+    if (selectedDiv) {
+      selectedDiv.style.display = 'flex';
+
+      const liveShow = selectedDiv.querySelector('.live-show-highlight');
+      if (liveShow) {
+        liveShow.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+      } else {
+        selectedDiv.scrollTo({ left: 0, behavior: 'smooth' });
+      }
+    }
+    document.querySelector(`.day-tabs button[onclick="showDaySchedule('${dayId}')"]`)?.classList.add('active');
+  }
+
+  // --- Section Switching Functionality ---
+  let activeSectionId = 'home-section'; // Keep track of the currently active section
+
+  function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('main > .container').forEach(section => {
+      section.classList.add('hidden');
+    });
+
+    // Show the requested section
+    const targetElement = document.getElementById(sectionId);
+    if (targetElement) {
+      targetElement.classList.remove('hidden');
+      activeSectionId = sectionId; // Update active section ID
+
+      // Scroll to the top of the displayed section
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+      // Execute section-specific initialization/updates
+      if (sectionId === 'news-section') {
+        // Attempt to get user location, then fetch weather.
+        getUserLocation()
+          .then(coords => fetchWeatherUpdates(coords))
+          .catch(error => {
+            console.warn("Geolocation failed, fetching weather for all cities:", error.message);
+            fetchWeatherUpdates(); // Fetch weather for all cities if geolocation fails
+            const container = document.getElementById('weather-updates');
+            if (container) {
+              container.insertAdjacentHTML('afterbegin', `<p class="text-red-500 mb-2">Note: ${error.message}</p>`);
+            }
+          });
+        if (weatherIntervalId) clearInterval(weatherIntervalId);
+        // Set interval to fetch weather updates periodically (e.g., every 10 minutes)
+        // This will refetch weather and re-evaluate closest city if user's location is known
+        weatherIntervalId = setInterval(() => {
+          getUserLocation()
+            .then(coords => fetchWeatherUpdates(coords))
+            .catch(error => {
+              console.warn("Periodic geolocation failed, refreshing weather for all cities:", error.message);
+              fetchWeatherUpdates();
             });
-        });
+        }, 600000); // 10 minutes
+      } else {
+        if (weatherIntervalId) clearInterval(weatherIntervalId); // Clear if moving away
+      }
 
+      if (sectionId === 'about-section') {
+        startListenerCountAnimation();
+        if (listenerCountIntervalId) clearInterval(listenerCountIntervalId);
+        // The animation runs once, so no interval needed for continuous update unless specified
+      } else {
+        if (listenerCountIntervalId) clearInterval(listenerCountIntervalId);
+      }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateRadioShow();
-            intervalId = setInterval(updateRadioShow, 1000);
+      if (sectionId === 'schedule-section') {
+        generateSchedule();
+        // Schedule updates are usually on page load or when actively viewing, no periodic interval needed here
+      }
+      // No specific actions for 'contact-section' currently needed on show
+      // The 'team-section' is removed, so no action needed there.
+    }
 
-            showSection('home-section');
+    // Close the mobile navigation menu if it is open
+    const mainNav = document.getElementById('main-nav');
+    const hamburgerButton = document.getElementById('hamburger-button');
+    if (mainNav.classList.contains('active')) {
+      mainNav.classList.remove('active');
+      hamburgerButton.classList.remove('active');
+    }
+  }
 
-            fetchWeatherUpdates();
-            setInterval(fetchWeatherUpdates, 600000);
+  // --- Hamburger Menu Toggle Functionality ---
+  const hamburgerButton = document.getElementById('hamburger-button');
+  const mainNav = document.getElementById('main-nav');
 
-            generateSchedule();
+  hamburgerButton.addEventListener('click', () => {
+    mainNav.classList.toggle('active');
+    hamburgerButton.classList.toggle('active');
+  });
 
-            // Initial fetch of current song metadata and then update every 10 seconds
-            fetchCurrentSongMetadata();
-            setInterval(fetchCurrentSongMetadata, 10000); // Poll every 10 seconds
-        });
-    </script>
+  // --- Initial Load Operations ---
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize and set up intervals for dynamic content updates on the main player.
+    fetchCurrentSongMetadata();
+    setInterval(fetchCurrentSongMetadata, 10000);
+
+    updateRadioShow();
+    currentShowIntervalId = setInterval(updateRadioShow, 1000);
+
+    // Initially show only the home section
+    showSection('home-section');
+  });
+</script>
 </body>
 </html>
