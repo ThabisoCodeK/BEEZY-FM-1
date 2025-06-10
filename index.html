@@ -4,16 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Beezy FM - Radio Bathong</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<!-- Google Fonts - Inter -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
-  /*
-   * Base body styles: sets font, background, and ensures full viewport height.
-   * Also includes a fixed background image for consistent visual appeal.
-   */
+  /* Base body styles: sets font, background, and ensures full viewport height. */
   body {
     font-family: 'Inter', sans-serif;
-    background-image: url('image_643d5e.jpg');
+    background-image: url('image_643d5e.jpg'); /* Ensure this image path is correct */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -26,10 +25,7 @@
     overflow-y: auto; /* Allows scrolling when content exceeds viewport height */
   }
 
-  /*
-   * Overlay for blur effect: Creates a semi-transparent layer over the background image
-   * to enhance readability of text and apply a subtle blur.
-   */
+  /* Overlay for blur effect: Creates a semi-transparent layer over the background image */
   body::before {
     content: "";
     position: fixed; /* Fixed to the viewport */
@@ -40,269 +36,118 @@
     z-index: -1; /* Positions the overlay behind the main content */
   }
 
-  /* Header styles: Defines the top navigation bar's appearance and layout. */
-  header {
-    background-color: rgba(0, 0, 0, 0.8); /* Dark background with transparency */
-    color: white;
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap; /* Allows header items to wrap on smaller screens */
-    position: sticky; /* Makes the header sticky at the top */
-    top: 0;
-    z-index: 1000; /* Ensures the header stays on top of other content */
-  }
-
-  /* Left section of the header: groups logo and station information. */
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  /* Station logo styles: Controls the appearance of the radio station's logo. */
+  /* Station logo styles */
   .station-logo {
     width: 100px;
     height: 100px;
-    object-fit: cover; /* Ensures the image covers the area, potentially cropping */
-    border-radius: 0; /* Keeps the logo square */
-    border: none; /* Removes any border */
-    box-shadow: none; /* Removes any shadow */
+    object-fit: cover;
   }
 
-  /* Station information styles: Controls the main title and slogan within the header. */
+  /* Station info custom text color for 'BEEZY FM' */
   .station-info h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: yellow; /* Bright yellow for visibility */
-    margin-bottom: 0.25rem;
+    color: yellow; /* Custom yellow for heading */
   }
 
-  .station-info p {
-    font-size: 0.9rem;
-    color: #ccc; /* Lighter grey for secondary text */
-  }
-
-  /* Navigation bar (navbar) styles: Defines the layout and appearance of navigation links. */
-  nav ul {
-    list-style: none; /* Removes default list bullets */
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 1.5rem; /* Space between navigation items */
-    flex-wrap: wrap; /* Allows navigation items to wrap */
-    justify-content: center; /* Centers navigation items */
-  }
-
-  nav a {
-    color: white;
-    text-decoration: none; /* Removes underline from links */
-    font-weight: 600;
-    transition: color 0.3s ease; /* Smooth color transition on hover */
-  }
-
-  nav a:hover {
-    color: yellow; /* Changes link color to yellow on hover */
-  }
-
-  /* Volume control section: Styles for the volume slider and icon. */
-  .volume-control {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-left: 1.5rem;
-  }
-
-  /* Volume slider input styles: Customizes the appearance of the range input. */
-  .volume-control input[type="range"] {
-    width: 80px;
-    -webkit-appearance: none; /* Removes default WebKit appearance */
-    appearance: none;
-    background: #4a5568; /* Dark grey track */
-    outline: none;
-    border-radius: 5px;
-    height: 5px;
-    cursor: pointer;
-  }
-
-  /* WebKit specific thumb styles for the volume slider. */
-  .volume-control input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%; /* Makes the thumb circular */
-    background: yellow;
-    cursor: pointer;
-    border: 1px solid #fff;
-  }
-
-  /* Mozilla specific thumb styles for the volume slider. */
-  .volume-control input[type="range"]::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: yellow;
-    cursor: pointer;
-    border: 1px solid #fff;
-  }
-
-  /* Main content area styles: Defines layout and spacing for all content sections. */
-  main {
-    flex-grow: 1; /* Allows main to grow and take available vertical space */
-    display: flex;
-    flex-direction: column; /* Stacks content vertically */
-    justify-content: flex-start; /* Aligns content to the top */
-    align-items: center; /* Centers content horizontally */
-    padding: 2rem;
-    gap: 4rem; /* Space between content sections - ADJUSTED FROM 2rem to 4rem */
-    position: relative;
-    z-index: 1;
-  }
-
-  /* General container styles for content sections. */
-  .container {
-    background-color: rgba(240, 242, 245, 0.9); /* Slightly transparent light background */
-    border-radius: 1rem; /* Rounded corners */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), /* Subtle shadow for depth */
+  /* Custom styles for main content containers (replacing previous .container with Bootstrap's .card) */
+  .custom-card {
+    background-color: rgba(240, 242, 245, 0.9);
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
                 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     padding: 2.5rem;
-    width: 100%; /* Takes full width of its parent */
-    max-width: 768px; /* Max width for larger screens, adjust as needed */
-    margin: 0 auto; /* Centers the container when it's not full width */
-    box-sizing: border-box; /* Include padding in the width calculation */
+    width: 100%;
+    max-width: 768px; /* Max width for larger screens */
+    margin: 0 auto;
+    box-sizing: border-box;
     position: relative;
     border: 1px solid #e2e8f0;
     text-align: center;
   }
 
-  /* Styles for the current show time at the top of the home section. */
-  .show-time-at-top {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 0.5rem;
-  }
-
-  /* Styles for the current show title. */
+  /* Styles for the current show title */
   .show-title {
-    text-align: center;
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: #eab308; /* Tailwind yellow-500 */
-    margin-bottom: 0.75rem;
+    color: #eab308; /* Tailwind yellow-500 equivalent */
   }
 
-  /* Styles for presenter information. */
-  .presenter-info {
-    text-align: center;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #4a5568; /* Tailwind gray-700 */
-    margin-bottom: 0.5rem;
+  /* Presenter info text color */
+  .presenter-info p {
+    color: #4a5568; /* Tailwind gray-700 equivalent */
   }
 
-  /* Styles for the contact lines container */
-  .contact-lines {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem; /* Space below the contact lines */
-  }
-
-  /* Styles for individual contact lines (WhatsApp, Studio Line) */
+  /* Contact lines styling */
   .contact-line-item {
-    font-size: 1rem;
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Center content within the line item */
-    gap: 0.5rem;
   }
-
-  /* Specific color for WhatsApp line */
   .whatsapp-line-item {
     color: #25D366; /* WhatsApp green */
   }
-
-  /* Specific color for Studio line */
   .studio-line-item {
     color: #1A73E8; /* Google Blue, or similar */
   }
-
-  /* Styles for the WhatsApp icon. */
   .whatsapp-icon {
-    width: 20px; height: 20px;
+    width: 20px;
+    height: 20px;
   }
 
-  /* Styles for general time display (e.g., current system time). */
-  .time-display {
-    font-size: 1rem;
-    color: #a0aec0;
-    margin-top: 1.5rem;
-  }
-
-  /* Styles for the progress bar container. */
+  /* Progress bar custom styling */
   .progress-bar-container {
-    width: 100%;
-    background-color: #e2e8f0; /* Light grey background for the track */
-    border-radius: 9999px; /* Fully rounded corners */
+    background-color: #e2e8f0;
+    border-radius: 9999px;
     height: 0.75rem;
-    margin-top: 2.5rem;
     overflow: visible;
     position: relative;
   }
-
-  /* Styles for the progress bar itself (the filled part). */
-  .progress-bar {
+  .progress-bar-custom { /* Custom class to avoid conflict with Bootstrap's .progress-bar */
     height: 100%;
     background-color: yellow;
     border-radius: 9999px;
     width: 0%;
-    transition: width 0.5s ease; /* Smooth transition for progress updates */
+    transition: width 0.5s ease;
   }
+  .time-label {
+    position: absolute;
+    top: -1.5rem;
+    font-size: 0.75rem;
+    color: #000;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .time-label.start { left: 0; }
+  .time-label.end { right: 0; }
 
-  /* Keyframe animation for the "LIVE ON AIR" text to make it flash. */
+  /* Live on Air flashing effect */
   @keyframes flashRed {
-    0%, 100% { color: #ef4444; } /* Red color at start and end */
-    50% { color: #b91c1c; } /* Darker red in the middle */
+    0%, 100% { color: #ef4444; }
+    50% { color: #b91c1c; }
   }
-
-  /* Class to apply the flashing animation. */
   .flashing-on-air {
-    text-align: center;
-    animation: flashRed 1.15s infinite alternate; /* Applies animation, alternates direction */
+    animation: flashRed 1.15s infinite alternate;
   }
 
-  /* Container for the show image. */
+  /* Show image container pulse animation */
   .show-image-container {
     width: 200px;
     height: 200px;
-    margin: 0 auto 1.5rem auto; /* Centers horizontally, provides bottom margin */
+    margin: 0 auto 1.5rem auto;
     position: relative;
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); /* Initial shadow for pulse effect */
-    animation: pulseMagnetic 2s infinite ease-in-out; /* Applies pulse animation */
+    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7);
+    animation: pulseMagnetic 2s infinite ease-in-out;
+  }
+  @keyframes pulseMagnetic {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); }
   }
 
-  /* Styles for the actual show image within its container. */
-  .show-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ensures image covers the area without distortion */
-    display: block;
-  }
-
-  /* Play/Pause Button styles */
+  /* Play/Pause button styles */
   .play-pause-button {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+    background-color: rgba(0, 0, 0, 0.6);
     border: 2px solid yellow;
     border-radius: 50%;
     width: 60px;
@@ -312,105 +157,35 @@
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    z-index: 5; /* Ensure it's above the image */
+    z-index: 5;
   }
-
   .play-pause-button:hover {
     background-color: rgba(0, 0, 0, 0.8);
     transform: translate(-50%, -50%) scale(1.1);
   }
-
   .play-pause-button svg {
-    fill: yellow; /* Icon color */
+    fill: yellow;
     width: 30px;
     height: 30px;
   }
 
-
-  /* Keyframe animation for a magnetic pulsing effect on the show image container. */
-  @keyframes pulseMagnetic {
-    0% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); } /* Start with no visible shadow */
-    70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); } /* Expands and fades out */
-    100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); } /* Returns to invisible */
-  }
-
-  /* Labels for start and end times on the progress bar. */
-  .time-label {
-    text-align: center;
-    position: absolute;
-    top: -1.5rem; /* Positions above the progress bar */
-    font-size: 0.75rem;
-    color: #000;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  /* Specific positioning for start and end time labels. */
-  .time-label.start { left: 0; }
-  .time-label.end { right: 0; }
-
-  /* Styles for "Up Next" show information. */
-  .next-show-info {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 1rem;
-    color: #eab308; /* Yellow color */
-    font-weight: 600;
-  }
-
-  /* Styles for the presenter of the "Up Next" show. */
-  .next-show-presenter {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #4a5568; /* Grey color */
-  }
-
-  /* News Section Styles */
-  #news-section {
-    background-color: rgba(255,255,255,0.9);
-    border-radius: 1rem;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),
-                0 4px 6px -2px rgba(0,0,0,0.05);
-    padding: 2.5rem;
-    width: 90%; /* Adjusted to take up 90% of the parent width */
-    max-width: 90%; /* Ensures it doesn't exceed 90% */
-    min-height: 400px; /* Added for consistent length */
-    margin-top: 2rem; /* Space below the preceding section */
-    text-align: center;
-    border: 1px solid #e2e8f0;
-  }
-
-  /* Heading for the News Section. */
-  #news-section h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-
-  /* Horizontal Scrolling container for weather cards within the News Section. */
+  /* News section weather cards */
   .weather-grid {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
     gap: 1.5rem;
-    margin-top: 1.5rem;
     padding-bottom: 1rem;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
-
-  /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
   .weather-grid::-webkit-scrollbar {
-    display: none;
+    display: none; /* Chrome, Safari, Opera */
   }
-
-  /* Individual weather card styles. */
   .weather-card {
     flex-shrink: 0;
     width: 280px; /* Fixed width for desktop */
-    box-sizing: border-box; /* Ensures padding is included in the width */
+    box-sizing: border-box;
     background-color: rgba(248, 250, 252, 0.95);
     border: 1px solid #e2e8f0;
     border-radius: 0.75rem;
@@ -422,207 +197,42 @@
     flex-direction: column;
     align-items: center;
   }
-
-  /* Hover effect for weather cards. */
   .weather-card:hover {
     transform: translateY(-5px);
   }
-
-  /* Highlight for the closest city weather card */
   .weather-card.highlight {
-    border: 2px solid #eab308; /* Yellow border */
-    box-shadow: 0 0 15px rgba(234, 179, 8, 0.5); /* Yellow glow */
-    transform: scale(1.03); /* Slightly larger */
+    border: 2px solid #eab308;
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.5);
+    transform: scale(1.03);
   }
-
-  /* Heading for individual weather cards (city name). */
-  .weather-card h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 0.5rem;
-  }
-
-  /* Paragraph text within weather cards. */
-  .weather-card p {
-    font-size: 1rem;
-    color: #4a5568;
-    margin-bottom: 0.25rem;
-  }
-
-  /* Temperature display within weather cards. */
   .weather-card .temp {
-    font-size: 1.5rem;
-    font-weight: 700;
     color: #eab308;
   }
 
-  /* About Section Styles */
-  #about-section {
-    background-color: rgba(255,255,255,0.9);
-    border-radius: 1rem;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),
-                0 4px 6px -2px rgba(0,0,0,0.05);
-    padding: 2.5rem;
-    width: 90%; /* Adjusted to take up 90% of the parent width */
-    max-width: 90%; /* Ensures it doesn't exceed 90% */
-    min-height: 400px; /* Added for consistent length */
-    margin-top: 2rem;
-    text-align: center;
-    border: 1px solid #e2e8f0;
-  }
-
-  /* Heading for the About Section. */
-  #about-section h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 1.5rem;
-  }
-
-  /* Paragraph and list item text within the About Section. */
-  #about-section p, #about-section ul {
-    font-size: 1.15rem;
-    color: #333;
-    line-height: 1.8;
-    margin-bottom: 1rem;
-  }
-
-  /* List styles within the About Section. */
-  #about-section ul {
-    list-style: none;
-    padding: 0;
-    margin: 1.5rem auto;
-    max-width: 400px;
-    text-align: left;
-  }
-
-  /* Individual list item styles within the About Section. */
-  #about-section ul li {
-    margin-bottom: 0.75rem;
-    padding-left: 1.5rem;
-    position: relative;
-  }
-
-  /* Custom bullet point for list items in the About Section. */
-  #about-section ul li:before {
-    content: '⭐';
-    position: absolute;
-    left: 0;
-    color: yellow;
-    font-size: 1.2em;
-    line-height: 1;
-  }
-
-  /* Styles for the dynamic listener count display. */
-  .listener-count-display {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #eab308;
-    margin-bottom: 1.5rem;
-    display: block;
-  }
-
-  /* Label for the listener count. */
-  .listener-count-label {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #4a5568;
-    margin-bottom: 0.5rem;
-    display: block;
-  }
-
-  /* Schedule Section Styles */
-  #schedule-section {
-    background-color: rgba(255,255,255,0.9);
-    border-radius: 1rem;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),
-                0 4px 6px -2px rgba(0,0,0,0.05);
-    padding: 2.5rem;
-    width: 90%; /* Adjusted to take up 90% of the parent width */
-    max-width: 90%; /* Ensures it doesn't exceed 90% */
-    min-height: 400px; /* Added for consistent length */
-    margin-top: 2rem;
-    text-align: center;
-    border: 1px solid #e2e8f0;
-  }
-
-  /* Heading for the Schedule Section. */
-  #schedule-section h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 1.5rem;
-  }
-
-  /* Day Tabs for Schedule: Styles for the buttons to switch between daily schedules. */
-  .day-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  /* Individual day tab button styles. */
-  .day-tabs button {
-    background-color: #cbd5e0;
-    color: #4a5568;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border: none;
-    flex-shrink: 0;
-  }
-
-  /* Hover effect for day tab buttons. */
-  .day-tabs button:hover {
-    background-color: #a0aec0;
-    color: #1a202c;
-  }
-
-  /* Active state for day tab buttons. */
-  .day-tabs button.active {
-    background-color: #eab308;
+  /* Schedule section styles */
+  .day-tabs .btn.active {
+    background-color: #eab308; /* yellow */
     color: white;
     box-shadow: 0 2px 5px rgba(234, 179, 8, 0.4);
   }
 
-  /* Horizontal Scrolling container for Daily Schedules. */
-  .daily-schedules-container {
-    overflow-x: hidden;
-    position: relative;
-  }
-
-  /* Styles for the container of individual show entries within a day's schedule. */
+  /* Removed flex-nowrap and overflow-x from schedule-day-shows to allow wrapping */
   .schedule-day-shows {
-    display: flex;
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    /* Removed: display: flex; flex-wrap: nowrap; overflow-x: scroll; white-space: nowrap; */
+    /* Handled by Bootstrap's row and col classes directly */
     padding-bottom: 1rem;
-    white-space: nowrap;
-    gap: 1.5rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
-
-  /* Hide scrollbar for a cleaner look across different browsers. */
   .schedule-day-shows::-webkit-scrollbar {
-    display: none;
+    display: none; /* Chrome, Safari, Opera */
   }
-  .schedule-day-shows {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  /* Styles for individual schedule entries (show cards). */
+  /* Updated schedule-entry to be fully responsive within its col */
   .schedule-entry {
-    flex-shrink: 0;
-    width: 280px;
-    scroll-snap-align: start;
+    flex-shrink: 1; /* Allow shrinking */
+    width: 100%; /* Take full width of its column */
+    height: 100%; /* Ensure cards in a row have same height */
+    box-sizing: border-box;
     background-color: #f8fafc;
     border-radius: 0.75rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -634,14 +244,10 @@
     align-items: center;
     text-align: center;
   }
-
-  /* Hover effect for schedule entries. */
   .schedule-entry:hover {
     transform: translateY(-3px);
     background-color: #f0f4f8;
   }
-
-  /* Keyframe animation for a flashing effect on the currently live show in the schedule. */
   @keyframes flashScheduleEntry {
     0%, 100% {
       background-color: #fffbeb;
@@ -654,261 +260,82 @@
       box-shadow: 0 6px 12px rgba(251, 191, 36, 0.4);
     }
   }
-
-  /* Class to apply the flashing animation to the live schedule entry. */
   .live-show-highlight {
-    text-align: center;
     animation: flashScheduleEntry 1.5s infinite alternate;
   }
-
-  /* Styles for the time display within a schedule entry. */
-  .schedule-time {
-    text-align: center;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px dashed #cbd5e0;
-    width: 100%;
-  }
-
-  /* Styles for the details section within a schedule entry. */
-  .schedule-details {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-grow: 1;
-    margin-top: 0.5rem;
-  }
-
-  /* Styles for the image within a schedule entry. */
   .schedule-entry-image {
     width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 0.75rem;
     border: 2px solid #ccc;
-    margin-bottom: 0.75rem;
   }
-
-  /* Styles for the title of a show within a schedule entry. */
   .schedule-entry-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 0.25rem;
-    white-space: normal;
+    word-break: break-word; /* Ensure long words break */
+    overflow-wrap: break-word; /* Ensure long words wrap */
   }
 
-  /* Styles for the presenter name within a schedule entry. */
-  .schedule-entry-presenter {
-    font-size: 1rem;
-    color: #666;
-    white-space: normal;
-  }
-
-  /* Contact Section Styles - New section for contact information */
-  #contact-section {
-    background-color: rgba(255,255,255,0.9);
-    border-radius: 1rem;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),
-                0 4px 6px -2px rgba(0,0,0,0.05);
-    padding: 2.5rem;
-    width: 90%; /* Adjusted to take up 90% of the parent width */
-    max-width: 90%; /* Ensures it doesn't exceed 90% */
-    min-height: 400px; /* Added for consistent length */
-    margin-top: 2rem;
-    text-align: center;
-    border: 1px solid #e2e8f0;
-  }
-
-  /* Heading for the Contact Section. */
-  #contact-section h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 1.5rem;
-  }
-
-  /* List styles for contact methods. */
-  #contact-section ul {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-  }
-
-  /* Individual list item styles for contact methods. */
-  #contact-section ul li {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-  }
-
-  /* Footer styles: Defines the bottom section of the page. */
-  footer {
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #ccc;
-    padding: 1.5rem 2rem;
-    text-align: center;
-    font-size: 0.85rem;
-    margin-top: auto;
-  }
-
-  /* Social links within the footer. */
-  footer .social-links a {
-    color: yellow;
-    margin: 0 0.5rem;
-    text-decoration: none;
-    font-weight: 600;
-  }
-
-  /* Hamburger menu for responsive design (hidden on larger screens). */
-  .hamburger-menu {
-    display: none;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 25px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1001;
-  }
-
-  /* Bars within the hamburger menu icon. */
-  .hamburger-menu span {
-    display: block;
-    width: 100%;
-    height: 3px;
-    background-color: white;
-    border-radius: 3px;
-    transition: all 0.3s ease-in-out;
-  }
-
-  /* Hamburger menu animation: Transforms bars into an 'X' when active. */
-  .hamburger-menu.active span:nth-child(1) {
-    transform: translateY(11px) rotate(45deg);
-  }
-
-  .hamburger-menu.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger-menu.active span:nth-child(3) {
-    transform: translateY(-11px) rotate(-45deg);
-  }
-
-  /* Mobile navigation styles: Controls how the nav menu appears on small screens. */
-  #main-nav {
-    display: flex;
-  }
-
-  @media (max-width: 768px) {
-    /* Show hamburger menu on smaller screens. */
-    .hamburger-menu {
-      display: flex;
+  /* Responsive Adjustments */
+  @media (max-width: 767.98px) { /* Equivalent to Bootstrap's -sm breakpoint */
+    /* Adjust header for mobile */
+    .navbar-toggler {
+      display: block; /* Show toggler on mobile */
+      border: none; /* Remove default border */
     }
-
-    /* Styles for the main navigation when in mobile view. */
-    #main-nav {
-      flex-direction: column;
+    .navbar-collapse {
       position: absolute;
       top: 100%;
       left: 0;
       width: 100%;
       background-color: rgba(0, 0, 0, 0.9);
-      padding: 1rem 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      transform: translateX(-100%);
       transition: transform 0.3s ease-in-out;
+      transform: translateX(-100%);
       z-index: 999;
     }
-
-    /* Active state for mobile navigation (slides into view). */
-    #main-nav.active {
+    .navbar-collapse.show {
       transform: translateX(0);
     }
-
-    /* List items within mobile navigation. */
-    #main-nav ul {
+    .navbar-nav {
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
-
-    /* Links within mobile navigation. */
-    #main-nav a {
+    .nav-link {
       padding: 0.5rem 1rem;
       width: 100%;
       text-align: center;
     }
-
-    /* Volume control adjustments for mobile. */
     .volume-control {
-      margin-left: 0;
-      margin-top: 1rem;
+      width: 100%;
       justify-content: center;
-      width: 100%;
-    }
-  }
-
-  /* Further responsive adjustments for very small screens (e.g., phones in portrait). */
-  @media (max-width: 600px) {
-    header {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 1rem;
-    }
-    .header-left {
-      width: 100%;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-    .station-info {
-      flex-grow: 1;
-      text-align: right;
-    }
-    .volume-control {
-      order: 3;
       margin-top: 1rem;
+      margin-left: 0;
     }
+
+    /* Adjust main content padding */
     main {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 2rem;
-            gap: 2rem;
-        }
-    .container {
-      padding: 1.5rem; /* Reduce padding for smaller screens */
+      padding: 1rem;
+      gap: 2rem;
     }
 
     /* Mobile specific styles for weather and schedule grids */
     .weather-grid,
     .schedule-day-shows {
-      flex-direction: column; /* Stack items vertically */
-      white-space: normal; /* Allow content to wrap */
-      overflow-x: hidden; /* Disable horizontal scrolling */
-      align-items: center; /* Center stacked items */
-      padding-left: 0.5rem; /* Add some padding to the sides */
-      padding-right: 0.5rem; /* Add some padding to the sides */
+      flex-direction: column;
+      white-space: normal;
+      overflow-x: hidden;
+      align-items: center;
+      padding-left: 0;
+      padding-right: 0;
       gap: 1rem; /* Adjust gap for vertical stacking */
     }
 
     .weather-card,
     .schedule-entry {
-      width: calc(100% - 1rem); /* Take full width minus 0.5rem padding on each side */
-      max-width: none; /* Override any max-width */
-      margin-bottom: 1rem; /* Add vertical spacing between stacked cards */
+      width: 100%; /* Take full width */
+      max-width: none;
+      margin-bottom: 1rem;
     }
 
     /* Remove bottom margin for the last card to prevent extra space */
@@ -920,44 +347,43 @@
 </style>
 </head>
 <body>
-<header>
-  <div class="header-left">
-    <img src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Beezy FM Logo" class="station-logo" />
-    <div class="station-info">
-      <h1>BEEZY FM</h1>
-      <p>RADIO BATHONG</p>
+<header class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="#" onclick="showSection('home-section')">
+      <img src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Beezy FM Logo" class="station-logo me-2 rounded-0" />
+      <div class="station-info">
+        <h1 class="h4 mb-0 fw-bold">BEEZY FM</h1>
+        <p class="small text-light mb-0">RADIO BATHONG</p>
+      </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('home-section')">HOME</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('news-section')">BEEZY NEWS</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('schedule-section')">BEEZY SCHEDULE</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('about-section')">ABOUT US</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('contact-section')">CONTACT</a></li>
+      </ul>
+      <div class="volume-control d-flex align-items-center ms-lg-3">
+        <label for="volume-slider" class="visually-hidden">Volume</label>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" class="form-range w-auto" />
+        <span id="volume-icon" class="ms-2">🔊</span>
+      </div>
     </div>
   </div>
-  <button class="hamburger-menu" id="hamburger-button" aria-label="Toggle navigation">
-    <span></span><span></span><span></span>
-  </button>
-  <nav id="main-nav">
-    <ul>
-      <li><a href="#" onclick="showSection('home-section')">HOME</a></li>
-      <li><a href="#" onclick="showSection('news-section')">BEEZY NEWS</a></li>
-      <li><a href="#" onclick="showSection('schedule-section')">BEEZY SCHEDULE</a></li>
-      <li><a href="#" onclick="showSection('about-section')">ABOUT US</a></li>
-      <li><a href="#" onclick="showSection('contact-section')">CONTACT</a></li>
-    </ul>
-  </nav>
-  <div class="volume-control">
-    <label for="volume-slider" class="sr-only">Volume</label>
-    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" />
-    <span id="volume-icon">🔊</span>
-  </div>
 </header>
-<main>
-  <div class="container" id="home-section">
-
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 flashing-on-air" id="show-time-top">LIVE ON AIR</h1>
-    <div id="show-info" class="p-6 bg-blue-50 border border-blue-200 rounded-lg shadow-md">
-      <!-- New div for contact numbers - positioned above the image -->
-      <div id="contact-numbers" class="contact-lines">
+<main class="d-flex flex-column align-items-center py-4">
+  <div class="custom-card mb-5" id="home-section">
+    <h1 class="display-6 fw-bold text-dark mb-4 flashing-on-air" id="show-time-top">LIVE ON AIR</h1>
+    <div id="show-info" class="p-4 bg-light border border-info rounded shadow-sm">
+      <div id="contact-numbers" class="contact-lines mb-3">
           <!-- Contact numbers will be dynamically inserted here by JavaScript -->
       </div>
       <div class="show-image-container">
-        <img id="show-image" class="show-image" src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Show Image" />
-        <!-- Play/Pause button overlay -->
+        <img id="show-image" class="img-fluid show-image" src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Show Image" />
         <button id="play-pause-button" class="play-pause-button" aria-label="Play/Pause Radio Stream">
           <svg id="play-icon" style="display: block;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z"/>
@@ -967,91 +393,92 @@
           </svg>
         </button>
       </div>
-      <!-- This paragraph will now display the show's start and end time -->
-      <p class="show-time-at-top" id="current-show-duration-display"></p>
-      <!-- This paragraph will now display the show's name -->
-      <p class="show-title" id="show-name">Loading Show...</p>
-      <p id="current-song-title" class="text-lg font-semibold text-gray-700 mt-2">No song info</p>
-      <p id="current-song-artist" class="text-md text-gray-600">Artist: </p>
+      <p class="h5 mt-3 mb-1 text-dark" id="current-show-duration-display"></p>
+      <p class="show-title h3 mb-2" id="show-name">Loading Show...</p>
+      <p id="current-song-title" class="lead fw-semibold text-secondary mt-2">No song info</p>
+      <p id="current-song-artist" class="text-muted">Artist: </p>
       <div class="presenter-info">
         <p id="presenter-name"></p>
       </div>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="show-progress-bar"></div>
+      <div class="progress-bar-container mt-4 mb-2">
+        <div class="progress-bar-custom" id="show-progress-bar"></div>
         <span class="time-label start" id="show-elapsed-time-label"></span>
         <span class="time-label end" id="show-total-duration-label"></span>
       </div>
-      <p class="next-show-info" id="next-show-name"></p>
-      <p class="next-show-presenter" id="next-show-presenter"></p>
+      <p class="next-show-info text-warning mt-3" id="next-show-name"></p>
+      <p class="next-show-presenter text-secondary" id="next-show-presenter"></p>
     </div>
-    <p class="time-display" id="current-time"></p>
+    <p class="text-muted mt-3" id="current-time"></p>
   </div>
 
-    <div id="news-section" class="container hidden">
-      <h2>Beezy News: Weather Updates</h2>
-      <div class="weather-grid" id="weather-updates">
-        <p>Loading weather data...</p>
-      </div>
-      <p class="time-display" id="news-last_updated"></p>
+  <div id="news-section" class="custom-card mb-5 d-none">
+    <h2 class="h3 fw-bold text-dark mb-4">Beezy News: Weather Updates</h2>
+    <div class="weather-grid row justify-content-center g-3" id="weather-updates">
+      <p>Loading weather data...</p>
     </div>
+    <p class="text-muted mt-3" id="news-last_updated"></p>
+  </div>
 
-    <div id="schedule-section" class="container hidden">
-      <h2>Beezy FM Broadcast Schedule</h2>
-      <div id="day-tabs" class="day-tabs"></div>
-      <div id="daily-schedules-container" class="daily-schedules-container"></div>
+  <div id="schedule-section" class="custom-card mb-5 d-none">
+    <h2 class="h3 fw-bold text-dark mb-4">Beezy FM Broadcast Schedule</h2>
+    <div id="day-tabs" class="day-tabs d-flex justify-content-center gap-2 flex-wrap mb-4"></div>
+    <div id="daily-schedules-container" class="daily-schedules-container">
+      <!-- Schedule content will be dynamically loaded here -->
     </div>
+  </div>
 
-    <div id="about-section" class="container hidden">
-      <h2>Welcome to the New Beezy FM!</h2>
-      <p class="listener-count-label">Our Growing Family:</p>
-      <span id="listener-count" class="listener-count-display">0</span>
-      <p>
-        Beezy FM is more than just a radio station; we are a vibrant community hub, dedicated to bringing you the freshest beats,
-        most insightful discussions, and up-to-the-minute news. Our mission is to connect, entertain, and inform our listeners across South Africa.
-      </p>
-      <p>
-        We are constantly innovating to enhance your listening experience. From our dynamic presenters to our diverse music selection,
-        every aspect of Beezy FM is crafted with you in mind. Join us as we continue to grow and shape the sound of tomorrow!
-      </p>
-      <ul>
-        <li>🎧 Cutting-Edge Content: Always relevant, always engaging.</li>
-        <li>🌍 Community Focused: Your voice, your stories, our platform.</li>
-        <li>🎶 Diverse Music Library: Discover new favorites and timeless classics.</li>
-        <li>🎙️ Top Presenters: The best talent bringing you daily joy.</li>
-        <li>🏆 Award-Winning Quality: Recognized for our commitment to excellence.</li>
-      </ul>
-      <p>Thank you for being part of the Beezy FM family. Radio Bathong!</p>
-    </div>
+  <div id="about-section" class="custom-card mb-5 d-none">
+    <h2 class="h3 fw-bold text-dark mb-4">Welcome to the New Beezy FM!</h2>
+    <p class="listener-count-label lead text-secondary">Our Growing Family:</p>
+    <span id="listener-count" class="listener-count-display display-5 fw-bold text-warning d-block mb-4">0</span>
+    <p class="lead text-dark">
+      Beezy FM is more than just a radio station; we are a vibrant community hub, dedicated to bringing you the freshest beats,
+      most insightful discussions, and up-to-the-minute news. Our mission is to connect, entertain, and inform our listeners across South Africa.
+    </p>
+    <p class="lead text-dark">
+      We are constantly innovating to enhance your listening experience. From our dynamic presenters to our diverse music selection,
+      every aspect of Beezy FM is crafted with you in mind. Join us as we continue to grow and shape the sound of tomorrow!
+    </p>
+    <ul class="list-unstyled text-start mx-auto" style="max-width: 400px;">
+      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎧</span> Cutting-Edge Content: Always relevant, always engaging.</li>
+      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🌍</span> Community Focused: Your voice, your stories, our platform.</li>
+      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎶</span> Diverse Music Library: Discover new favorites and timeless classics.</li>
+      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎙️</span> Top Presenters: The best talent bringing you daily joy.</li>
+      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🏆</span> Award-Winning Quality: Recognized for our commitment to excellence.</li>
+    </ul>
+    <p class="text-dark">Thank you for being part of the Beezy FM family. Radio Bathong!</p>
+  </div>
 
-    <div id="contact-section" class="container hidden">
-      <h2>Contact Beezy FM</h2>
-      <p>We'd love to hear from you! Reach out to us through the following channels:</p>
-      <ul class="text-left max-w-sm mx-auto">
-        <li>
-          <span class="text-yellow-500 text-xl">📞</span> Phone: <a href="tel:+27836442822" class="text-blue-600 hover:underline">083 644 2822</a>
-        </li>
-        <li>
-          <span class="text-green-500 text-xl">📱</span> WhatsApp: <a href="https://wa.me/27836442822" target="_blank" class="text-blue-600 hover:underline">083 644 2822</a>
-        </li>
-        <li>
-          <span class="text-red-500 text-xl">📧</span> Email: <a href="mailto:info@beezyfm.co.za" class="text-blue-600 hover:underline">info@beezyfm.co.za</a>
-        </li>
-        <li>
-          <span class="text-blue-500 text-xl">👍</span> Facebook: <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank" class="text-blue-600 hover:underline">Beezy FM Page</a>
-        </li>
-      </ul>
-      <p class="mt-4">Our offices are open from 8:00 AM to 5:00 PM, Monday to Friday.</p>
-    </div>
-
+  <div id="contact-section" class="custom-card mb-5 d-none">
+    <h2 class="h3 fw-bold text-dark mb-4">Contact Beezy FM</h2>
+    <p class="lead text-dark">We'd love to hear from you! Reach out to us through the following channels:</p>
+    <ul class="list-unstyled text-start mx-auto" style="max-width: 300px;">
+      <li class="mb-2 d-flex align-items-center justify-content-center">
+        <span class="text-warning fs-5 me-2">📞</span> Phone: <a href="tel:+27836442822" class="text-primary text-decoration-underline">083 644 2822</a>
+      </li>
+      <li class="mb-2 d-flex align-items-center justify-content-center">
+        <span class="text-success fs-5 me-2">📱</span> WhatsApp: <a href="https://wa.me/27836442822" target="_blank" class="text-primary text-decoration-underline">083 644 2822</a>
+      </li>
+      <li class="mb-2 d-flex align-items-center justify-content-center">
+        <span class="text-danger fs-5 me-2">📧</span> Email: <a href="mailto:info@beezyfm.co.za" class="text-primary text-decoration-underline">info@beezyfm.co.za</a>
+      </li>
+      <li class="mb-2 d-flex align-items-center justify-content-center">
+        <span class="text-primary fs-5 me-2">👍</span> Facebook: <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank" class="text-primary text-decoration-underline">Beezy FM Page</a>
+      </li>
+    </ul>
+    <p class="mt-4 text-dark">Our offices are open from 8:00 AM to 5:00 PM, Monday to Friday.</p>
+  </div>
 </main>
-<footer>
-  <p>© 2025 Beezy FM. All rights reserved. Radio Bathong.</p>
+<footer class="bg-dark text-light text-center py-3 mt-auto">
+  <p class="mb-2 small">&copy; 2025 Beezy FM. All rights reserved. Radio Bathong.</p>
   <div class="social-links">
-    <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank">Facebook</a> |
-    <a href="https://wa.me/0836442822" target="_blank">Whatsapp</a>
+    <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank" class="text-warning mx-2 text-decoration-none fw-semibold">Facebook</a> |
+    <a href="https://wa.me/0836442822" target="_blank" class="text-warning mx-2 text-decoration-none fw-semibold">Whatsapp</a>
   </div>
 </footer>
 <audio id="radio-stream" src="https://stream.zeno.fm/f0ccd091-d7e5-4939-98d8-52457d88ecd3/audio" preload="none"></audio>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
   // Global variable for interval ID to manage periodic updates.
   let currentShowIntervalId; // Renamed for clarity for the main player updates
@@ -1521,40 +948,39 @@
         // Add highlight class if this is the closest city
         const highlightClass = (city.name === closestCityName && userCoords) ? 'highlight' : '';
 
+        // Use Bootstrap card classes for weather cards
         return `
-          <div class="weather-card ${highlightClass}" data-city-name="${city.name}">
-            <h3>${city.name}</h3>
-            <p>${weatherDesc}</p>
-            <p class="temp">${Math.round(temperature)}°C</p>
-            <p>Wind: ${Math.round(windSpeed)} m/s</p>
+          <div class="col-12 col-md-4 mb-3"> <!-- Bootstrap grid column -->
+            <div class="card h-100 ${highlightClass} weather-card" data-city-name="${city.name}">
+              <div class="card-body">
+                <h3 class="card-title h5">${city.name}</h3>
+                <p class="card-text">${weatherDesc}</p>
+                <p class="card-text fs-4 fw-bold temp">${Math.round(temperature)}°C</p>
+                <p class="card-text small text-muted">Wind: ${Math.round(windSpeed)} m/s</p>
+              </div>
+            </div>
           </div>`;
       });
 
       const results = await Promise.allSettled(fetchPromises);
+      container.innerHTML = ''; // Clear "Loading weather data..."
       results.forEach(result => {
         if (result.status === 'fulfilled') {
-          html += result.value;
+          container.innerHTML += result.value;
         } else {
           console.error("Failed to fetch weather for a city:", result.reason);
         }
       });
 
-      if (html === '') {
-        container.innerHTML = `<p class="text-red-500">No weather data could be loaded for any city. Please check your internet connection or try again later.</p>`;
+      if (container.innerHTML === '') {
+        container.innerHTML = `<p class="text-danger">No weather data could be loaded for any city. Please check your internet connection or try again later.</p>`;
       } else {
-        container.innerHTML = html;
-        // If a closest city was found, scroll to it
-        if (closestCityName) {
-          const closestCard = container.querySelector(`.weather-card[data-city-name="${closestCityName}"]`);
-          if (closestCard) {
-            closestCard.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-          }
-        }
+        // If a closest city was found, scroll to it (handled by CSS now due to flex-direction column)
       }
       lastUpdatedEl.textContent = `Weather data last updated: ${new Date().toLocaleTimeString('en-ZA')}`;
     } catch (err) {
       console.error("Overall error fetching weather data:", err);
-      container.innerHTML = `<p class="text-red-500">Failed to load weather data. An unexpected error occurred.</p>`;
+      container.innerHTML = `<p class="text-danger">Failed to load weather data. An unexpected error occurred.</p>`;
       lastUpdatedEl.textContent = '';
     }
   }
@@ -1613,13 +1039,15 @@
     daysConfig.forEach(dayInfo => {
       const btn = document.createElement('button');
       btn.textContent = dayInfo.label;
+      btn.className = 'btn btn-secondary'; // Bootstrap button class
       btn.onclick = () => showDaySchedule(dayInfo.id);
       dayTabsContainer.appendChild(btn);
 
       const dayDiv = document.createElement('div');
       dayDiv.id = `schedule-${dayInfo.id}`;
-      dayDiv.className = 'schedule-day-shows';
-      dayDiv.style.display = 'none';
+      // Changed to Bootstrap row classes for responsive wrapping
+      dayDiv.className = 'schedule-day-shows row g-3'; 
+      dayDiv.style.display = 'none'; // Initially hidden
 
       const daySchedule = schedule[dayInfo.scheduleKey];
       if (daySchedule && daySchedule.length > 0) {
@@ -1636,17 +1064,20 @@
 
           const isLive = dayInfo.dayIndices.includes(currentDayIndex) && (now >= showStart && now < showEnd);
           const liveClass = isLive ? 'live-show-highlight' : '';
-          const presenterHtml = show.presenter ? `<p class="schedule-entry-presenter">Presenter: ${show.presenter}</p>` : '';
+          const presenterHtml = show.presenter ? `<p class="card-text text-muted mb-0">${show.presenter}</p>` : '';
 
+          // Use Bootstrap col classes directly here for responsive grid
           dayDiv.innerHTML += `
-            <div class="schedule-entry ${liveClass}">
-              <div class="schedule-time">
-                ${show.start.hour.toString().padStart(2,'0')}:${show.start.minute.toString().padStart(2,'0')} - ${show.end.hour.toString().padStart(2,'0')}:${show.end.minute.toString().padStart(2,'0')}
-              </div>
-              <div class="schedule-details">
-                <img src="${UNIVERSAL_IMAGE_URL}" alt="${show.name}" class="schedule-entry-image"/>
-                <h4 class="schedule-entry-title">${show.name}</h4>
-                ${presenterHtml}
+            <div class="col-12 col-md-4">
+              <div class="card h-100 ${liveClass} schedule-entry">
+                <div class="card-header fw-bold text-dark py-2">
+                  ${show.start.hour.toString().padStart(2,'0')}:${show.start.minute.toString().padStart(2,'0')} - ${show.end.hour.toString().padStart(2,'0')}:${show.end.minute.toString().padStart(2,'0')}
+                </div>
+                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                  <img src="${UNIVERSAL_IMAGE_URL}" alt="${show.name}" class="schedule-entry-image mb-2"/>
+                  <h4 class="card-title h5 fw-bold text-dark mb-1 schedule-entry-title">${show.name}</h4>
+                  ${presenterHtml}
+                </div>
               </div>
             </div>
           `;
@@ -1655,7 +1086,7 @@
           }
         });
       } else {
-        dayDiv.innerHTML = '<p class="text-center w-full py-4 text-gray-600">No shows scheduled for this day.</p>';
+        dayDiv.innerHTML = '<p class="text-center w-100 py-4 text-muted">No shows scheduled for this day.</p>';
       }
       dailySchedulesContainer.appendChild(dayDiv);
     });
@@ -1669,20 +1100,20 @@
 
   function showDaySchedule(dayId) {
     document.querySelectorAll('.schedule-day-shows').forEach(d => d.style.display = 'none');
-    document.querySelectorAll('.day-tabs button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.day-tabs button').forEach(b => b.classList.remove('active', 'btn-warning')); // Remove btn-warning and active from all
+    document.querySelectorAll('.day-tabs button').forEach(b => b.classList.add('btn-secondary')); // Ensure all are secondary
 
     const selectedDiv = document.getElementById(`schedule-${dayId}`);
     if (selectedDiv) {
-      selectedDiv.style.display = 'flex';
-
-      const liveShow = selectedDiv.querySelector('.live-show-highlight');
-      if (liveShow) {
-        liveShow.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-      } else {
-        selectedDiv.scrollTo({ left: 0, behavior: 'smooth' });
-      }
+      selectedDiv.style.display = 'flex'; // Use flex for the row to display its columns
+      // For schedule cards, we are now using Bootstrap's grid system (col-12, col-md-4)
+      // which automatically handles wrapping. No explicit scrollIntoView for cards needed.
     }
-    document.querySelector(`.day-tabs button[onclick="showDaySchedule('${dayId}')"]`)?.classList.add('active');
+    const activeButton = document.querySelector(`.day-tabs button[onclick="showDaySchedule('${dayId}')"]`);
+    if(activeButton) {
+      activeButton.classList.remove('btn-secondary');
+      activeButton.classList.add('active', 'btn-warning'); // Add active and btn-warning to selected
+    }
   }
 
   // --- Section Switching Functionality ---
@@ -1690,14 +1121,14 @@
 
   function showSection(sectionId) {
     // Hide all sections
-    document.querySelectorAll('main > .container').forEach(section => {
-      section.classList.add('hidden');
+    document.querySelectorAll('main > .custom-card').forEach(section => { // Use custom-card as selector
+      section.classList.add('d-none'); // Bootstrap hidden class
     });
 
     // Show the requested section
     const targetElement = document.getElementById(sectionId);
     if (targetElement) {
-      targetElement.classList.remove('hidden');
+      targetElement.classList.remove('d-none'); // Show section
       activeSectionId = sectionId; // Update active section ID
 
       // Scroll to the top of the displayed section
@@ -1708,20 +1139,17 @@
 
       // Execute section-specific initialization/updates
       if (sectionId === 'news-section') {
-        // Attempt to get user location, then fetch weather.
         getUserLocation()
           .then(coords => fetchWeatherUpdates(coords))
           .catch(error => {
             console.warn("Geolocation failed, fetching weather for all cities:", error.message);
-            fetchWeatherUpdates(); // Fetch weather for all cities if geolocation fails
+            fetchWeatherUpdates();
             const container = document.getElementById('weather-updates');
             if (container) {
-              container.insertAdjacentHTML('afterbegin', `<p class="text-red-500 mb-2">Note: ${error.message}</p>`);
+              container.insertAdjacentHTML('afterbegin', `<p class="text-danger mb-2">Note: ${error.message}</p>`); // Bootstrap danger text
             }
           });
         if (weatherIntervalId) clearInterval(weatherIntervalId);
-        // Set interval to fetch weather updates periodically (e.g., every 10 minutes)
-        // This will refetch weather and re-evaluate closest city if user's location is known
         weatherIntervalId = setInterval(() => {
           getUserLocation()
             .then(coords => fetchWeatherUpdates(coords))
@@ -1731,46 +1159,31 @@
             });
         }, 600000); // 10 minutes
       } else {
-        if (weatherIntervalId) clearInterval(weatherIntervalId); // Clear if moving away
+        if (weatherIntervalId) clearInterval(weatherIntervalId);
       }
 
       if (sectionId === 'about-section') {
         startListenerCountAnimation();
         if (listenerCountIntervalId) clearInterval(listenerCountIntervalId);
-        // The animation runs once, so no interval needed for continuous update unless specified
       } else {
         if (listenerCountIntervalId) clearInterval(listenerCountIntervalId);
       }
 
       if (sectionId === 'schedule-section') {
         generateSchedule();
-        // Schedule updates are usually on page load or when actively viewing, no periodic interval needed here
       }
-      // No specific actions for 'contact-section' currently needed on show
-      // The 'team-section' is removed, so no action needed there.
     }
 
     // Close the mobile navigation menu if it is open
-    const mainNav = document.getElementById('main-nav');
-    const hamburgerButton = document.getElementById('hamburger-button');
-    if (mainNav.classList.contains('active')) {
-      mainNav.classList.remove('active');
-      hamburgerButton.classList.remove('active');
+    const mainNavbar = document.getElementById('mainNavbar');
+    const bsCollapse = bootstrap.Collapse.getInstance(mainNavbar); // Get Bootstrap Collapse instance
+    if (mainNavbar.classList.contains('show')) { // Check if Bootstrap collapse is open
+      bsCollapse.hide(); // Hide it using Bootstrap's JS method
     }
   }
 
-  // --- Hamburger Menu Toggle Functionality ---
-  const hamburgerButton = document.getElementById('hamburger-button');
-  const mainNav = document.getElementById('main-nav');
-
-  hamburgerButton.addEventListener('click', () => {
-    mainNav.classList.toggle('active');
-    hamburgerButton.classList.toggle('active');
-  });
-
   // --- Initial Load Operations ---
   document.addEventListener('DOMContentLoaded', () => {
-    // Initialize and set up intervals for dynamic content updates on the main player.
     fetchCurrentSongMetadata();
     setInterval(fetchCurrentSongMetadata, 10000);
 
