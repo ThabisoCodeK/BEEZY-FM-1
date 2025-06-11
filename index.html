@@ -216,38 +216,45 @@
     box-shadow: 0 2px 5px rgba(234, 179, 8, 0.4);
   }
 
-  /* Removed flex-nowrap and overflow-x from schedule-day-shows to allow wrapping */
-  .schedule-day-shows {
-    /* Removed: display: flex; flex-wrap: nowrap; overflow-x: scroll; white-space: nowrap; */
-    /* Handled by Bootstrap's row and col classes directly */
-    padding-bottom: 1rem;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+  /* Timeline specific styles */
+  .timeline-container {
+    position: relative;
+    padding-left: 50px; /* Space for the timeline line and dots */
+    border-left: 2px solid #eab308; /* The main timeline line */
   }
-  .schedule-day-shows::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
-  /* Updated schedule-entry to be fully responsive within its col */
-  .schedule-entry {
-    flex-shrink: 1; /* Allow shrinking */
-    width: 100%; /* Take full width of its column */
-    height: 100%; /* Ensure cards in a row have same height */
-    box-sizing: border-box;
+
+  .timeline-entry {
+    position: relative;
+    margin-bottom: 20px;
+    padding: 15px 15px 15px 30px; /* Padding for content inside the entry */
     background-color: #f8fafc;
     border-radius: 0.75rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    text-align: left; /* Align text within entry to left */
     border: 1px solid #e2e8f0;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
   }
-  .schedule-entry:hover {
+
+  .timeline-entry:hover {
     transform: translateY(-3px);
     background-color: #f0f4f8;
   }
+
+  /* Timeline dot */
+  .timeline-entry::before {
+    content: '';
+    position: absolute;
+    left: -13px; /* Position the dot on the timeline line */
+    top: 25px; /* Adjust vertical alignment */
+    width: 20px;
+    height: 20px;
+    background-color: #eab308; /* Yellow dot */
+    border: 3px solid #fff; /* White border around the dot */
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  /* Live show highlight for timeline entry */
   @keyframes flashScheduleEntry {
     0%, 100% {
       background-color: #fffbeb;
@@ -260,19 +267,46 @@
       box-shadow: 0 6px 12px rgba(251, 191, 36, 0.4);
     }
   }
-  .live-show-highlight {
+  .timeline-entry.live-show-highlight {
     animation: flashScheduleEntry 1.5s infinite alternate;
   }
-  .schedule-entry-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 0.75rem;
-    border: 2px solid #ccc;
+
+  .timeline-time {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
   }
-  .schedule-entry-title {
-    word-break: break-word; /* Ensure long words break */
-    overflow-wrap: break-word; /* Ensure long words wrap */
+
+  .timeline-image {
+    width: 60px; /* Smaller image for timeline */
+    height: 60px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 2px solid #ccc;
+    margin-right: 15px; /* Space between image and text */
+    flex-shrink: 0;
+  }
+
+  .timeline-details {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .timeline-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .timeline-presenter {
+    font-size: 1rem;
+    color: #666;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   /* Responsive Adjustments */
@@ -319,9 +353,8 @@
       gap: 2rem;
     }
 
-    /* Mobile specific styles for weather and schedule grids */
-    .weather-grid,
-    .schedule-day-shows {
+    /* Mobile specific styles for weather grid (schedule is now timeline based) */
+    .weather-grid {
       flex-direction: column;
       white-space: normal;
       overflow-x: hidden;
@@ -331,17 +364,40 @@
       gap: 1rem; /* Adjust gap for vertical stacking */
     }
 
-    .weather-card,
-    .schedule-entry {
+    .weather-card {
       width: 100%; /* Take full width */
       max-width: none;
       margin-bottom: 1rem;
     }
-
-    /* Remove bottom margin for the last card to prevent extra space */
-    .weather-grid .weather-card:last-child,
-    .schedule-day-shows .schedule-entry:last-child {
+    .weather-grid .weather-card:last-child {
       margin-bottom: 0;
+    }
+
+    /* Timeline specific mobile adjustments */
+    .timeline-container {
+      padding-left: 30px; /* Reduce padding for mobile */
+      border-left: 2px solid #eab308;
+    }
+    .timeline-entry::before {
+      left: -11px; /* Adjust dot position for smaller padding */
+      top: 20px; /* Adjust vertical alignment */
+      width: 16px;
+      height: 16px;
+      border-width: 2px;
+    }
+    .timeline-entry {
+      padding: 10px 10px 10px 20px;
+    }
+    .timeline-image {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+    .timeline-title {
+      font-size: 1.1rem;
+    }
+    .timeline-presenter {
+      font-size: 0.9rem;
     }
   }
 </style>
@@ -422,8 +478,8 @@
   <div id="schedule-section" class="custom-card mb-5 d-none">
     <h2 class="h3 fw-bold text-dark mb-4">Beezy FM Broadcast Schedule</h2>
     <div id="day-tabs" class="day-tabs d-flex justify-content-center gap-2 flex-wrap mb-4"></div>
-    <div id="daily-schedules-container" class="daily-schedules-container">
-      <!-- Schedule content will be dynamically loaded here -->
+    <div id="daily-schedules-container" class="daily-schedules-container px-3">
+      <!-- Schedule content will be dynamically loaded here as a timeline -->
     </div>
   </div>
 
@@ -1045,8 +1101,7 @@
 
       const dayDiv = document.createElement('div');
       dayDiv.id = `schedule-${dayInfo.id}`;
-      // Changed to Bootstrap row classes for responsive wrapping
-      dayDiv.className = 'schedule-day-shows row g-3'; 
+      dayDiv.className = 'timeline-container'; // Use timeline-container for each day's schedule
       dayDiv.style.display = 'none'; // Initially hidden
 
       const daySchedule = schedule[dayInfo.scheduleKey];
@@ -1064,18 +1119,17 @@
 
           const isLive = dayInfo.dayIndices.includes(currentDayIndex) && (now >= showStart && now < showEnd);
           const liveClass = isLive ? 'live-show-highlight' : '';
-          const presenterHtml = show.presenter ? `<p class="card-text text-muted mb-0">${show.presenter}</p>` : '';
+          const presenterHtml = show.presenter ? `<p class="timeline-presenter mb-0">${show.presenter}</p>` : '';
 
-          // Use Bootstrap col classes directly here for responsive grid
           dayDiv.innerHTML += `
-            <div class="col-12 col-md-4">
-              <div class="card h-100 ${liveClass} schedule-entry">
-                <div class="card-header fw-bold text-dark py-2">
-                  ${show.start.hour.toString().padStart(2,'0')}:${show.start.minute.toString().padStart(2,'0')} - ${show.end.hour.toString().padStart(2,'0')}:${show.end.minute.toString().padStart(2,'0')}
-                </div>
-                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                  <img src="${UNIVERSAL_IMAGE_URL}" alt="${show.name}" class="schedule-entry-image mb-2"/>
-                  <h4 class="card-title h5 fw-bold text-dark mb-1 schedule-entry-title">${show.name}</h4>
+            <div class="timeline-entry ${liveClass}">
+              <div class="timeline-time">
+                ${show.start.hour.toString().padStart(2,'0')}:${show.start.minute.toString().padStart(2,'0')} - ${show.end.hour.toString().padStart(2,'0')}:${show.end.minute.toString().padStart(2,'0')}
+              </div>
+              <div class="timeline-details d-flex align-items-center">
+                <img src="${UNIVERSAL_IMAGE_URL}" alt="${show.name}" class="timeline-image me-3"/>
+                <div>
+                  <h4 class="timeline-title mb-1">${show.name}</h4>
                   ${presenterHtml}
                 </div>
               </div>
@@ -1099,15 +1153,20 @@
   }
 
   function showDaySchedule(dayId) {
-    document.querySelectorAll('.schedule-day-shows').forEach(d => d.style.display = 'none');
+    document.querySelectorAll('.timeline-container').forEach(d => d.style.display = 'none');
     document.querySelectorAll('.day-tabs button').forEach(b => b.classList.remove('active', 'btn-warning')); // Remove btn-warning and active from all
     document.querySelectorAll('.day-tabs button').forEach(b => b.classList.add('btn-secondary')); // Ensure all are secondary
 
     const selectedDiv = document.getElementById(`schedule-${dayId}`);
     if (selectedDiv) {
-      selectedDiv.style.display = 'flex'; // Use flex for the row to display its columns
-      // For schedule cards, we are now using Bootstrap's grid system (col-12, col-md-4)
-      // which automatically handles wrapping. No explicit scrollIntoView for cards needed.
+      selectedDiv.style.display = 'block'; // Display as block for timeline
+      // Find the currently live show and scroll to it if it exists
+      const liveShowElement = selectedDiv.querySelector('.live-show-highlight');
+      if (liveShowElement) {
+        liveShowElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        selectedDiv.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top if no live show
+      }
     }
     const activeButton = document.querySelector(`.day-tabs button[onclick="showDaySchedule('${dayId}')"]`);
     if(activeButton) {
