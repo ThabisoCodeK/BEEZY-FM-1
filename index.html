@@ -124,29 +124,45 @@
     animation: flashRed 1.15s infinite alternate;
   }
 
-  /* Show image container pulse animation */
+  /* Show image container styling - now flexible by default */
   .show-image-container {
-    width: 200px;
-    height: 200px;
     margin: 0 auto 1.5rem auto;
     position: relative;
-    border-radius: 1rem;
-    overflow: hidden;
-    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7);
-    animation: pulseMagnetic 2s infinite ease-in-out;
-  }
-  @keyframes pulseMagnetic {
-    0% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); }
+    /* Dimensions and other styles are now managed by the .show-image itself through JS */
   }
 
-  /* Play/Pause button styles */
+  /* Show image styling (for actual image within container) - defaults */
+  .show-image {
+    max-width: 100%; /* Ensure image scales down if larger than parent */
+    height: auto; /* Maintain aspect ratio by default */
+    display: block; /* Remove extra space below image */
+    margin: 0 auto; /* Center the image */
+    transition: all 0.3s ease-in-out; /* Smooth transition for style changes */
+    /* border-radius and object-fit will be set by JS based on show */
+  }
+
+  /* Keyframes for pulsing circle effect */
+  @keyframes pulse-circle {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); /* Starting yellow pulse */
+    }
+    70% {
+      box-shadow: 0 0 0 15px rgba(255, 193, 7, 0); /* Expanding yellow pulse */
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); /* Fading out */
+    }
+  }
+
+  /* Apply pulsing effect to circular images */
+  .show-image.pulsing-image {
+    animation: pulse-circle 2s infinite ease-out;
+  }
+
+
+  /* Play/Pause button styles (removed from home section, kept for nav) */
+  /* The .play-pause-button styles are still here but only apply to #listen-live-button now */
   .play-pause-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.6);
     border: 2px solid yellow;
     border-radius: 50%;
@@ -161,7 +177,7 @@
   }
   .play-pause-button:hover {
     background-color: rgba(0, 0, 0, 0.8);
-    transform: translate(-50%, -50%) scale(1.1);
+    transform: scale(1.1);
   }
   .play-pause-button svg {
     fill: yellow;
@@ -278,14 +294,15 @@
     margin-bottom: 0.5rem;
   }
 
+  /* Timeline image styling - defaults, will be overridden by JS for specific images */
   .timeline-image {
-    width: 60px; /* Smaller image for timeline */
-    height: 60px;
-    object-fit: cover;
-    border-radius: 0.5rem;
+    width: 60px; /* Fixed width for timeline */
+    height: 60px; /* Fixed height for timeline */
     border: 2px solid #ccc;
     margin-right: 15px; /* Space between image and text */
     flex-shrink: 0;
+    transition: all 0.3s ease-in-out; /* Smooth transition for style changes */
+    /* object-fit and border-radius will be set by JS based on show */
   }
 
   .timeline-details {
@@ -308,6 +325,32 @@
     word-break: break-word;
     overflow-wrap: break-word;
   }
+
+  /* Styles for the new "Listen Live" button in the navbar */
+  .nav-listen-live-btn {
+    background-color: #eab308; /* Tailwind yellow-500 */
+    color: #1a202c !important; /* Dark text for contrast */
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem; /* Rounded corners */
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    text-decoration: none; /* Remove underline */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  .nav-listen-live-btn:hover {
+    background-color: #facc15; /* Lighter yellow on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+  .nav-listen-live-btn svg {
+    fill: #1a202c; /* Dark icon for contrast */
+    width: 20px;
+    height: 20px;
+  }
+
 
   /* Responsive Adjustments */
   @media (max-width: 767.98px) { /* Equivalent to Bootstrap's -sm breakpoint */
@@ -335,6 +378,10 @@
       padding-top: 1rem;
       padding-bottom: 1rem;
     }
+    .nav-item {
+      width: 100%; /* Ensure nav items take full width in mobile */
+      text-align: center;
+    }
     .nav-link {
       padding: 0.5rem 1rem;
       width: 100%;
@@ -345,6 +392,10 @@
       justify-content: center;
       margin-top: 1rem;
       margin-left: 0;
+    }
+    .nav-listen-live-btn {
+      width: fit-content; /* Adjust width for mobile */
+      margin: 0.5rem auto; /* Center button on mobile */
     }
 
     /* Adjust main content padding */
@@ -422,10 +473,21 @@
         <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('schedule-section')">BEEZY SCHEDULE</a></li>
         <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('about-section')">ABOUT US</a></li>
         <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('contact-section')">CONTACT</a></li>
+        <li class="nav-item">
+          <a href="#" id="listen-live-button" class="nav-link nav-listen-live-btn">
+            <span class="me-2">LISTEN LIVE</span>
+            <svg id="listen-live-play-icon" style="display: block;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            <svg id="listen-live-pause-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+          </a>
+        </li>
       </ul>
       <div class="volume-control d-flex align-items-center ms-lg-3">
         <label for="volume-slider" class="visually-hidden">Volume</label>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" class="form-range w-auto" />
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" />
         <span id="volume-icon" class="ms-2">🔊</span>
       </div>
     </div>
@@ -439,17 +501,11 @@
           <!-- Contact numbers will be dynamically inserted here by JavaScript -->
       </div>
       <div class="show-image-container">
-        <img id="show-image" class="img-fluid show-image" src="https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000" alt="Show Image" />
-        <button id="play-pause-button" class="play-pause-button" aria-label="Play/Pause Radio Stream">
-          <svg id="play-icon" style="display: block;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
-          <svg id="pause-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-          </svg>
-        </button>
+        <img id="show-image" class="img-fluid show-image" src="" alt="Current Show Image" />
       </div>
+      <!-- This paragraph will now display the show's start and end time -->
       <p class="h5 mt-3 mb-1 text-dark" id="current-show-duration-display"></p>
+      <!-- This paragraph will now display the show's name -->
       <p class="show-title h3 mb-2" id="show-name">Loading Show...</p>
       <p id="current-song-title" class="lead fw-semibold text-secondary mt-2">No song info</p>
       <p id="current-song-artist" class="text-muted">Artist: </p>
@@ -467,65 +523,78 @@
     <p class="text-muted mt-3" id="current-time"></p>
   </div>
 
-  <div id="news-section" class="custom-card mb-5 d-none">
-    <h2 class="h3 fw-bold text-dark mb-4">Beezy News: Weather Updates</h2>
-    <div class="weather-grid row justify-content-center g-3" id="weather-updates">
-      <p>Loading weather data...</p>
+    <div id="news-section" class="custom-card mb-5 d-none">
+      <h2 class="h3 fw-bold text-dark mb-4">Beezy News: Weather Updates</h2>
+      <div class="weather-grid row justify-content-center g-3" id="weather-updates">
+        <p>Loading weather data...</p>
+      </div>
+      <p class="text-muted mt-3" id="news-last_updated"></p>
     </div>
-    <p class="text-muted mt-3" id="news-last_updated"></p>
-  </div>
 
-  <div id="schedule-section" class="custom-card mb-5 d-none">
-    <h2 class="h3 fw-bold text-dark mb-4">Beezy FM Broadcast Schedule</h2>
-    <div id="day-tabs" class="day-tabs d-flex justify-content-center gap-2 flex-wrap mb-4"></div>
-    <div id="daily-schedules-container" class="daily-schedules-container px-3">
-      <!-- Schedule content will be dynamically loaded here as a timeline -->
+    <div id="schedule-section" class="custom-card mb-5 d-none">
+      <h2 class="h3 fw-bold text-dark mb-4">Beezy FM Broadcast Schedule</h2>
+      <div id="day-tabs" class="day-tabs d-flex justify-content-center gap-2 flex-wrap mb-4"></div>
+      <div id="daily-schedules-container" class="daily-schedules-container px-3">
+        <!-- Schedule content will be dynamically loaded here as a timeline -->
+      </div>
     </div>
-  </div>
 
-  <div id="about-section" class="custom-card mb-5 d-none">
-    <h2 class="h3 fw-bold text-dark mb-4">Welcome to the New Beezy FM!</h2>
-    <p class="listener-count-label lead text-secondary">Our Growing Family:</p>
-    <span id="listener-count" class="listener-count-display display-5 fw-bold text-warning d-block mb-4">0</span>
-    <p class="lead text-dark">
-      Beezy FM is more than just a radio station; we are a vibrant community hub, dedicated to bringing you the freshest beats,
-      most insightful discussions, and up-to-the-minute news. Our mission is to connect, entertain, and inform our listeners across South Africa.
-    </p>
-    <p class="lead text-dark">
-      We are constantly innovating to enhance your listening experience. From our dynamic presenters to our diverse music selection,
-      every aspect of Beezy FM is crafted with you in mind. Join us as we continue to grow and shape the sound of tomorrow!
-    </p>
-    <ul class="list-unstyled text-start mx-auto" style="max-width: 400px;">
-      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎧</span> Cutting-Edge Content: Always relevant, always engaging.</li>
-      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🌍</span> Community Focused: Your voice, your stories, our platform.</li>
-      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎶</span> Diverse Music Library: Discover new favorites and timeless classics.</li>
-      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎙️</span> Top Presenters: The best talent bringing you daily joy.</li>
-      <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🏆</span> Award-Winning Quality: Recognized for our commitment to excellence.</li>
-    </ul>
-    <p class="text-dark">Thank you for being part of the Beezy FM family. Radio Bathong!</p>
-  </div>
+    <div id="about-section" class="custom-card mb-5 d-none">
+      <h2 class="h3 fw-bold text-dark mb-4">Welcome to the New Beezy FM!</h2>
+      <p class="listener-count-label lead text-secondary">Our Growing Family:</p>
+      <span id="listener-count" class="listener-count-display display-5 fw-bold text-warning d-block mb-4">0</span>
+      <p class="lead text-dark">
+        Beezy FM is more than just a radio station; we are a vibrant community hub, dedicated to bringing you the freshest beats,
+        most insightful discussions, and up-to-the-minute news. Our mission is to connect, entertain, and inform our listeners across South Africa.
+      </p>
+      <p class="lead text-dark">
+        We are constantly innovating to enhance your listening experience. From our dynamic presenters to our diverse music selection,
+        every aspect of Beezy FM is crafted with you in mind. Join us as we continue to grow and shape the sound of tomorrow!
+      </p>
+      <ul class="list-unstyled text-start mx-auto" style="max-width: 400px;">
+        <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎧</span> Cutting-Edge Content: Always relevant, always engaging.</li>
+        <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🌍</span> Community Focused: Your voice, your stories, our platform.</li>
+        <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎶</span> Diverse Music Library: Discover new favorites and timeless classics.</li>
+        <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🎙️</span> Top Presenters: The best talent bringing you daily joy.</li>
+        <li class="mb-2 ps-4 position-relative"><span class="position-absolute start-0">🏆</span> Award-Winning Quality: Recognized for our commitment to excellence.</li>
+      </ul>
+      <p class="text-dark">Thank you for being part of the Beezy FM family. Radio Bathong!</p>
+    </div>
 
-  <div id="contact-section" class="custom-card mb-5 d-none">
-    <h2 class="h3 fw-bold text-dark mb-4">Contact Beezy FM</h2>
-    <p class="lead text-dark">We'd love to hear from you! Reach out to us through the following channels:</p>
-    <ul class="list-unstyled text-start mx-auto" style="max-width: 300px;">
-      <li class="mb-2 d-flex align-items-center justify-content-center">
-        <span class="text-warning fs-5 me-2">📞</span> Phone: <a href="tel:+27836442822" class="text-primary text-decoration-underline">083 644 2822</a>
-      </li>
-      <li class="mb-2 d-flex align-items-center justify-content-center">
-        <span class="text-success fs-5 me-2">📱</span> WhatsApp: <a href="https://wa.me/27836442822" target="_blank" class="text-primary text-decoration-underline">083 644 2822</a>
-      </li>
-      <li class="mb-2 d-flex align-items-center justify-content-center">
-        <span class="text-danger fs-5 me-2">📧</span> Email: <a href="mailto:info@beezyfm.co.za" class="text-primary text-decoration-underline">info@beezyfm.co.za</a>
-      </li>
-      <li class="mb-2 d-flex align-items-center justify-content-center">
-        <span class="text-primary fs-5 me-2">👍</span> Facebook: <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank" class="text-primary text-decoration-underline">Beezy FM Page</a>
-      </li>
-    </ul>
-    <p class="mt-4 text-dark">Our offices are open from 8:00 AM to 5:00 PM, Monday to Friday.</p>
-  </div>
+    <div id="contact-section" class="custom-card mb-5 d-none">
+      <h2>Contact Beezy FM</h2>
+      <p class="lead text-dark">We'd love to hear from you! Reach out to us through the following channels:</p>
+      <ul class="list-unstyled text-start mx-auto" style="max-width: 300px;">
+        <li class="mb-2 d-flex align-items-center justify-content-center">
+          <span class="text-warning fs-5 me-2">📞</span> Phone: <a href="tel:+27836442822" class="text-primary text-decoration-underline">083 644 2822</a>
+        </li>
+        <li class="mb-2 d-flex align-items-center justify-content-center">
+          <span class="text-success fs-5 me-2">📱</span> WhatsApp: <a href="https://wa.me/27836442822" target="_blank" class="text-primary text-decoration-underline">083 644 2822</a>
+        </li>
+        <li class="mb-2 d-flex align-items-center justify-content-center">
+          <span class="text-danger fs-5 me-2">📧</span> Email: <a href="mailto:info@beezyfm.co.za" class="text-primary text-decoration-underline">info@beezyfm.co.za</a>
+        </li>
+        <li class="mb-2 d-flex align-items-center justify-content-center">
+          <span class="text-primary fs-5 me-2">👍</span> Facebook: <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank" class="text-primary text-decoration-underline">Beezy FM Page</a>
+        </li>
+      </ul>
+      <p class="mt-4 text-dark">Our offices are open from 8:00 AM to 5:00 PM, Monday to Friday.</p>
+    </div>
+
+    <!-- New section for show details -->
+    <div id="show-details-section" class="custom-card mb-5 d-none">
+      <button class="btn btn-secondary mb-4 float-start" onclick="showSection('schedule-section')">
+        &larr; Back to Schedule
+      </button>
+      <h2 class="h3 fw-bold text-dark mb-3" id="show-details-title"></h2>
+      <p class="text-muted mb-2" id="show-details-time"></p>
+      <p class="text-secondary fw-semibold mb-3" id="show-details-presenter"></p>
+      <img id="show-details-image" class="img-fluid mb-4" src="" alt="Show Image" />
+      <p class="text-dark text-start" id="show-details-description"></p>
+    </div>
+
 </main>
-<footer class="bg-dark text-light text-center py-3 mt-auto">
+<footer class="bg-dark text-light py-4 text-center d-flex flex-column align-items-center">
   <p class="mb-2 small">&copy; 2025 Beezy FM. All rights reserved. Radio Bathong.</p>
   <div class="social-links">
     <a href="https://www.facebook.com/p/BEEZY-FM-61571015857551/" target="_blank" class="text-warning mx-2 text-decoration-none fw-semibold">Facebook</a> |
@@ -544,50 +613,63 @@
   // --- Schedule Data (used for current show logic) ---
   const schedule = {
     sunday: [
-      { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "SELEKANE", presenter: "TROST WAHA NDUMO" },
-      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "EMMANUEL", presenter: "MONYANE MOKOENA" },
-      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
-      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY CRUISE", presenter: "DIBUSENG PELEHA (QUEEN D)" },
-      { start: {hour: 18, minute: 0}, end: {hour: 21, minute: 0}, name: "EBENHEZER", presenter:"LERATO MOKAEANE"},
-      { start: {hour: 21, minute: 0}, end: {hour: 0, minute: 0}, name:"DIVINE WORSHIP", presenter:"MALESEDI MOFOKENG" },
-      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false }, name: "AUTOMATED PLAYLIST", presenter: "Automated Playlist" }
+      { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "SELEKANE", presenter: "TROST WAHA NDUMO", description: "Start your Sunday morning with spiritual upliftment and soulful music on SELEKANE, a show dedicated to reflection and community." },
+      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "EMMANUEL", presenter: "MONYANE MOKOENA", description: "Join MONYANE MOKOENA for the EMMANUEL show, bringing you inspiring stories and discussions to brighten your Sunday." },
+      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)", description: "Relax and unwind with IKETLE, featuring a blend of chilled music and engaging conversations, hosted by NKUNYANA NKUNYANA (SKUZABELL)." },
+      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY CRUISE", presenter: "DIBUSENG PELEHA (QUEEN D)", description: "Take a musical journey with DIBUSENG PELEHA (QUEEN D) on BEEZY CRUISE, playing the best tracks to get you through your Sunday afternoon." },
+      { start: {hour: 18, minute: 0}, end: {hour: 21, minute: 0}, name: "EBENHEZER", presenter:"LERATO MOKAEANE", description: "EBENHEZER with LERATO MOKAEANE offers a reflective and soothing end to your Sunday, with gospel music and uplifting messages."},
+      { start: {hour: 21, minute: 0}, end: {hour: 0, minute: 0}, name:"DIVINE WORSHIP", presenter:"MALESEDI MOFOKENG", description: "Conclude your weekend with DIVINE WORSHIP, as MALESEDI MOFOKENG guides you through an evening of praise and devotion."},
+      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0}, name: "AUTOMATED PLAYLIST", presenter: "Automated Playlist", description: "Enjoy a continuous flow of great music selected by our automated system to keep you company through the night." }
     ],
     weekday: [
-      { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA" },
-      { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA" },
-      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA (PEKSH) MPONO" },
-      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE" },
-      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SIMELA" },
-      { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
-      { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
-      { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "NOTICE BOARD", presenter: "MOJALEFA ZIM" },
-      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "CAMPUS CORNER", presenter: "JABULILE HLONGWANE" },
-      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false}, name: "Automated Playlist", presenter: "Automated Playlist" }
+      { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA", description: "Thahameso is Beezy FM's dedicated news show, airing every Monday to Friday from 6:00 AM to 7:00 AM. It delves into the day's major headlines and features expert guests who discuss critical issues, keeping you informed and engaged with current affairs." },
+      { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA", description: "Wake up with the MONAKALADI BREAKFAST SHOW, hosted by JOHANNES LESIBA, serving fresh news, lively discussions, and energizing music to kickstart your weekday." },
+      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA (PEKSH) MPONO", description: "PHELEKWA (PEKSH) MPONO brings you the MAGNIFICENT MORNING, a show filled with engaging topics, interviews, and a fantastic music selection to carry you through the late morning." },
+      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE", description: "Join MPHO NTHEBE on MATHULAHOHLE for an informative and entertaining midday show, focusing on local issues and listener interaction." },
+      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SIMELA", description: "Navigate your afternoon commute with MOHAU SIMELA on BEEZY DRIVE, featuring the latest hits, traffic updates, and engaging afternoon discussions." },
+      { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE", description: "MAMPODI with MASILO MALAKOANE provides a dynamic hour of current affairs, analysis, and listener perspectives on pressing national and international news." },
+      { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI", description: "Get your daily dose of sports news and analysis on the DINALEDI SPORTS SHOW, with MALEFETSANE MOREKI breaking down the biggest sporting events." },
+      { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "NOTICE BOARD", presenter: "MOJALEFA ZIM", description: "Stay informed with community announcements, public service messages, and local events on NOTICE BOARD, presented by MOJALEFA ZIM." },
+      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "CAMPUS CORNER", presenter: "JABULILE HLONGWANE", description: "CAMPUS CORNER with JABULILE HLONGWANE is your platform for youth issues, campus life, and discussions relevant to students and young adults."},
+      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0 }, name: "Automated Playlist", presenter: "Automated Playlist", description: "Enjoy a continuous flow of great music selected by our automated system to keep you company through the night." }
     ],
     saturday: [
-      { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "KA LAPENG", presenter: "MONYANE MOKOENA" },
-      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "BEEZY FM TOP 30", presenter: "LEUTSOA NKUNYANA (DJ INCUS)" },
-      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)" },
-      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "OLD VIBES", presenter: "SAKI CHELE (DJ SEXY D)" },
-      { start: { hour: 18, minute: 0 }, end: { hour: 21, minute: 0 }, name: "TSA MORAOMORAO", presenter: "HANANIOUS MOTAUNG" },
-      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "HOT ZONE", presenter: "LERATO MOSETHE" },
-      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0, nextDay: false}, name: "AUTOMATED PLAYLIST", presenter: "AUTOMATED PLAYLIST" }
+      { start: { hour: 6, minute: 0 }, end: { hour: 9, minute: 0 }, name: "KA LAPENG", presenter: "MONYANE MOKOENA", description: "Start your Saturday with KA LAPENG, a family-focused show with MONYANE MOKOENA, offering wholesome discussions and music for all ages." },
+      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "BEEZY FM TOP 30", presenter: "LEUTSOA NKUNYANA (DJ INCUS)", description: "Count down the biggest hits with LEUTSOA NKUNYANA (DJ INCUS) on the BEEZY FM TOP 30, bringing you the most popular tracks of the week." },
+      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "IKETLE", presenter: "NKUNYANA NKUNYANA (SKUZABELL)", description: "Relax and unwind with IKETLE, featuring a blend of chilled music and engaging conversations, hosted by NKUNYANA NKUNYANA (SKUZABELL)." },
+      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "OLD VIBES", presenter: "SAKI CHELE (DJ SEXY D)", description: "Groove to the classics with SAKI CHELE (DJ SEXY D) on OLD VIBES, taking you back in time with timeless hits." },
+      { start: { hour: 18, minute: 0 }, end: { hour: 21, minute: 0 }, name: "TSA MORAOMORAO", presenter: "HANANIOUS MOTAUNG", description: "Explore the latest trends and happenings on TSA MORAOMORAO with HANANIOUS MOTAUNG, keeping you up-to-date with pop culture and lifestyle." },
+      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "HOT ZONE", presenter: "LERATO MOSETHE", description: "Turn up the heat with LERATO MOSETHE in the HOT ZONE, playing the hottest tracks and keeping the energy high for your Saturday night."},
+      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0}, name: "AUTOMATED PLAYLIST", presenter: "AUTOMATED PLAYLIST", description: "Enjoy a continuous flow of great music selected by our automated system to keep you company through the night." }
     ],
     friday: [
-      { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA" },
-      { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA" },
-      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA (PEKSH) MPONO" },
-      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE" },
-      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SIMELA" },
-      { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE" },
-      { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI & MOJALEFA TSOTETSI" },
-      { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "REGGAE HOUR", presenter: "SAKI CHELE (DJ SEXY D)" },
-      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "HOT ZONE", presenter: "LERATO MOSETHE" },
-      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0,nextDay: false}, name: "AUTOMATED PLAYLIST", presenter: "Automated Playlist" }
+      { start: { hour: 6, minute: 0 }, end: { hour: 7, minute: 0 }, name: "THAHAMESO", presenter: "MASESI MOLABA", description: "Thahameso is Beezy FM's dedicated news show, airing every Monday to Friday from 6:00 AM to 7:00 AM. It delves into the day's major headlines and features expert guests who discuss critical issues, keeping you informed and engaged with current affairs." },
+      { start: { hour: 7, minute: 0 }, end: { hour: 9, minute: 0 }, name: "MONAKALADI BREAKFAST SHOW", presenter: "JOHANNES LESIBA", description: "Wake up with the MONAKALADI BREAKFAST SHOW, hosted by JOHANNES LESIBA, serving fresh news, lively discussions, and energizing music to kickstart your weekday." },
+      { start: { hour: 9, minute: 0 }, end: { hour: 12, minute: 0 }, name: "MAGNIFICENT MORNING", presenter: "PHELEKWA (PEKSH) MPONO", description: "PHELEKWA (PEKSH) MPONO brings you the MAGNIFICENT MORNING, a show filled with engaging topics, interviews, and a fantastic music selection to carry you through the late morning." },
+      { start: { hour: 12, minute: 0 }, end: { hour: 15, minute: 0 }, name: "MATHULAHOHLE", presenter: "MPHO NTHEBE", description: "Join MPHO NTHEBE on MATHULAHOHLE for an informative and entertaining midday show, focusing on local issues and listener interaction." },
+      { start: { hour: 15, minute: 0 }, end: { hour: 18, minute: 0 }, name: "BEEZY DRIVE with Mo Simela", presenter: "MOHAU SIMELA", description: "Navigate your afternoon commute with MOHAU SIMELA on BEEZY DRIVE, featuring the latest hits, traffic updates, and engaging afternoon discussions." },
+      { start: { hour: 18, minute: 0 }, end: { hour: 19, minute: 0 }, name: "MAMPODI", presenter: "MASILO MALAKOANE", description: "MAMPODI with MASILO MALAKOANE provides a dynamic hour of current affairs, analysis, and listener perspectives on pressing national and international news." },
+      { start: { hour: 19, minute: 0 }, end: { hour: 20, minute: 0 }, name: "DINALEDI SPORTS SHOW", presenter: "MALEFETSANE MOREKI", description: "Get your daily dose of sports news and analysis on the DINALEDI SPORTS SHOW, with MALEFETSANE MOREKI breaking down the biggest sporting events." },
+      { start: { hour: 20, minute: 0 }, end: { hour: 21, minute: 0 }, name: "REGGAE HOUR", presenter: "SAKI CHELE (DJ SEXY D)", description: "Wind down with the smooth rhythms of REGGAE HOUR, as SAKI CHELE (DJ SEXY D) brings you the best reggae music."},
+      { start: { hour: 21, minute: 0 }, end: { hour: 0, minute: 0}, name: "HOT ZONE", presenter: "LERATO MOSETHE", description: "Turn up the heat with LERATO MOSETHE in the HOT ZONE, playing the hottest tracks and keeping the energy high for your Friday night."},
+      { start: { hour: 0, minute: 0 }, end: { hour: 6, minute: 0}, name: "AUTOMATED PLAYLIST", presenter: "Automated Playlist", description: "Enjoy a continuous flow of great music selected by our automated system to keep you company through the night." }
     ]
   };
 
   const UNIVERSAL_IMAGE_URL = "https://proxy.zeno.fm/content/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/image/?u=1742924775000";
+  const THAHAMESO_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mjvgj2g/WhatsApp%20Image%202025-06-12%20at%2020.23.43_49791775.jpg"; // Updated THAHAMESO image
+  const CAMPUS_CORNER_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mjvgj2g/CAMPUS%20CORNER%202.jpg";
+  const AUTOMATED_PLAYLIST_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mgcm6cy/Thahameso.jpg";
+  const MAGNIFICENT_MORNING_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mjvgj2g/WhatsApp%20Image%202025-06-12%20at%2019.37.34_9788dfa7.jpg"; // Updated MAGNIFICENT MORNING image
+  const MATHULAHOHLE_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mjvgj2g/Captain%202.jpg"; // Updated MATHULAHOHLE image
+  const CAPTAIN_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mhsqyeg/Captain.jpg"; // Old image URL for Mathulahohle on homepage, replaced by MATHULAHOHLE_IMAGE_URL now
+  const IKETLE_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mhsqyeg/iketle.jpg"; // New image for IKETLE on schedule
+  const IKETLE_HOMEPAGE_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mhsqyeg/WhatsApp%20Image%202025-06-11%20at%2023.20.25_6d915096.jpg"; // New image for IKETLE on homepage
+  const MAMPODI_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mjnfvp3/Mampodi.jpg"; // New image for MAMPODI on homepage
+  const DINALEDI_SPORTS_SHOW_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mhsqyeg/Moreki.jpg"; // New image URL for Dinaledi Sports Show
+  const BEEZY_DRIVE_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mjvgj2g/WhatsApp%20Image%202025-06-12%20at%2020.45.30_1b4005f1.jpg"; // New image URL for BEEZY DRIVE
+  const MONAKALADI_BREAKFAST_SHOW_IMAGE_URL = "https://assets.onecompiler.app/42pxcbczf/43mjvgj2g/LESIBA.jpg"; // New image URL for MONAKALADI BREAKFAST SHOW
+
   const ZENO_NOW_PLAYING_API_URL = `https://api.zeno.fm/api/v2/stations/f0ccd091-d7e5-4939-98d8-52457d88ecd3/nowplaying`;
 
   let currentPlayingSongTitle = "";
@@ -614,7 +696,6 @@
         if (newTitle !== currentPlayingSongTitle || newArtist !== currentPlayingSongArtist) {
           currentPlayingSongTitle = newTitle;
           currentPlayingSongArtist = newArtist;
-          currentPlayingSongId = newSongId;
           console.log("New Song Playing:", currentPlayingSongTitle, "by", currentPlayingSongArtist);
           
           document.getElementById('current-song-title').textContent = newTitle;
@@ -678,15 +759,12 @@
         let showStartCandidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.start.hour, show.start.minute);
         let showEndCandidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), show.end.hour, show.end.minute);
 
+        // Adjust end time if the show spans midnight (e.g., 22:00 to 02:00)
         if (show.end.nextDay || (show.start.hour > show.end.hour || (show.start.hour === show.end.hour && show.start.minute > show.end.minute))) {
             showEndCandidate.setDate(showEndCandidate.getDate() + 1);
         }
         
-        if (show.start.hour === 0 && show.start.minute === 0 && show.end.hour === 6) {
-          if (now.getHours() >= 0 && now.getHours() < 6 && showStartCandidate.getHours() === 0) {
-            showStartCandidate.setDate(showStartCandidate.getDate() - 1);
-          }
-        }
+        // No special adjustment for 00:00-06:00 shows here, as it should be treated as a segment within the current day.
 
         if (now >= showStartCandidate && now < showEndCandidate) {
           currentShow = show;
@@ -700,7 +778,7 @@
       const showNameEl = document.getElementById('show-name'); // This will be the show TITLE
       const presenterEl = document.getElementById('presenter-name');
       const progressBar = document.getElementById('show-progress-bar');
-      const showImage = document.getElementById('show-image');
+      const showImage = document.getElementById('show-image'); // Re-added show image element
       const elapsedTimeLabel = document.getElementById('show-elapsed-time-label');
       const totalDurationLabel = document.getElementById('show-total-duration-label');
       const liveOnAirText = document.getElementById('show-time-top'); // This is the H1 that should display "LIVE ON AIR"
@@ -718,19 +796,8 @@
           </p>`;
 
       if (currentShow) {
-        const date = now.getDate();
-        // Calculate the week of the month (1-indexed)
-        const dayOfMonth = now.getDate();
-        const weekOfMonth = Math.ceil(dayOfMonth / 7); // Using Math.ceil to get week 1 for days 1-7, week 2 for days 8-14, etc.
-
-        if (currentShow.name === "DINALEDI SPORTS SHOW") {
-          // Changed condition from (weekOfMonth === 1 || weekOfMonth === 3) to (weekOfMonth === 1 || weekOfMonth === 2)
-          if (weekOfMonth === 1 || weekOfMonth === 2) {
-            currentShow.presenter = "MALEFETSANE MOREKI";
-          } else {
-            currentShow.presenter = "MOJALEFA TSOTETSI";
-          }
-        }
+        // Removed conditional presenter assignment for "DINALEDI SPORTS SHOW"
+        // as per user request (only Malefetsane Moreki will present it).
 
         const totalDurationMs = currentShow.actualEnd.getTime() - currentShow.actualStart.getTime();
         const elapsedMs = now.getTime() - currentShow.actualStart.getTime();
@@ -778,15 +845,92 @@
         progressBar.style.width = '0%';
         elapsedTimeLabel.textContent = "00:00:00";
         totalDurationLabel.textContent = "00:00:00";
-        document.getElementById('next-show-name').textContent = "Check schedule for next show.";
+        document.getElementById('next-show-name').textContent = "No more shows today. Check schedule for tomorrow.";
         document.getElementById('next-show-presenter').textContent = "";
       }
       
       // Apply the generated contact HTML
       contactNumbersDiv.innerHTML = contactHtml;
 
+      // Reset image styles to default first
+      showImage.style.width = 'auto';
+      showImage.style.height = 'auto';
+      showImage.style.borderRadius = '0';
+      showImage.style.objectFit = 'contain';
+      showImage.classList.remove('pulsing-image'); // Always remove pulsing-image class first
 
-      showImage.src = UNIVERSAL_IMAGE_URL;
+      // Set show image based on current show and presenter
+      if (currentShow && currentShow.name === "DINALEDI SPORTS SHOW") {
+        showImage.src = DINALEDI_SPORTS_SHOW_IMAGE_URL;
+        showImage.style.width = '200px';
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%';
+        showImage.style.objectFit = 'cover';
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      } else if (currentShow && currentShow.name === "THAHAMESO") {
+        showImage.src = THAHAMESO_IMAGE_URL;
+        showImage.style.width = '200px'; // Set fixed size for round image
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%'; // Make it round
+        showImage.style.objectFit = 'cover'; // Crop to fit circle
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      } else if (currentShow && currentShow.name === "CAMPUS CORNER") {
+        showImage.src = CAMPUS_CORNER_IMAGE_URL;
+        showImage.style.width = '200px'; // Set fixed size for round image
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%'; // Make it round
+        showImage.style.objectFit = 'cover'; // Crop to fit circle
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      } else if (currentShow && currentShow.name === "AUTOMATED PLAYLIST") {
+        showImage.src = AUTOMATED_PLAYLIST_IMAGE_URL;
+      } else if (currentShow && currentShow.name === "MAGNIFICENT MORNING") {
+        showImage.src = MAGNIFICENT_MORNING_IMAGE_URL;
+        showImage.style.width = '200px'; // Set fixed size for round image
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%'; // Make it round
+        showImage.style.objectFit = 'cover'; // Crop to fit circle
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      } else if (currentShow && currentShow.name === "MATHULAHOHLE") { // Condition for Mathulahohle on homepage
+        showImage.src = MATHULAHOHLE_IMAGE_URL; // Use new image
+        showImage.style.width = '200px'; // Set fixed size for round image
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%'; // Make it round
+        showImage.style.objectFit = 'cover'; // Crop to fit circle
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      } else if (currentShow && currentShow.name === "IKETLE") { // IKETLE on home page, use new image and make it round
+        showImage.src = IKETLE_HOMEPAGE_IMAGE_URL;
+        showImage.style.width = '200px';
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%';
+        showImage.style.objectFit = 'cover';
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      } else if (currentShow && currentShow.name === "MAMPODI") { // MAMPODI on home page, use new image and make it round
+        showImage.src = MAMPODI_IMAGE_URL;
+        showImage.style.width = '200px';
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%';
+        showImage.style.objectFit = 'cover';
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      } else if (currentShow && currentShow.name === "BEEZY DRIVE with Mo Simela") { // BEEZY DRIVE on home page
+        showImage.src = BEEZY_DRIVE_IMAGE_URL;
+        showImage.style.width = '200px';
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%';
+        showImage.style.objectFit = 'cover';
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      } else if (currentShow && currentShow.name === "MONAKALADI BREAKFAST SHOW") { // MONAKALADI BREAKFAST SHOW on home page
+        showImage.src = MONAKALADI_BREAKFAST_SHOW_IMAGE_URL;
+        showImage.style.width = '200px';
+        showImage.style.height = '200px';
+        showImage.style.borderRadius = '50%';
+        showImage.style.objectFit = 'cover';
+        showImage.classList.add('pulsing-image'); // Add pulsing class
+      }
+      else {
+        showImage.src = UNIVERSAL_IMAGE_URL;
+        showImage.style.width = '200px'; 
+        showImage.style.height = '200px';
+      }
       showImage.onerror = () => {
         showImage.src = "https://placehold.co/200x200/CCCCCC/666666?text=ERROR";
       };
@@ -807,9 +951,10 @@
   const radioStream = document.getElementById('radio-stream');
   const volumeSlider = document.getElementById('volume-slider');
   const volumeIcon = document.getElementById('volume-icon');
-  const playPauseButton = document.getElementById('play-pause-button');
-  const playIcon = document.getElementById('play-icon');
-  const pauseIcon = document.getElementById('pause-icon');
+  const listenLiveButton = document.getElementById('listen-live-button'); // New button in navbar
+  const listenLivePlayIcon = document.getElementById('listen-live-play-icon');
+  const listenLivePauseIcon = document.getElementById('listen-live-pause-icon');
+
 
   volumeSlider.addEventListener('input', () => {
     radioStream.volume = volumeSlider.value;
@@ -830,31 +975,34 @@
   }
 
   // --- Play/Pause Button Functionality ---
-  playPauseButton.addEventListener('click', () => {
+  function togglePlayPause() {
     if (radioStream.paused) {
       radioStream.play().catch(e => console.error("Error playing stream:", e));
     } else {
       radioStream.pause();
     }
-    updatePlayPauseButtonIcon();
-  });
+  }
 
-  radioStream.addEventListener('play', updatePlayPauseButtonIcon);
-  radioStream.addEventListener('pause', updatePlayPauseButtonIcon);
-  radioStream.addEventListener('ended', updatePlayPauseButtonIcon); // Reset when stream ends
+  listenLiveButton.addEventListener('click', togglePlayPause); // New button click event
 
-  function updatePlayPauseButtonIcon() {
+  radioStream.addEventListener('play', updatePlayPauseButtonIcons);
+  radioStream.addEventListener('pause', updatePlayPauseButtonIcons);
+  radioStream.addEventListener('ended', updatePlayPauseButtonIcons); // Reset when stream ends
+
+  function updatePlayPauseButtonIcons() {
     if (radioStream.paused) {
-      playIcon.style.display = 'block';
-      pauseIcon.style.display = 'none';
+      // Navbar button
+      listenLivePlayIcon.style.display = 'block';
+      listenLivePauseIcon.style.display = 'none';
     } else {
-      playIcon.style.display = 'none';
-      pauseIcon.style.display = 'block';
+      // Navbar button
+      listenLivePlayIcon.style.display = 'none';
+      listenLivePauseIcon.style.display = 'block';
     }
   }
 
-  // Initial state of the play/pause button
-  updatePlayPauseButtonIcon();
+  // Initial state of the play/pause buttons
+  updatePlayPauseButtonIcons();
 
 
   // --- Geolocation and Weather Data Functionality (for Beezy News Section) ---
@@ -1113,21 +1261,57 @@
           if (show.end.nextDay || (show.start.hour > show.end.hour || (show.start.hour === show.end.hour && show.start.minute > show.end.minute))) {
             showEnd.setDate(showEnd.getDate() + 1);
           }
-          if (show.start.hour === 0 && show.start.minute === 0 && show.end.hour === 6) {
-            showStart.setDate(showStart.getDate() - 1);
-          }
+          // The problematic time adjustment block was here, it's now removed.
 
           const isLive = dayInfo.dayIndices.includes(currentDayIndex) && (now >= showStart && now < showEnd);
           const liveClass = isLive ? 'live-show-highlight' : '';
           const presenterHtml = show.presenter ? `<p class="timeline-presenter mb-0">${show.presenter}</p>` : '';
 
+          // Determine image URL and apply inline styles for timeline entry
+          let showImageUrl;
+          let imgStyle = `border-radius: 0; object-fit: contain;`; // Default styles
+
+          if (show.name === "DINALEDI SPORTS SHOW") {
+            showImageUrl = DINALEDI_SPORTS_SHOW_IMAGE_URL;
+            imgStyle = `border-radius: 50%; object-fit: cover;`;
+          } else if (show.name === "THAHAMESO") {
+            showImageUrl = THAHAMESO_IMAGE_URL;
+            imgStyle = `border-radius: 50%; object-fit: cover;`; // Make it round for schedule too
+          } else if (show.name === "CAMPUS CORNER") {
+            showImageUrl = CAMPUS_CORNER_IMAGE_URL;
+             imgStyle = `border-radius: 50%; object-fit: cover;`
+          } else if (show.name === "AUTOMATED PLAYLIST") {
+            showImageUrl = AUTOMATED_PLAYLIST_IMAGE_URL;
+          } else if (show.name === "MAGNIFICENT MORNING") {
+            showImageUrl = MAGNIFICENT_MORNING_IMAGE_URL;
+            imgStyle = `border-radius: 50%; object-fit: cover;`; // Make it round for schedule too
+          } else if (show.name === "MATHULAHOHLE") {
+            showImageUrl = MATHULAHOHLE_IMAGE_URL;
+            imgStyle = `border-radius: 50%; object-fit: cover;`; // Make it round for schedule too
+          } else if (show.name === "IKETLE") { // Condition for IKETLE on schedule
+            showImageUrl = IKETLE_IMAGE_URL;
+            // No custom styles, use default imgStyle
+          } else if (show.name === "MAMPODI") { // MAMPODI on schedule
+            showImageUrl = MAMPODI_IMAGE_URL; // Use MAMPODI_IMAGE_URL for schedule
+            imgStyle = `border-radius: 50%; object-fit: cover;`; // Make it round for schedule too
+          } else if (show.name === "BEEZY DRIVE with Mo Simela") { // BEEZY DRIVE on schedule
+            showImageUrl = BEEZY_DRIVE_IMAGE_URL;
+            imgStyle = `border-radius: 50%; object-fit: cover;`;
+          } else if (show.name === "MONAKALADI BREAKFAST SHOW") { // MONAKALADI BREAKFAST SHOW on schedule
+            showImageUrl = MONAKALADI_BREAKFAST_SHOW_IMAGE_URL;
+            imgStyle = `border-radius: 50%; object-fit: cover;`;
+          }
+          else {
+            showImageUrl = UNIVERSAL_IMAGE_URL;
+          }
+
           dayDiv.innerHTML += `
-            <div class="timeline-entry ${liveClass}">
+            <div class="timeline-entry ${liveClass}" onclick="showShowDetails(${JSON.stringify(show).replace(/'/g, "\\'")})">
               <div class="timeline-time">
                 ${show.start.hour.toString().padStart(2,'0')}:${show.start.minute.toString().padStart(2,'0')} - ${show.end.hour.toString().padStart(2,'0')}:${show.end.minute.toString().padStart(2,'0')}
               </div>
               <div class="timeline-details d-flex align-items-center">
-                <img src="${UNIVERSAL_IMAGE_URL}" alt="${show.name}" class="timeline-image me-3"/>
+                <img src="${showImageUrl}" alt="${show.name}" class="timeline-image me-3" style="${imgStyle}"/>
                 <div>
                   <h4 class="timeline-title mb-1">${show.name}</h4>
                   ${presenterHtml}
@@ -1175,11 +1359,113 @@
     }
   }
 
+  // --- Show Details Functionality ---
+  function showShowDetails(show) {
+    // Hide all main sections
+    document.querySelectorAll('main > .custom-card').forEach(section => {
+      section.classList.add('d-none');
+    });
+
+    const showDetailsSection = document.getElementById('show-details-section');
+    document.getElementById('show-details-title').textContent = show.name;
+    document.getElementById('show-details-time').textContent = `${show.start.hour.toString().padStart(2,'0')}:${show.start.minute.toString().padStart(2,'0')} - ${show.end.hour.toString().padStart(2,'0')}:${show.end.minute.toString().padStart(2,'0')}`;
+    document.getElementById('show-details-presenter').textContent = show.presenter ? `Presenter: ${show.presenter}` : '';
+    document.getElementById('show-details-description').textContent = show.description || 'No description available for this show.';
+    
+    const showDetailsImage = document.getElementById('show-details-image');
+
+    // Reset image styles to default first
+    showDetailsImage.style.width = 'auto';
+    showDetailsImage.style.height = 'auto';
+    showDetailsImage.style.borderRadius = '0';
+    showDetailsImage.style.objectFit = 'contain';
+    showDetailsImage.style.maxWidth = '300px'; // Re-apply default max-width
+
+    // Determine image URL and apply inline styles for show details
+    let imageUrlForDetails;
+    if (show.name === "DINALEDI SPORTS SHOW") {
+      imageUrlForDetails = DINALEDI_SPORTS_SHOW_IMAGE_URL;
+      showDetailsImage.style.width = '300px';
+      showDetailsImage.style.height = '300px';
+      showDetailsImage.style.borderRadius = '50%';
+      showDetailsImage.style.objectFit = 'cover';
+    } else if (show.name === "THAHAMESO") {
+      imageUrlForDetails = THAHAMESO_IMAGE_URL;
+      showDetailsImage.style.width = '300px'; // Set fixed size for round image
+      showDetailsImage.style.height = '300px';
+      showDetailsImage.style.borderRadius = '50%'; // Make it round
+      showDetailsImage.style.objectFit = 'cover'; // Crop to fit circle
+    } else if (show.name === "CAMPUS CORNER") {
+      imageUrlForDetails = CAMPUS_CORNER_IMAGE_URL;
+    } else if (show.name === "AUTOMATED PLAYLIST") {
+      imageUrlForDetails = AUTOMATED_PLAYLIST_IMAGE_URL;
+    } else if (show.name === "MAGNIFICENT MORNING") {
+      imageUrlForDetails = MAGNIFICENT_MORNING_IMAGE_URL;
+      showDetailsImage.style.width = '300px'; // Set fixed size for round image
+      showDetailsImage.style.height = '300px';
+      showDetailsImage.style.borderRadius = '50%'; // Make it round
+      showDetailsImage.style.objectFit = 'cover'; // Crop to fit circle
+    } else if (show.name === "MATHULAHOHLE") {
+      imageUrlForDetails = MATHULAHOHLE_IMAGE_URL; // Keep original image for details
+      showDetailsImage.style.width = '300px'; // Set fixed size for round image
+      showDetailsImage.style.height = '300px';
+      showDetailsImage.style.borderRadius = '50%'; // Make it round
+      showDetailsImage.style.objectFit = 'cover'; // Crop to fit circle
+    } else if (show.name === "IKETLE") { // IKETLE on show details page, use universal
+      imageUrlForDetails = UNIVERSAL_IMAGE_URL;
+    } else if (show.name === "MAMPODI") { // MAMPODI on show details page, use MAMPODI_IMAGE_URL
+      imageUrlForDetails = MAMPODI_IMAGE_URL;
+      showDetailsImage.style.width = '300px'; // Set fixed size for round image
+      showDetailsImage.style.height = '300px';
+      showDetailsImage.style.borderRadius = '50%'; // Make it round
+      showDetailsImage.style.objectFit = 'cover'; // Crop to fit circle
+    } else if (show.name === "BEEZY DRIVE with Mo Simela") { // BEEZY DRIVE on show details page
+      imageUrlForDetails = BEEZY_DRIVE_IMAGE_URL;
+      showDetailsImage.style.width = '300px'; // Set fixed size for round image
+      showDetailsImage.style.height = '300px';
+      showDetailsImage.style.borderRadius = '50%'; // Make it round
+      showDetailsImage.style.objectFit = 'cover'; // Crop to fit circle
+    } else if (show.name === "MONAKALADI BREAKFAST SHOW") { // MONAKALADI BREAKFAST SHOW on show details page
+      imageUrlForDetails = MONAKALADI_BREAKFAST_SHOW_IMAGE_URL;
+      showDetailsImage.style.width = '300px'; // Set fixed size for round image
+      showDetailsImage.style.height = '300px';
+      showDetailsImage.style.borderRadius = '50%'; // Make it round
+      showDetailsImage.style.objectFit = 'cover'; // Crop to fit circle
+    }
+    else {
+      imageUrlForDetails = UNIVERSAL_IMAGE_URL;
+      showDetailsImage.style.width = '200px'; 
+      showDetailsImage.style.height = '200px';
+      showDetailsImage.style.objectFit = 'cover'; 
+    }
+    showDetailsImage.src = imageUrlForDetails;
+    showDetailsImage.onerror = () => {
+        showDetailsImage.src = "https://placehold.co/300x300/CCCCCC/666666?text=Image+Error";
+    };
+
+
+    showDetailsSection.classList.remove('d-none'); // Show the details section
+
+    // Scroll to the top of the details section
+    showDetailsSection.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+
+    // Close the mobile navigation menu if it is open
+    const mainNavbar = document.getElementById('mainNavbar');
+    const bsCollapse = bootstrap.Collapse.getInstance(mainNavbar);
+    if (mainNavbar.classList.contains('show')) {
+      bsCollapse.hide();
+    }
+  }
+
+
   // --- Section Switching Functionality ---
   let activeSectionId = 'home-section'; // Keep track of the currently active section
 
   function showSection(sectionId) {
-    // Hide all sections
+    // Hide all sections, including the show details section
     document.querySelectorAll('main > .custom-card').forEach(section => { // Use custom-card as selector
       section.classList.add('d-none'); // Bootstrap hidden class
     });
@@ -1235,9 +1521,9 @@
 
     // Close the mobile navigation menu if it is open
     const mainNavbar = document.getElementById('mainNavbar');
-    const bsCollapse = bootstrap.Collapse.getInstance(mainNavbar); // Get Bootstrap Collapse instance
-    if (mainNavbar.classList.contains('show')) { // Check if Bootstrap collapse is open
-      bsCollapse.hide(); // Hide it using Bootstrap's JS method
+    const bsCollapse = bootstrap.Collapse.getInstance(mainNavbar);
+    if (mainNavbar.classList.contains('show')) {
+      bsCollapse.hide();
     }
   }
 
